@@ -6,9 +6,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import HeaderBottom from "./HeaderBottom";
 import { allItems } from "../../constants";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const [showAll, setShowAll] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="w-full sticky top-0 z-50">
@@ -68,7 +70,14 @@ function Header() {
 
         {/* Signin start */}
         <div className="flex flex-col items-start justify-center headerHover">
-          <p className="text-xs text-lightText font-light">Hello, sign in</p>
+          <p
+            className="text-xs text-lightText font-light"
+            onClick={() => {
+              navigate("/signin");
+            }}
+          >
+            Hello, sign in
+          </p>
           <p className="text-sm font-semibold -m1-1 text-whiteText hidden mdl:inline-flex">
             Accounts & Lists
             <span>
@@ -80,7 +89,9 @@ function Header() {
 
         {/* Orders start */}
         <div className="hidden lgl:flex flex-col items-start justify-center headerHover">
-          <p className="text-sm mdl:text-xs text-white mdl:text-lightText font-light">Returns</p>
+          <p className="text-sm mdl:text-xs text-white mdl:text-lightText font-light">
+            Returns
+          </p>
           <p className="text-sm font-semibold -mt-1 text-whiteText">& Orders</p>
         </div>
         {/* Orders end */}
