@@ -1,6 +1,7 @@
 import React from "react";
 import { logo } from "../assets";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import { Link } from "react-router-dom";
 
 function Signin() {
   return (
@@ -59,14 +60,15 @@ function Signin() {
             <span className="w-1/3 text-center">New to ForestDise?</span>
             <span className="w-1/3 h-[1px] bg-zinc-400 inline-flex"></span>
           </div>
-          <button
-            onClick={(e) => e.preventDefault()}
-            className="w-full py-1.5 mt-4 text-sm font-normal
+          <Link className="w-full" to="/register">
+            <button
+              className="w-full py-1.5 px-2 mt-4 text-sm font-normal
               rounded-sm bg-gradient-to-t from-slate-200 to-slate-100 hover:bg-gradient-to-b border
               border-zinc-400 active:border-yellow-800 active:shadow-amazonInput"
-          >
-            Create your ForestDise account
-          </button>
+            >
+              Create your ForestDise account
+            </button>
+          </Link>
         </form>
       </div>
       <div className="w-full bg-gradient-to-t from-white via-white to-zinc-200 flex flex-col gap-4 justify-center items-center py-10">
@@ -81,7 +83,9 @@ function Signin() {
             Help
           </p>
         </div>
-        <p className="text-xs text-gray-600">© 2023-2023 ForestDise.com, Inc. or its affiliates</p>
+        <p className="text-xs text-gray-600">
+          © 2023-2023 ForestDise.com, Inc. or its affiliates
+        </p>
       </div>
     </div>
   );
