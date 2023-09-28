@@ -5,6 +5,7 @@ import bannerImgThree from "./banner/bannerImgThree.jpg";
 import bannerImgFour from "./banner/bannerImgFour.jpg";
 import bannerImgFive from "./banner/bannerImgFive.jpg";
 import vnFlag from "./vnFlag.png";
+import emptyCart from "./emptyCart.png";
 
 export {
   logo,
@@ -13,5 +14,6 @@ export {
   bannerImgThree,
   bannerImgFour,
   bannerImgFive,
-  vnFlag
+  vnFlag,
+  emptyCart
 };
