@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   products: [],
-  userInfo: [],
+  empties: [],
 };
 
 export const cartSlice = createSlice({
@@ -12,20 +12,20 @@ export const cartSlice = createSlice({
     addToCart: (state, action) => {
       const item = state.products.find((item) => item.id === action.payload.id);
       if (item) {
-        state.quantity += action.payload.quantity;
-      } else { 
+        item.quantity += action.payload.quantity;
+      } else {
         state.products.push(action.payload);
       }
     },
     incrementQuantity: (state, action) => {
       const item = state.products.find((item) => item.id === action.payload);
       item.quantity++;
-    }, 
+    },
     decrementQuantity: (state, action) => {
       const item = state.products.find((item) => item.id === action.payload);
-      if(item.quantity === 1){
+      if (item.quantity === 1) {
         item.quantity = 1;
-      }else{
+      } else {
         item.quantity--;
       }
     },
@@ -37,10 +37,43 @@ export const cartSlice = createSlice({
     resetCart: (state) => {
       state.products = [];
     },
+    saveForLater: (state, action) => {
+      const item = state.empties.find((item) => item.id === action.payload.id);
+      if (item) {
+        state.products = state.products.filter(
+          (item) => item.id !== action.payload.id
+        );
+      } else {
+        state.empties.push(action.payload);
+        state.products = state.products.filter(
+          (item) => item.id !== action.payload.id
+        );
+      }
+    },
+    deleteEmpties: (state, action) => {
+      state.empties = state.empties.filter(
+        (item) => item.id !== action.payload
+      );
+    },
+    moveToCart:(state,action)=>{
+      state.products.push(action.payload);
+      state.empties = state.empties.filter(
+        (item) => item.id !== action.payload.id
+      );
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addToCart, deleteItem, resetCart, decrementQuantity, incrementQuantity } = cartSlice.actions;
+export const {
+  addToCart,
+  deleteItem,
+  resetCart,
+  decrementQuantity,
+  incrementQuantity,
+  saveForLater,
+  deleteEmpties,
+  moveToCart,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -37,8 +37,10 @@ function Products() {
           <span className="text-xs capitalize italic absolute top-2 right-2 text-gray-500">
             {product.category}
           </span>
-          <div className="w-full h-auto flex items-center justify-center relative
-          group">
+          <div
+            className="w-full h-auto flex items-center justify-center relative
+          group"
+          >
             <img
               className="w-52 h-64 object-contain"
               src={product.image}
@@ -54,7 +56,22 @@ function Products() {
                   <ApiIcon />
                 </span>
               </li>
-              <li className="productLi">
+              <li
+                onClick={() =>
+                  dispatch(
+                    addToCart({
+                      id: product.id,
+                      title: product.title,
+                      description: product.description,
+                      price: product.price,
+                      category: product.category,
+                      image: product.image,
+                      quantity: 1,
+                    })
+                  )
+                }
+                className="productLi"
+              >
                 Add to Cart
                 <span>
                   <ShoppingCartIcon />
@@ -100,15 +117,20 @@ function Products() {
                 <StarIcon />
               </div>
             </div>
-            <button onClick={()=>dispatch(addToCart({
-              id: product.id,
-              title: product.title,
-              description: product.description,
-              price: product.price,
-              category: product.category,
-              image: product.image,
-              quantity: 1,
-            }))}
+            <button
+              onClick={() =>
+                dispatch(
+                  addToCart({
+                    id: product.id,
+                    title: product.title,
+                    description: product.description,
+                    price: product.price,
+                    category: product.category,
+                    image: product.image,
+                    quantity: 1,
+                  })
+                )
+              }
               className="w-full font-titleFont font-medium text-base bg-gradient-to-tr
             from-yellow-400 to-yellow-200 border hover:from-yellow-300 hover:to-yellow-400
             border-yellow-500 hover:border-yellow-700 active:bg-gradient-to-bl
