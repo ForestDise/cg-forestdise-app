@@ -18,7 +18,7 @@ function Products() {
 
   async function fetchData() {
     await axios
-      .get("https://fakestoreapi.com/products")
+      .get("http://localhost:8080/api/get-all-cart-lines")
       .then((res) => setProductData(res.data))
       .catch((err) => {
         throw err;
