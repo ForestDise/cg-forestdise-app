@@ -27,10 +27,10 @@ function Header() {
 
   return (
     <div className="w-full sticky top-0 z-50">
-      <div className="w-full bg-amazon_blue text-white px-4 py-3 flex items-center gap-4">
+      <div className="w-full bg-amazon_blue text-white px-4 py-1 flex items-center gap-4">
         {/* Logo start */}
         <div onClick={() => navigate("/")} className="headerHover">
-          <img className="w-[5rem] mt-2" src={logo} alt="logo"></img>
+          <img className="w-[7rem] mt-0" src={logo} alt="logo"></img>
         </div>
         {/* Logo end */}
 
