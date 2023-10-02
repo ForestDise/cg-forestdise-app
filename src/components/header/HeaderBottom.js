@@ -4,6 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SideNavContent from "./SideNavContent";
 import {motion} from "framer-motion";
+import { Link } from "react-router-dom";
 
 function HeaderBottom() {
   const [sideBar, setSidebar] = useState(false);
@@ -65,9 +66,11 @@ function HeaderBottom() {
               gap-4"
               >
                 <AccountCircleIcon />
-                <h3 className="font-titleFont font-bold text-lg tracking-wide">
-                  Hello, Sign In
-                </h3>
+                <Link to="/signin">
+                  <h3 className="font-titleFont font-bold text-lg tracking-wide hover:text-blue-300 hover:underline underline-offset-1">
+                    Hello, Sign In
+                  </h3>
+                </Link>
               </div>
               <SideNavContent
                 title="Digital Content & Devices"

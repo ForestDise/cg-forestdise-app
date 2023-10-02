@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   Outlet,
   Route,
@@ -10,6 +10,7 @@ import {
 import Home from "./pages/Home";
 import Cart from "./components/cart/Cart";
 import Signin from "./pages/Signin";
+import Registration from "./pages/Registration";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 
@@ -27,15 +28,15 @@ const Layout = () => {
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="/cart" element={<Cart />} />
+      <Fragment>
         <Route path="/signin" element={<Signin />} />
-      </Route>
+        <Route path="/register" element={<Registration />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/cart" element={<Cart />} />
+        </Route>
+      </Fragment>
     )
-    // <Routes>
-    //   <Route path="/signin" element={<Signin />} />
-    // </Routes>
   );
   return (
     <div className="font-bodyFont bg-gray-100">
