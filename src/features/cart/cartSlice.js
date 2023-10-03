@@ -45,20 +45,11 @@ export const cartSlice = createSlice({
         );
       } else {
         state.empties.push(action.payload);
-        state.products = state.products.filter(
-          (item) => item.id !== action.payload.id
-        );
       }
     },
     deleteEmpties: (state, action) => {
       state.empties = state.empties.filter(
         (item) => item.id !== action.payload
-      );
-    },
-    moveToCart:(state,action)=>{
-      state.products.push(action.payload);
-      state.empties = state.empties.filter(
-        (item) => item.id !== action.payload.id
       );
     },
   },

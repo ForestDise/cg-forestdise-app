@@ -1,17 +1,18 @@
 import StarIcon from "@mui/icons-material/Star";
-import { useDispatch} from "react-redux";
-import {moveToCart} from "../../features/cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { moveToCart } from "../../features/cart/cartSlice";
+import CartPayment from "./CartPayment";
 
-
-const CartSidebar = (props) => {
+const CartSidebar = () => {
   const dispatch = useDispatch();
-    const {empties} = props;
-    return (
-      <>
+  const { empties } = useSelector((state) => state.cart);
+
+  return (
+    <>
+      <div class="flex flex-col gap-4">
+        <CartPayment />
         <div class="bg-white rounded-lg">
-          <h2 class="p-4 font-semibold">
-            Customers Who Bought Items in Your Recent History Also Bought
-          </h2>
+          <h3 class="p-4 font-semibold">Top 10 best-selling products</h3>
           {empties.map((item) => (
             <div class="max-w-md mx-auto bg-white  overflow-hidden md:max-w-2xl rounded-lg">
               <div class="md:flex p-2">
@@ -66,8 +67,9 @@ const CartSidebar = (props) => {
             </div>
           ))}
         </div>
-      </>
-    );
-}
- 
+      </div>
+    </>
+  );
+};
+
 export default CartSidebar;
