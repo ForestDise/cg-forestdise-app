@@ -7,6 +7,7 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../features/cart/cartSlice";
+import { Link } from "react-router-dom";
 
 function Products() {
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ function Products() {
 
   async function fetchData() {
     await axios
-      .get("https://fakestoreapi.com/products")
+      .get("http://localhost:8080/api/product/get-all-product")
       .then((res) => setProductData(res.data))
       .catch((err) => {
         throw err;
@@ -43,7 +44,7 @@ function Products() {
           >
             <img
               className="w-52 h-64 object-contain"
-              src={product.image}
+              src={product.mainPicture}
               alt="ProductImg"
             ></img>
             <ul
@@ -77,12 +78,12 @@ function Products() {
                   <ShoppingCartIcon />
                 </span>
               </li>
-              <li className="productLi">
+              <Link to={`/product/${product.id}`} className="productLi">
                 View Details
                 <span>
                   <ArrowCircleRightIcon />
                 </span>
-              </li>
+              </Link>
               <li className="productLi">
                 Add to Wish List
                 <span>

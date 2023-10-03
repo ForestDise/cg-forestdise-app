@@ -13,6 +13,7 @@ import Signin from "./pages/Signin";
 import Registration from "./pages/Registration";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
+import Variant from "./pages/Variant";
 
 const Layout = () => {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/cart" element={<Cart />} />
         </Route>
+        <Route path="/product/:id" element={<Variant />} />
       </Fragment>
     )
   );
