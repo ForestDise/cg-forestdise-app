@@ -11,6 +11,7 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import cartReducer from "../features/cart/cartSlice";
+import  variantReducer from "../features/variant/variantSlice";
 
 const persistConfig = {
   key: "root",
@@ -21,7 +22,10 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, cartReducer);
 
 export const store = configureStore({
-  reducer: {cart:persistedReducer},
+  reducer: {
+    cart:persistedReducer,
+    variant: variantReducer
+  },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

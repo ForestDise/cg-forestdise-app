@@ -1,68 +1,89 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import StarIcon from "@mui/icons-material/Star";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
+import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getVariant, selectError, selectLoading, selectSuccess, selectVariantDetail } from "../../features/variant/variantSlice"
+import { addToCart } from "../../features/cart/cartSlice";
 
 function ProductDetail() {
-  const [variant, setVariant] = useState({});
+  const {id} = useParams();
+  const [variantId, setVariantId] = useState(id);
+  console.log(variantId);
+
+  const dispatch = useDispatch();
+  const variantDetail = useSelector(selectVariantDetail);
+  const statusLoading = useSelector(selectLoading);
+  const statusSuccess = useSelector(selectSuccess);
+  const statusError = useSelector(selectError);
+
+  console.log(statusLoading);
+  console.log(statusSuccess);
+  console.log(statusError);
+  console.log(id);
+  console.log(variantDetail);
+   
+
+  const getVariantDetail = async () => {
+    if (id != null) {
+      dispatch(getVariant(id));
+    }
+  };
+
   useEffect(() => {
-    fetchData();
-  });
-  async function fetchData() {
-    await axios
-      .get("https://fakestoreapi.com/products/1")
-      .then((res) => setVariant(res.data))
-      .catch((err) => {
-        throw err;
-      });
-  }
+    getVariantDetail();
+
+  }, [variantId]);
+
+
   return (
-    <div className="w-full bg-gray-100 p-1">
+    variantDetail && <div className="w-full bg-gray-100 p-1">
       <div className="container mx-auto h-auto grid grid-cols-5 gap-2">
         {/* Thumnail start */}
         <div className="w-full h-full bg-white px-4 col-span-2 flex flex-col py-10 border-gray-300 border-2 rounded-3xl">
           <div>
             <img
               className="w-full h-96 object-contain "
-              src={variant.image}
+              src ={variantDetail.variantDto.img}
               alt="ProductImg"
             ></img>
           </div>
           <div className="px-8 mx-8 my-4 hover:border-spacing-x-5 text-center justify-center font-titleFont tracking-wide text-green-900 size text-sm ">
-            <span>Roll over the image to zoo in</span>
+            <span>Roll over the image to zoom in</span>
           </div>
           <div>
             <div className="flex flex-wrap text-center justify-between object-contain hover:py-4 mx-21">
               <img
                 className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
-                src={variant.image}
+                src ={variantDetail.variantDto.img}
                 alt="ProductImg"
               ></img>
               <img
                 className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
-                src={variant.image}
+                src ="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
                 alt="ProductImg"
               ></img>
               <img
                 className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
-                src={variant.image}
+              src ="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
                 alt="ProductImg"
               ></img>
               <img
                 className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
-                src={variant.image}
+              src ="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
                 alt="ProductImg"
               ></img>
               <img
                 className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
-                src={variant.image}
+              src ="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
                 alt="ProductImg"
               ></img>
               <video
                 controls
                 className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300 px-4"
               >
-                <source src={variant.image} type="video/mp4" />
+                <source src ="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
+                type="video/mp4" />
               </video>
             </div>
           </div>
@@ -73,15 +94,15 @@ function ProductDetail() {
           <div className="w-full h-full bg-white px-4 col-span-2 flex flex-col py-10">
             <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
               <h2>
-                Fjallraven - Foldsack No. 1 Backpack, Fits 15 LaptopsFjallraven
-                - Foldsack No. 1 Backpack, Fits 15 Laptops
+          {variantDetail.variantDto.name}
+             
               </h2>
             </div>
-            <a>
+            <Link to ={`/shop`}>
               <div className="font-titleFont tracking-wide text-green-900 size text-sm sm:text-xs hover:text-orange-500 underline">
                 <span>Visit to the Helu Store</span>
               </div>
-            </a>
+            </Link>
             <div className="flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
               <div className="flex text-center justify-center ">
                 <div>4.1</div>
@@ -96,7 +117,7 @@ function ProductDetail() {
               {/* 5 star */}
               <div className="">69 rating</div>
               <button
-                class="flex-none flex items-center justify-center w-9 h-9 rounded-md text-slate-300 border border-slate-200 "
+                className="flex-none flex items-center justify-center w-9 h-9 rounded-md text-slate-300 border border-slate-200 "
                 type="button"
                 aria-label="Like"
               >
@@ -107,20 +128,20 @@ function ProductDetail() {
                   aria-hidden="true"
                 >
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
                   />
                 </svg>
               </button>
-              <a className="text-green-900">See all reviews</a>
+               <Link to ={`/review`} className="text-green-900"> See all reviews</Link>
             </div>
             <hr></hr>
-            <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
+            <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl flex ">
               <h2>
-                <span className="">$</span>
-                {variant.price}
+                <span className="">${variantDetail.variantDto.price}</span>
               </h2>
+              <span className="text-yellow-500 text-xs ml-4 pb-0">{variantDetail.variantDto.stockQuantity} Đã bán</span>
             </div>
             {/* status */}
             <div className=" text-green-900 mt-6 flex flex-col mb-2">
@@ -133,61 +154,61 @@ function ProductDetail() {
               <div className="text-gray mr-2">Color : </div>
               <div> Red and Blue</div>
             </div>
-            <div class="flex items-baseline mt-2 mb-6 pb-6 border-b border-slate-200">
-              <div class="space-x-2 flex text-sm">
+            <div className="flex items-baseline mt-2 mb-6 pb-6 border-b border-slate-200">
+              <div className="space-x-2 flex text-sm">
                 <label>
                   <input
-                    class="sr-only peer"
+                    className="sr-only peer"
                     name="size"
                     type="radio"
                     value="xs"
                     // checked
                   />
-                  <div class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     XS
                   </div>
                 </label>
                 <label>
                   <input
-                    class="sr-only peer"
+                    className="sr-only peer"
                     name="size"
                     type="radio"
                     value="s"
                   />
-                  <div class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     S
                   </div>
                 </label>
                 <label>
                   <input
-                    class="sr-only peer"
+                    className="sr-only peer"
                     name="size"
                     type="radio"
                     value="m"
                   />
-                  <div class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     M
                   </div>
                 </label>
                 <label>
                   <input
-                    class="sr-only peer"
+                    className="sr-only peer"
                     name="size"
                     type="radio"
                     value="l"
                   />
-                  <div class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     L
                   </div>
                 </label>
                 <label>
                   <input
-                    class="sr-only peer"
+                    className="sr-only peer"
                     name="size"
                     type="radio"
                     value="xl"
                   />
-                  <div class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     XL
                   </div>
                 </label>
@@ -197,60 +218,60 @@ function ProductDetail() {
               <div className="text-black mr-2">Style : </div>
               <div>SE - Pink Stripes</div>
             </div>
-            <div class="flex items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
-              <div class="space-x-2 flex text-xs">
+            <div className="flex items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
+              <div className="space-x-2 flex text-xs">
                 <label>
                   <input
-                    class="sr-only peer"
+                    className="sr-only peer"
                     name="style"
                     type="radio"
                     value="SE - Pink Stripes"
                   />
-                  <div class="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     SE - Pink Stripes
                   </div>
                 </label>
                 <label>
                   <input
-                    class="sr-only peer"
+                    className="sr-only peer"
                     name="style"
                     type="radio"
                     value="PROMAX - Pink Stripes"
                   />
-                  <div class="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     PROMAX - Pink Stripes
                   </div>
                 </label>
                 <label>
                   <input
-                    class="sr-only peer"
+                    className="sr-only peer"
                     name="style"
                     type="radio"
                     value="PLUS - Pink Stripes"
                   />
-                  <div class="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     PLUS - Pink Stripes
                   </div>
                 </label>
                 <label>
                   <input
-                    class="sr-only peer"
+                    className="sr-only peer"
                     name="style"
                     type="radio"
                     value="l"
                   />
-                  <div class="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     SE - BLACK Stripes
                   </div>
                 </label>
                 <label>
                   <input
-                    class="sr-only peer"
+                    className="sr-only peer"
                     name="style"
                     type="radio"
                     value="xl"
                   />
-                  <div class="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     PROMAX - Pink Stripes
                   </div>
                 </label>
@@ -316,7 +337,7 @@ function ProductDetail() {
             <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
               <h2>
                 <span className="">$</span>
-                {variant.price}
+                {variantDetail.variantDto.price}
               </h2>
             </div>
             <div>
@@ -326,16 +347,30 @@ function ProductDetail() {
             </div>
             <div className="flex flex-row">
               <FmdGoodIcon sx={{ fontSize: 20 }} />
-              <a>
+             <Link to={`/deliver`}>
                 <span className=" text-teal-600 hover:text-orange-500 underline text-xs">
                   Deliver To Nghia - Đà Nẵng
                 </span>
-              </a>
+             </Link>
             </div>
             <div>
               <h1 className="my-4 text-2xl text-green-900">In Stock</h1>
             </div>
-            <button className="rounded-lg bg-yellow-500 py-3 my-2 hover:bg-yellow-300 duration-100">
+            <button
+              onClick={() =>
+                dispatch(
+                  addToCart({
+                    id: variantDetail.variantDto.id,
+                    title: variantDetail.variantDto.name,
+                    description: variantDetail.variantDto.skuCode,
+                    price: variantDetail.variantDto.price,
+                    category: variantDetail.variantDto.img,
+                    image: variantDetail.variantDto.img,
+                    quantity: 1,
+                  })
+                )
+              }
+             className="rounded-lg bg-yellow-500 py-3 my-2 hover:bg-yellow-300 duration-100">
               Add To Cart
             </button>
             <button className="rounded-lg bg-yellow-500 py-3 my-2 hover:bg-green-600 duration-100">

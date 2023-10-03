@@ -29,10 +29,10 @@ const Cart = () => {
 
   return (
     <div className="w-full bg-gray-100 p-4">
-      <div class="grid grid-cols-4 gap-4">
-        <div class="col-span-3">
-          <div class="grid gap-4">
-            <div class="bg-red-500">
+      <div className="grid grid-cols-4 gap-4">
+        <div className="col-span-3">
+          <div className="grid gap-4">
+            <div className="bg-red-500">
               <div className="w-full h-full bg-white px-4 col-span-4 pb-3">
                 {products.length > 0 ? (
                   <div className="font-titleFont flex items-center justify-between border-b-[1px] border-b-gray-400 py-3">
@@ -164,7 +164,7 @@ const Cart = () => {
                 )}
               </div>
             </div>
-            <div class="bg-lime-400">
+            <div className="bg-lime-400">
               <div className="w-full h-full bg-white px-4 col-span-4 pb-1">
                 <div className="font-titleFont flex items-center justify-between border-b-[1px] border-b-gray-400 py-3">
                   <h2 className="text-3x1 font-medium">
@@ -178,15 +178,15 @@ const Cart = () => {
                 <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4  xl:gap-4 py-4">
                   {empties.map((item) => (
                     <div
-                      class="grid grid-cols-4 gap-1 bg-white border-[1px] border-gray-200 hover:border-transparent shadow-none hover:shadow-testShadow duration-200"
+                      className="grid grid-cols-4 gap-1 bg-white border-[1px] border-gray-200 hover:border-transparent shadow-none hover:shadow-testShadow duration-200"
                       key={item.id}
                     >
-                      <div class=" col-span-4 px-3">
+                      <div className=" col-span-4 px-3">
                         <div className="text-sm italic text-gray-500 text-right">
                           {item.category}
                         </div>
                       </div>
-                      <div class=" col-span-4">
+                      <div className=" col-span-4">
                         <div className="w-full h-auto flex items-center justify-center relative group">
                           <img
                             className="w-52 h-44 object-contain"
@@ -195,7 +195,7 @@ const Cart = () => {
                           />
                         </div>
                       </div>
-                      <div class=" col-span-4 px-4 h-12">
+                      <div className=" col-span-4 px-4 h-12">
                         <div className="flex items-center justify-between  ">
                           <h2
                             className="font-titleFont tracking-wide text-md text-amazon_blue
@@ -206,7 +206,7 @@ const Cart = () => {
                           </h2>
                         </div>
                       </div>
-                      <div class=" col-span-4 px-4">
+                      <div className=" col-span-4 px-4">
                         <p className="text-md font-semibold">${item.price}</p>
                         <button
                           onClick={() =>
@@ -244,9 +244,9 @@ const Cart = () => {
           </div>
         </div>
         <div>
-          <div class="col-span-3 ">
-            <div class="flex flex-col gap-4">
-              <div class="bg-red-500">
+          <div className="col-span-3 ">
+            <div className="flex flex-col gap-4">
+              <div className="bg-red-500">
                 <div className="w-full h-52 bg-white col-span-1 flex flex-col justify-center items-center p-4">
                   <div>
                     <p className="flex gap-2 items-start text-sm">
@@ -271,31 +271,31 @@ const Cart = () => {
                 </div>
               </div>
 
-              {/* <div class="bg-white rounded-lg">
+              {/* <div className="bg-white rounded-lg">
                 
-                <h2 class="p-4 font-semibold">
+                <h2 className="p-4 font-semibold">
                   Customers Who Bought Items in Your Recent History Also Bought
                 </h2>
                 {empties.map((item) => (
-                  <div class="max-w-md mx-auto bg-white  overflow-hidden md:max-w-2xl rounded-lg">
-                    <div class="md:flex p-2">
-                      <div class="md:shrink-0 ">
+                  <div className="max-w-md mx-auto bg-white  overflow-hidden md:max-w-2xl rounded-lg">
+                    <div className="md:flex p-2">
+                      <div className="md:shrink-0 ">
                         <img
-                          class="h-auto w-full object-cover md:h-auto md:w-20 p-2"
+                          className="h-auto w-full object-cover md:h-auto md:w-20 p-2"
                           src={item.image}
                           alt="Modern building architecture"
                         />
                       </div>
 
-                      <div class="p-1">
-                        <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
+                      <div className="p-1">
+                        <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
                           {item.title.substring(0, 27)}
                           {item.title.length > 30 ? "..." : ""}
                         </div>
-                        <p class="mt-2 text-slate-500">
+                        <p className="mt-2 text-slate-500">
                           ${item.price.toFixed(2)}
                           <br />
-                          <div class="text-xs">{item.category}</div>
+                          <div className="text-xs">{item.category}</div>
                           <div className="text-yellow-500 text-xs">
                             <StarIcon />
                             <StarIcon />
@@ -334,16 +334,16 @@ const Cart = () => {
             </div>
           </div>
         </div>
-        <div class="col-span-4 bg-amber-400">
-          <div class="bg-red-400 ">
-            <div class="grid grid-cols-6 gap-4">
-              <div class="col-start-2 col-span-4 bg-amber-400">01</div>
-              <div class="col-start-1 col-end-3 bg-blue-400">02</div>
-              <div class="col-end-7 col-span-2 bg-green-400">03</div>
-              <div class="col-start-1 col-end-7 bg-gray-400">04</div>
+        <div className="col-span-4 bg-amber-400">
+          <div className="bg-red-400 ">
+            <div className="grid grid-cols-6 gap-4">
+              <div className="col-start-2 col-span-4 bg-amber-400">01</div>
+              <div className="col-start-1 col-end-3 bg-blue-400">02</div>
+              <div className="col-end-7 col-span-2 bg-green-400">03</div>
+              <div className="col-start-1 col-end-7 bg-gray-400">04</div>
             </div>
           </div>
-          <div class="bg-lime-400 ">07</div>
+          <div className="bg-lime-400 ">07</div>
         </div>
       </div>
     </div>
