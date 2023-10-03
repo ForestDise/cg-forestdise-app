@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { logo } from "../../assets";
+import { logo } from "../../../assets";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import HeaderBottom from "./HeaderBottom";
-import { allItems } from "../../constants";
+import { allItems } from "../../../constants";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";

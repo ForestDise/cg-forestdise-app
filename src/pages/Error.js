@@ -1,6 +1,6 @@
 import React from 'react'
-import ErrorHeader from '../components/error/ErrorHeader';
-import ErrorContent from '../components/error/ErrorContent';
+import ErrorHeader from '../components/common/error/ErrorHeader';
+import ErrorContent from "../components/common/error/ErrorContent";
 
 function Error() {
   return (

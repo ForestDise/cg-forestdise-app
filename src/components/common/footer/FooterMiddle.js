@@ -1,7 +1,7 @@
 import React from 'react'
 import FooterMiddleList from './FooterMiddleList';
-import { middleList } from '../../constants';
-import { logo, vnFlag } from '../../assets';
+import { middleList } from '../../../constants';
+import { logo, vnFlag } from '../../../assets';
 
 function FooterMiddle() {
   return (

@@ -1,6 +1,6 @@
 import StarIcon from "@mui/icons-material/Star";
 import { useDispatch} from "react-redux";
-import {moveToCart} from "../../features/cart/cartSlice";
+import { moveToCart } from "../../../features/cart/cartSlice";
 
 
 const CartSidebar = (props) => {

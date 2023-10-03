@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { forest } from "../../assets";
+import { forest } from "../../../assets";
 
 function ErrorContent() {
   return (

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { logo } from "../../assets";
+import { logo } from "../../../assets";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import SearchIcon from "@mui/icons-material/Search";
-import { allItems } from "../../constants";
+import { allItems } from "../../../constants";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 

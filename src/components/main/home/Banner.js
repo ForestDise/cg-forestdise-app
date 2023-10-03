@@ -6,7 +6,7 @@ import {
   bannerImgThree,
   bannerImgFour,
   bannerImgFive,
-} from "../../assets";
+} from "../../../assets";
 
 function Banner() {
   const [bannerActive, setBannerActive] = useState(0);
@@ -106,7 +106,7 @@ function Banner() {
           slidesToScroll: 1,
         },
       },
-    ]
+    ],
   };
 
   return (
