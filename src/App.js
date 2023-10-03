@@ -10,6 +10,7 @@ import {
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Signin from "./pages/Signin";
+import Error from "./pages/Error";
 import Registration from "./pages/Registration";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -30,6 +31,7 @@ function App() {
     createRoutesFromElements(
       <Fragment>
         <Route path="/signin" element={<Signin />} />
+        <Route path="/error" element={<Error />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
