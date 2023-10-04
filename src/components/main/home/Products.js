@@ -6,7 +6,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../../features/cart/cartSlice";
+import { addToCart } from "../../../features/cart/cartSlice";
 import { Link } from "react-router-dom";
 
 function Products() {
@@ -19,7 +19,7 @@ function Products() {
 
   async function fetchData() {
     await axios
-      .get("http://localhost:8080/api/product/get-all-product")
+      .get("http://localhost:8080/api/products")
       .then((res) => setProductData(res.data))
       .catch((err) => {
         throw err;

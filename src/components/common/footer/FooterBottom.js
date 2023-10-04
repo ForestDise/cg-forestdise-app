@@ -1,5 +1,5 @@
 import React from 'react'
-import { footerBottomItem } from '../../constants'
+import { footerBottomItem } from '../../../constants'
 
 function FooterBottom() {
   return (

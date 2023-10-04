@@ -27,8 +27,8 @@ function Signin() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    
   };
 
   return (
@@ -56,7 +56,7 @@ function Signin() {
                     <p className="text-sm font-medium">Email or username</p>
                     <input
                       onChange={handleChange}
-                      className="w-full lowercase py-1 bordder border-zinc-400
+                      className="w-full normal-case py-1 bordder border-zinc-400
                     px-2 text-base rounded-sm outline-none focus-within:border-[#e77600]
                     focus-within:shadow-amazonInput duration-100
                     "
@@ -78,7 +78,7 @@ function Signin() {
                     <p className="text-sm font-medium">Password</p>
                     <input
                       onChange={handleChange}
-                      className="w-full lowercase py-1 bordder border-zinc-400
+                      className="w-full normal-case py-1 bordder border-zinc-400
                     px-2 text-base rounded-sm outline-none focus-within:border-[#e77600]
                     focus-within:shadow-amazonInput duration-100
                     "
