@@ -22,6 +22,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, cartReducer);
 
 export const store = configureStore({
+
   reducer: {
     cart:persistedReducer,
     variant: variantReducer

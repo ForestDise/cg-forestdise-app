@@ -8,12 +8,13 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import Home from "./pages/Home";
-import Cart from "./components/cart/Cart";
+import Cart from "./components/main/cart/Cart";
 import Signin from "./pages/Signin";
+import Error from "./pages/Error";
 import Registration from "./pages/Registration";
-import Header from "./components/header/Header";
-import Footer from "./components/footer/Footer";
-import ProductDetail from "./components/variant/ProductDetail";
+import Header from "./components/common/header/Header";
+import Footer from "./components/common/footer/Footer";
+import ProductDetail from "./components/main/variant/ProductDetail";
 
 const Layout = () => {
   return (
@@ -31,6 +32,7 @@ function App() {
     createRoutesFromElements(
       <Fragment>
         <Route path="/signin" element={<Signin />} />
+        <Route path="/error" element={<Error />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

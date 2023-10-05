@@ -1,13 +1,13 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import StarIcon from "@mui/icons-material/Star";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getVariant, selectError, selectLoading, selectSuccess, selectVariantDetail } from "../../features/variant/variantSlice"
-import { addToCart } from "../../features/cart/cartSlice";
+import { getVariant, selectError, selectLoading, selectSuccess, selectVariantDetail } from "../../../features/variant/variantSlice"
+import { addToCart } from "../../../features/cart/cartSlice";
 
 function ProductDetail() {
-  const {id} = useParams();
+  const { id } = useParams();
   const [variantId, setVariantId] = useState(id);
   console.log(variantId);
 
@@ -22,7 +22,6 @@ function ProductDetail() {
   console.log(statusError);
   console.log(id);
   console.log(variantDetail);
-   
 
   const getVariantDetail = async () => {
     if (id != null) {
@@ -32,58 +31,66 @@ function ProductDetail() {
 
   useEffect(() => {
     getVariantDetail();
-
   }, [variantId]);
 
 
+
+
+
+
   return (
-    variantDetail && <div className="w-full bg-gray-100 p-1">
+    variantDetail && <div className="font-bodyFont w-full bg-gray-100 p-1">
       <div className="container mx-auto h-auto grid grid-cols-5 gap-2">
         {/* Thumnail start */}
         <div className="w-full h-full bg-white px-4 col-span-2 flex flex-col py-10 border-gray-300 border-2 rounded-3xl">
           <div>
             <img
               className="w-full h-96 object-contain "
-              src ={variantDetail.variantDto.img}
+              src={variantDetail.variantDto.image}
               alt="ProductImg"
             ></img>
           </div>
-          <div className="px-8 mx-8 my-4 hover:border-spacing-x-5 text-center justify-center font-titleFont tracking-wide text-green-900 size text-sm ">
+          <div className="font-titleFont px-8 mx-8 my-4 hover:border-spacing-x-5 text-center justify-center tracking-wide text-green-900 size text-sm ">
             <span>Roll over the image to zoom in</span>
           </div>
           <div>
             <div className="flex flex-wrap text-center justify-between object-contain hover:py-4 mx-21">
               <img
                 className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
-                src ={variantDetail.variantDto.img}
+                src={variantDetail.variantDto.img}
                 alt="ProductImg"
+                // onClick={changeMainImage("https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg")}
               ></img>
               <img
                 className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
-                src ="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
+                src="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
                 alt="ProductImg"
+                // onClick={changeMainImage("https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg")}
               ></img>
               <img
                 className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
-              src ="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
+                src="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
                 alt="ProductImg"
+                // onClick={changeMainImage("https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg")}
               ></img>
               <img
                 className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
-              src ="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
+                src="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
                 alt="ProductImg"
+                // onClick={changeMainImage("https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg")}
               ></img>
               <img
                 className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
-              src ="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
+                src="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
                 alt="ProductImg"
+                // onClick={changeMainImage("https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg")}
               ></img>
               <video
                 controls
                 className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300 px-4"
               >
-                <source src ="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
-                type="video/mp4" />
+                <source src="https://m.media-amazon.com/images/I/91vA+JmG2TL._AC_UX425_.jpg"
+                  type="video/mp4" />
               </video>
             </div>
           </div>
@@ -94,16 +101,16 @@ function ProductDetail() {
           <div className="w-full h-full bg-white px-4 col-span-2 flex flex-col py-10">
             <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
               <h2>
-          {variantDetail.variantDto.name}
-             
+                {variantDetail.variantDto.name}
+
               </h2>
             </div>
-            <Link to ={`/shop`}>
-              <div className="font-titleFont tracking-wide text-green-900 size text-sm sm:text-xs hover:text-orange-500 underline">
+            <Link to={`/shop`}>
+              <div className="font-titleFont tracking-wide text-green-900 size text-sm sm:text-xs hover:text-green-700 underline">
                 <span>Visit to the Helu Store</span>
               </div>
             </Link>
-            <div className="flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
+            <div className="font-titleFont flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
               <div className="flex text-center justify-center ">
                 <div>4.1</div>
                 <div className="text-yellow-500 text-sm items-center ">
@@ -134,7 +141,7 @@ function ProductDetail() {
                   />
                 </svg>
               </button>
-               <Link to ={`/review`} className="text-green-900"> See all reviews</Link>
+              <Link to={`/review`} className="text-green-900"> See all reviews</Link>
             </div>
             <hr></hr>
             <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl flex ">
@@ -162,7 +169,7 @@ function ProductDetail() {
                     name="size"
                     type="radio"
                     value="xs"
-                    // checked
+                  // checked
                   />
                   <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     XS
@@ -227,7 +234,7 @@ function ProductDetail() {
                     type="radio"
                     value="SE - Pink Stripes"
                   />
-                  <div className="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     SE - Pink Stripes
                   </div>
                 </label>
@@ -238,7 +245,7 @@ function ProductDetail() {
                     type="radio"
                     value="PROMAX - Pink Stripes"
                   />
-                  <div className="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     PROMAX - Pink Stripes
                   </div>
                 </label>
@@ -249,7 +256,7 @@ function ProductDetail() {
                     type="radio"
                     value="PLUS - Pink Stripes"
                   />
-                  <div className="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     PLUS - Pink Stripes
                   </div>
                 </label>
@@ -260,7 +267,7 @@ function ProductDetail() {
                     type="radio"
                     value="l"
                   />
-                  <div className="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     SE - BLACK Stripes
                   </div>
                 </label>
@@ -271,7 +278,7 @@ function ProductDetail() {
                     type="radio"
                     value="xl"
                   />
-                  <div className="w-18 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                  <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
                     PROMAX - Pink Stripes
                   </div>
                 </label>
@@ -347,11 +354,11 @@ function ProductDetail() {
             </div>
             <div className="flex flex-row">
               <FmdGoodIcon sx={{ fontSize: 20 }} />
-             <Link to={`/deliver`}>
-                <span className=" text-teal-600 hover:text-orange-500 underline text-xs">
+              <Link to={`/deliver`}>
+                <span className=" text-green-900 hover:text-stone-400 underline text-xs">
                   Deliver To Nghia - Đà Nẵng
                 </span>
-             </Link>
+              </Link>
             </div>
             <div>
               <h1 className="my-4 text-2xl text-green-900">In Stock</h1>
@@ -370,10 +377,11 @@ function ProductDetail() {
                   })
                 )
               }
-             className="rounded-lg bg-yellow-500 py-3 my-2 hover:bg-yellow-300 duration-100">
+              className="rounded-lg bg-yellow-400 py-3 my-2 hover:bg-yellow-300 duration-100 cursor-pointer">
               Add To Cart
             </button>
-            <button className="rounded-lg bg-yellow-500 py-3 my-2 hover:bg-green-600 duration-100">
+            <button className="rounded-lg py-3 my-2 bg-gradient-to-t from-slate-200 to-slate-100 hover:bg-gradient-to-b border
+              border-zinc-400 active:border-yellow-800 active:shadow-amazonInput duration-100 cursor-pointer">
               Buy Now
             </button>
             <div className="w-full mx-auto h-auto grid grid-cols-6 gap-2 left-0 ">

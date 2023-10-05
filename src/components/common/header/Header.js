@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { logo } from "../../assets";
+import { logo } from "../../../assets";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import HeaderBottom from "./HeaderBottom";
-import { allItems } from "../../constants";
+import { allItems } from "../../../constants";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -74,6 +74,7 @@ function Header() {
           <input
             type="text"
             className="h-full text-base text-amazon_blue flex-grow outline-none border-none px-2"
+            placeholder="Search ForestDise"
           ></input>
           <span className="w-12 h-full flex items-center justify-center bg-amazon_yellow hover:bg-[#f3a847] duration-300 text-amazon_blue cursor-pointer rounded-tr-md rounded-br-md">
             <SearchIcon />

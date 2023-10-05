@@ -11,8 +11,8 @@ import {
   saveForLater,
   moveToCart,
   deleteEmpties,
-} from "../../features/cart/cartSlice";
-import { emptyCart } from "../../assets/index";
+} from "../../../features/cart/cartSlice";
+import { emptyCart } from "../../../assets";
 import { Link } from "react-router-dom";
 
 const Cart = () => {

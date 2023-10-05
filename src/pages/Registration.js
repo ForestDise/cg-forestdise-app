@@ -6,7 +6,7 @@ import { Formik } from "formik";
 
 function Registration() {
   const [form, setForm] = useState({});
-
+  const [emailUsed, setEmailUsed] = useState(false)
   const navigate = useNavigate();
 
   const REGEX = {
@@ -31,7 +31,7 @@ function Registration() {
       errors.email = "Required";
     } else if (!REGEX.email.test(form.email)) {
       errors.email = "Invalid email";
-    }
+    } 
 
     if (!form.password) {
       errors.password = "Required";
@@ -45,10 +45,7 @@ function Registration() {
     return errors;
   };
 
-  const handleSubmit = (e) => {
-    setForm({});
-    e.preventDefault();
-    navigate("/");
+  const handleSubmit = () => {
   };
 
   return (
@@ -79,7 +76,7 @@ function Registration() {
                       onChange={handleChange}
                       name="clientName"
                       value={form.clientName || ""}
-                      className="w-full placeholder:normal-case placeholder:text-sm lowercase py-1 bordder border-zinc-400
+                      className="w-full placeholder:normal-case placeholder:text-sm normal-case py-1 bordder border-zinc-400
                     px-2 text-base rounded-sm outline-none focus-within:border-[#e77600]
                     focus-within:shadow-amazonInput duration-100
                     "
@@ -103,7 +100,7 @@ function Registration() {
                       name="email"
                       onChange={handleChange}
                       value={form.email || ""}
-                      className="w-full lowercase py-1 bordder border-zinc-400
+                      className="w-full normal-case py-1 bordder border-zinc-400
                     px-2 text-base rounded-sm outline-none focus-within:border-[#e77600]
                     focus-within:shadow-amazonInput duration-100
                     "
@@ -128,7 +125,7 @@ function Registration() {
                       onChange={handleChange}
                       value={form.password || ""}
                       placeholder="At least 8 characters"
-                      className="w-full placeholder:normal-case placeholder:text-sm lowercase py-1 bordder border-zinc-400
+                      className="w-full placeholder:normal-case placeholder:text-sm normal-case py-1 bordder border-zinc-400
                     px-2 text-base rounded-sm outline-none focus-within:border-[#e77600]
                     focus-within:shadow-amazonInput duration-100
                     "
@@ -152,7 +149,7 @@ function Registration() {
                       name="cpassword"
                       onChange={handleChange}
                       value={form.cpassword || ""}
-                      className="w-full lowercase py-1 bordder border-zinc-400
+                      className="w-full normal-case py-1 bordder border-zinc-400
                     px-2 text-base rounded-sm outline-none focus-within:border-[#e77600]
                     focus-within:shadow-amazonInput duration-100
                     "
