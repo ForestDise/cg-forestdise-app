@@ -13,7 +13,7 @@ import Signin from "./pages/Signin";
 import Registration from "./pages/Registration";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
-import Variant from "./pages/Variant";
+import ProductDetail from "./components/variant/ProductDetail";
 
 const Layout = () => {
   return (
@@ -35,8 +35,8 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
         </Route>
-        <Route path="/product/:id" element={<Variant />} />
       </Fragment>
     )
   );
