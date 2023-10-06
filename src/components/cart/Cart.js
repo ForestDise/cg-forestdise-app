@@ -1,7 +1,8 @@
-import CartFooter from "./CartFooter";
 import CartHotItems from "./CartHotItems";
 import CartLine from "./CartLine";
 import CartSaveForLater from "./CartSaveForLater";
+import RecentlyViewed from "./RecentlyViewed";
+import ShoppingTrend from "./ShoppingTrend";
 
 const Cart = () => {
   
@@ -10,17 +11,20 @@ const Cart = () => {
       <div class="grid grid-cols-4 gap-4">
         <div class="col-span-3">
           <div class="grid gap-4">
-            <CartLine/>
-            <CartSaveForLater/>
+            <CartLine />
+            <CartSaveForLater />
           </div>
         </div>
         <div>
           <div class="col-span-3 ">
-              <CartHotItems/>
+            <CartHotItems />
           </div>
         </div>
-        <div class="col-span-4 bg-amber-400">
-          <CartFooter/>
+        <div class="col-span-4 bg-white">
+          <ShoppingTrend />
+        </div>
+        <div class="col-span-4 bg-white">
+          <RecentlyViewed/>
         </div>
       </div>
     </div>

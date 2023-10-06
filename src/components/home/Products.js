@@ -7,18 +7,20 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../features/cart/cartSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 function Products() {
   const dispatch = useDispatch();
   const [productData, setProductData] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchData();
   }, []);
 
   async function fetchData() {
     await axios
-      .get("https://fakestoreapi.com/products")
+      .get("http://localhost:8080/api/product/get-all-product")
+      // .get("https://fakestoreapi.com/products")
       .then((res) => setProductData(res.data))
       .catch((err) => {
         throw err;
@@ -43,7 +45,7 @@ function Products() {
           >
             <img
               className="w-52 h-64 object-contain"
-              src={product.image}
+              src={product.mainPicture}
               alt="ProductImg"
             ></img>
             <ul
@@ -77,12 +79,12 @@ function Products() {
                   <ShoppingCartIcon />
                 </span>
               </li>
-              <li className="productLi">
+              <Link to={`/product/${product.id}`} className="productLi">
                 View Details
                 <span>
                   <ArrowCircleRightIcon />
                 </span>
-              </li>
+              </Link>
               <li className="productLi">
                 Add to Wish List
                 <span>
@@ -119,24 +121,14 @@ function Products() {
             </div>
             <button
               onClick={() =>
-                dispatch(
-                  addToCart({
-                    id: product.id,
-                    title: product.title,
-                    description: product.description,
-                    price: product.price,
-                    category: product.category,
-                    image: product.image,
-                    quantity: 1,
-                  })
-                )
+                navigate(`/product/${product.id}`)
               }
               className="w-full font-titleFont font-medium text-base bg-gradient-to-tr
             from-yellow-400 to-yellow-200 border hover:from-yellow-300 hover:to-yellow-400
             border-yellow-500 hover:border-yellow-700 active:bg-gradient-to-bl
             active:from-yellow-400 active:to-yellow-500 duration-200 py-1.5 rounded-md mt-3"
             >
-              Add to Cart
+              View Details
             </button>
           </div>
         </div>

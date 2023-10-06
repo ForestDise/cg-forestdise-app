@@ -1,4 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { findProductsSame } from "../../api/cartAPI";
+
+export const getProductsSame = createAsyncThunk("products/list", async () => {
+  const response = await findProductsSame();
+  return response.data;
+});
 
 const initialState = {
   products: [],
@@ -64,7 +70,6 @@ export const {
   incrementQuantity,
   saveForLater,
   deleteEmpties,
-  moveToCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
