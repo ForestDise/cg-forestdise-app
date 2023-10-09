@@ -40,7 +40,7 @@ function ProductDetail() {
   }, [variantId]);
 
   return (
-    variantDetail && (
+    variantDetail && 
       <div className="w-full bg-gray-100 p-1">
         <div className="container mx-auto h-auto grid grid-cols-5 gap-2">
           {/* Thumnail start */}
@@ -52,8 +52,17 @@ function ProductDetail() {
                 alt="ProductImg"
               ></img>
             </div>
-            <div className="px-8 mx-8 my-4 hover:border-spacing-x-5 text-center justify-center font-titleFont tracking-wide text-green-900 size text-sm ">
-              <span>Roll over the image to zoom in</span>
+          </div>
+        </div>
+        {/* Thumnail end */}
+        {/* Detail Product Start */}
+        <div className="font-bodyFont w-full h-full bg-white px-4 col-span-2 border-gray-300 border-2 rounded-3xl">
+          <div className="w-full h-full bg-white px-4 col-span-2 flex flex-col py-10">
+            <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
+              <h2>
+          {variantDetail.variantDto.name}
+             
+              </h2>
             </div>
             <div>
               <div className="flex flex-wrap text-center justify-between object-contain hover:py-4 mx-21">
@@ -286,6 +295,7 @@ function ProductDetail() {
                 </div>
               </div>
 
+
               <div className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0 ">
                 <div className=" w-full h-full bg-white  col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
                   Brand
@@ -444,7 +454,6 @@ function ProductDetail() {
           ></img>
         </div>
       </div>
-    )
   );
 }
 

@@ -10,6 +10,7 @@ import { addToCart } from "../../features/cart/cartSlice";
 import { Link, useNavigate } from "react-router-dom";
 
 function Products() {
+  
   const dispatch = useDispatch();
   const [productData, setProductData] = useState([]);
   const navigate = useNavigate();
@@ -19,9 +20,10 @@ function Products() {
 
   async function fetchData() {
     await axios
-      .get("http://localhost:8080/api/product/get-all-product")
-      // .get("https://fakestoreapi.com/products")
-      .then((res) => setProductData(res.data))
+      .get("http://localhost:8080/api/products")
+      .then((res) => {
+        console.log(res);
+        setProductData(res.data)})
       .catch((err) => {
         throw err;
       });

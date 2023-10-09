@@ -8,7 +8,7 @@ export const getProductsSame = createAsyncThunk("products/list", async () => {
 
 const initialState = {
   products: [],
-  empties: [],
+  empties: []
 };
 
 export const cartSlice = createSlice({

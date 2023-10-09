@@ -4,6 +4,7 @@ import CartSaveForLater from "./CartSaveForLater";
 import RecentlyViewed from "./RecentlyViewed";
 import ShoppingTrend from "./ShoppingTrend";
 
+
 const Cart = () => {
   
   return (
