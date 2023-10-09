@@ -1,10 +1,10 @@
 import StarIcon from "@mui/icons-material/Star";
 import { useDispatch} from "react-redux";
 import CartPayment from "./CartPayment";
-import { addToCart } from "../../features/cart/cartSlice";
+import { addToCart } from "../../../features/cart/cartSlice";
 import { useEffect } from "react";
 import { useState } from "react";
-import { findFiveProducts } from "../../api/cartAPI";
+import { findFiveProducts } from "../../../api/cartAPI";
 import Spinner from "./Spinner";
 
 const CartSidebar = () => {

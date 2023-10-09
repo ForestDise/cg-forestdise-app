@@ -4,9 +4,9 @@ import {
   resetCart,
   decrementQuantity,
   incrementQuantity,
-  saveForLater
-} from "../../features/cart/cartSlice";
-import { emptyCart } from "../../assets/index";
+  saveForLater,
+} from "../../../features/cart/cartSlice";
+import { emptyCart } from "../../../assets";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
