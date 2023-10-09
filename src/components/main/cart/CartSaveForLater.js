@@ -1,4 +1,4 @@
-import { addToCart, deleteEmpties } from "../../features/cart/cartSlice";
+import { addToCart, deleteEmpties } from "../../../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const CartSaveForLater = () => {

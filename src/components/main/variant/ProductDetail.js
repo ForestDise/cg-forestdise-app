@@ -3,7 +3,13 @@ import StarIcon from "@mui/icons-material/Star";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getVariant, selectError, selectLoading, selectSuccess, selectVariantDetail } from "../../../features/variant/variantSlice"
+import {
+  getVariant,
+  selectError,
+  selectLoading,
+  selectSuccess,
+  selectVariantDetail,
+} from "../../../features/variant/variantSlice";
 import { addToCart } from "../../../features/cart/cartSlice";
 
 function ProductDetail() {
