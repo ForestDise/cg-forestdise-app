@@ -20,6 +20,7 @@ const persistConfig = {
   storage,
 };
 
+
 const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
 

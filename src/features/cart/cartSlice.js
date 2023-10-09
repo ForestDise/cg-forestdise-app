@@ -1,4 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { findProductsSame } from "../../api/cartAPI";
+
+export const getProductsSame = createAsyncThunk("products/list", async () => {
+  const response = await findProductsSame();
+  return response.data;
+});
 
 const initialState = {
   products: [],
@@ -45,20 +51,11 @@ export const cartSlice = createSlice({
         );
       } else {
         state.empties.push(action.payload);
-        state.products = state.products.filter(
-          (item) => item.id !== action.payload.id
-        );
       }
     },
     deleteEmpties: (state, action) => {
       state.empties = state.empties.filter(
         (item) => item.id !== action.payload
-      );
-    },
-    moveToCart:(state,action)=>{
-      state.products.push(action.payload);
-      state.empties = state.empties.filter(
-        (item) => item.id !== action.payload.id
       );
     },
   },
@@ -73,7 +70,6 @@ export const {
   incrementQuantity,
   saveForLater,
   deleteEmpties,
-  moveToCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

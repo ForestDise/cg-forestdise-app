@@ -23,7 +23,6 @@ function Header() {
   useEffect(() => {
     let quantity = 0;
     products.map((item) => {
-      console.log(item.quantity);
       quantity += item.quantity;
       return setNumberCart(quantity);
     });
