@@ -90,7 +90,7 @@ function ProductDetail() {
         </div>
         {/* Thumnail end */}
         {/* Detail Product Start */}
-        <div className="w-full h-full bg-white px-4 col-span-2 border-gray-300 border-2 rounded-3xl">
+        <div className="font-bodyFont w-full h-full bg-white px-4 col-span-2 border-gray-300 border-2 rounded-3xl">
           <div className="w-full h-full bg-white px-4 col-span-2 flex flex-col py-10">
             <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
               <h2>
@@ -278,7 +278,7 @@ function ProductDetail() {
               </div>
             </div>
 
-            <div className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0 ">
+            <div className="font-bodyFont w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0 ">
               <div className=" w-full h-full bg-white  col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
                 Brand
               </div>
@@ -332,7 +332,7 @@ function ProductDetail() {
         </div>
         {/* Detail Product End */}
         {/* Cart Start */}
-        <div className="w-full h-full bg-white col-span-1 border-yellow-300 border-2 rounded-3xl text-sm">
+        <div className="font-bodyFont w-full h-full bg-white col-span-1 border-yellow-300 border-2 rounded-3xl text-sm">
           <div className="flex flex-col p-4">
             <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
               <h2>
@@ -407,7 +407,7 @@ function ProductDetail() {
         </div>
         {/* Cart End */}
       </div>
-      <div className="container mx-auto h-auto text-3xl font-bold py-4">
+      <div className="font-bodyFont container mx-auto h-auto text-3xl font-bold py-4">
         <h1>FROM THE BRAND</h1>
         <img
           className="w-full object-contain"

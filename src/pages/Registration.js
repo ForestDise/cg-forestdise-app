@@ -1,12 +1,18 @@
 import React, { useState } from "react";
-import { logo } from "../assets";
+import { logoBlack } from "../assets";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
+import { motion } from "framer-motion";
+import axios from "axios";
+import { RotatingLines } from "react-loader-spinner";
 
 function Registration() {
   const [form, setForm] = useState({});
-  const [emailUsed, setEmailUsed] = useState(false)
+  const [registerData, setRegisterData] = useState({});
+  const [registeredEmail, setRegisteredEmail] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [successNotify, setSuccessNotify] = useState("");
   const navigate = useNavigate();
 
   const REGEX = {
@@ -19,6 +25,14 @@ function Registration() {
       ...form,
       [event.target.name]: event.target.value,
     });
+
+    if(event.target.name !== "cpassword"){
+      setRegisterData({
+        ...registerData,
+        [event.target.name]: event.target.value,
+      })
+    }
+    
   };
 
   const handleValidate = () => {
@@ -45,7 +59,23 @@ function Registration() {
     return errors;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    setLoading(true);
+    setRegisteredEmail(false);
+    await axios
+        .post("http://localhost:8080/api/register", registerData)
+        .then(() => {
+          setLoading(false);
+          setSuccessNotify("Account created successfully");
+          setTimeout(() => {
+            navigate("/signin")
+          }, 2500)}
+        )
+        .catch((err) => {
+          setRegisteredEmail(true);
+          setLoading(false);
+          throw err;
+        });
   };
 
   return (
@@ -62,7 +92,7 @@ function Registration() {
               className="w-[350px] mx-auto flex flex-col items-center"
             >
               <Link to="/">
-                <img className="w-32" src={logo} alt="logo" />
+                <img className="w-36" src={logoBlack} alt="logo" />
               </Link>
               <div className="w-full border border-zinc-200 bg-gray-100 rounded-md p-6">
                 <h2 className="font-titleFont text-3xl font-medium mb-4">
@@ -115,6 +145,17 @@ function Registration() {
                           !
                         </span>
                         {errors.email}
+                      </p>
+                    )}
+                    {registeredEmail && (
+                      <p
+                        className="text-red-600 text-xs font-semibold tracking-wide
+                    flex items-center gap-2 -mt-1.5"
+                      >
+                        <span className="italic font-titleFont font-extrabold text-base">
+                          !
+                        </span>
+                        Email has already been registered
                       </p>
                     )}
                   </div>
@@ -175,6 +216,29 @@ function Registration() {
                   >
                     Continue
                   </button>
+                  {loading && (
+                    <div className="flex justify-center">
+                    <RotatingLines
+                      strokeColor="#febd69"
+                      strokeWidth="5"
+                      animationDuration="0.75"
+                      width="50"
+                      visible={true}
+                    />
+                    </div>
+                  )}
+                  {
+                    successNotify && (
+                      <div>
+                        <motion.p
+                        initial={{y: 10, opacity: 0}}
+                        animate={{y:0, opacity: 1}}
+                        transition={{duration: 0.5}}
+                        className="text-base font-titleFont font-semibold text-green-500
+                        border-[1px] border-green-500 px-2 text-center">{successNotify}</motion.p>
+                      </div>
+                    )
+                  }
                 </div>
                 <p className="text-xs text-black leading-4 mt-4">
                   By creating an account, you agree to ForestDise's{" "}
