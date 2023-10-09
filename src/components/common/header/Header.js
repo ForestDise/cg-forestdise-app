@@ -4,26 +4,35 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import LogoutIcon from "@mui/icons-material/Logout";
 import HeaderBottom from "./HeaderBottom";
 import { allItems } from "../../../constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { logOutUser } from "../../../features/user/userSlice";
 
 function Header() {
   const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.user.userInfo);
   const products = useSelector((state) => state.cart.products);
   const [numberCart, setNumberCart] = useState(0);
-  
+
   useEffect(() => {
     let quantity = 0;
     products.map((item) => {
-      console.log(item.quantity);
       quantity += item.quantity;
       return setNumberCart(quantity);
     });
   }, [products]);
+
+  const handleLogOut = async () => {
+    dispatch(logOutUser());
+    window.localStorage.removeItem("token");
+    console.log(userInfo);
+  };
 
   return (
     <div className="w-full sticky top-0 z-50">
@@ -84,14 +93,21 @@ function Header() {
 
         {/* Signin start */}
         <div className="flex flex-col items-start justify-center headerHover">
-          <p
-            className="text-xs text-lightText font-light"
-            onClick={() => {
-              navigate("/signin");
-            }}
-          >
-            Hello, sign in
-          </p>
+          {userInfo ? (
+            <p className="text-xs text-lightText font-light">
+              Hello, {userInfo.clientName}
+            </p>
+          ) : (
+            <p
+              className="text-xs text-lightText font-light"
+              onClick={() => {
+                navigate("/signin");
+              }}
+            >
+              Hello, sign in
+            </p>
+          )}
+
           <p className="text-sm font-semibold -m1-1 text-whiteText hidden mdl:inline-flex">
             Accounts & Lists
             <span>
@@ -112,7 +128,10 @@ function Header() {
 
         {/* Carts start */}
         <Link to="/cart">
-          <div className="flex items-start justify-center headerHover relative">
+          <div
+            onClick={handleLogOut}
+            className="flex items-start justify-center headerHover relative"
+          >
             <ShoppingCartIcon />
             <p className="text-xs font-semibold mt-3 text-whiteText">
               Cart{" "}
@@ -122,6 +141,14 @@ function Header() {
             </p>
           </div>
         </Link>
+        {userInfo && (
+          <div onClick={handleLogOut} className="flex flex-col justify-center items-center headerHover relative">
+            <LogoutIcon />
+            <p className="hidden mdl:inline-flex text-xs font-semibold text-whiteText">
+              Log out
+            </p>
+          </div>
+        )}
         {/* Carts end */}
       </div>
       <HeaderBottom />
