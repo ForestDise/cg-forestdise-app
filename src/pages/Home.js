@@ -3,6 +3,7 @@ import Banner from "../components/main/home/Banner";
 import Products from "../components/main/home/Products";
 
 function Home() {
+
   return (
     <div className="font-bodyFont bg-gray-100">
       <Banner />

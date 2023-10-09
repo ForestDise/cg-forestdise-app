@@ -10,6 +10,7 @@ import { addToCart } from "../../../features/cart/cartSlice";
 import { Link } from "react-router-dom";
 
 function Products() {
+  
   const dispatch = useDispatch();
   const [productData, setProductData] = useState([]);
 
@@ -20,7 +21,9 @@ function Products() {
   async function fetchData() {
     await axios
       .get("http://localhost:8080/api/products")
-      .then((res) => setProductData(res.data))
+      .then((res) => {
+        console.log(res);
+        setProductData(res.data)})
       .catch((err) => {
         throw err;
       });

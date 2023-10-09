@@ -8,9 +8,11 @@ import vnFlag from "./vnFlag.png";
 import emptyCart from "./emptyCart.png";
 import error from "./error.png"
 import forest from "./forest.jpg"
+import logoBlack from "./logoBlack.png"
 
 export {
   logo,
+  logoBlack,
   bannerImgOne,
   bannerImgTwo,
   bannerImgThree,
