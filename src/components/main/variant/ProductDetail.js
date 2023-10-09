@@ -9,8 +9,8 @@ import {
   selectLoading,
   selectSuccess,
   selectVariantDetail,
-} from "../../features/variant/variantSlice";
-import { addToCart } from "../../features/cart/cartSlice";
+} from "../../../features/variant/variantSlice";
+import { addToCart } from "../../../features/cart/cartSlice";
 
 function ProductDetail() {
   const { id } = useParams();
