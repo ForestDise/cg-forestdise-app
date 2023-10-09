@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// const CART_MANAGEMENT_API = "http://localhost:8080/api";
+const CART_MANAGEMENT_API = "http://localhost:8080/api/cart-lines";
 
 export const findProductsSame = async () => {
   let result = null;
@@ -15,7 +15,7 @@ export const findProductsSame = async () => {
 export const findFiveProducts = async () => {
   let result = null;
   try {
-    result = await axios.get(`https://fakestoreapi.com/products?limit=5`);
+    result = await axios.get(`${CART_MANAGEMENT_API}`);
   } catch (e) {
     console.log("Find books API error: " + e);
   }
@@ -23,6 +23,16 @@ export const findFiveProducts = async () => {
 };
 
 export const findProductsRecentlyViewed = async () => {
+  let result = null;
+  try {
+    result = await axios.get(`https://fakestoreapi.com/products?limit=12`);
+  } catch (e) {
+    console.log("Find books API error: " + e);
+  }
+  return result;
+};
+
+export const findProductsInCart = async () => {
   let result = null;
   try {
     result = await axios.get(`https://fakestoreapi.com/products?limit=12`);

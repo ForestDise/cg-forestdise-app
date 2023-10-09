@@ -14,6 +14,7 @@ const CartContent = () => {
     const dispatch = useDispatch();
     const { products} = useSelector((state) => state.cart);
 
+    
   return (
     <>
       <div class="bg-red-500">
