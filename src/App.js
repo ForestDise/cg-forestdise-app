@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   Outlet,
   Route,
@@ -8,10 +8,13 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import Home from "./pages/Home";
-import Cart from "./pages/Cart";
+import Cart from "./components/main/cart/Cart";
 import Signin from "./pages/Signin";
-import Header from "./components/header/Header";
-import Footer from "./components/footer/Footer";
+import Error from "./pages/Error";
+import Registration from "./pages/Registration";
+import Header from "./components/common/header/Header";
+import Footer from "./components/common/footer/Footer";
+import ProductDetail from "./components/main/variant/ProductDetail";
 
 const Layout = () => {
   return (
@@ -27,15 +30,17 @@ const Layout = () => {
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="/cart" element={<Cart />} />
+      <Fragment>
         <Route path="/signin" element={<Signin />} />
-      </Route>
+        <Route path="/error" element={<Error />} />
+        <Route path="/register" element={<Registration />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+        </Route>
+      </Fragment>
     )
-    // <Routes>
-    //   <Route path="/signin" element={<Signin />} />
-    // </Routes>
   );
   return (
     <div className="font-bodyFont bg-gray-100">

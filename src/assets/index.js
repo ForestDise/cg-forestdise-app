@@ -6,14 +6,20 @@ import bannerImgFour from "./banner/bannerImgFour.jpg";
 import bannerImgFive from "./banner/bannerImgFive.jpg";
 import vnFlag from "./vnFlag.png";
 import emptyCart from "./emptyCart.png";
+import error from "./error.png"
+import forest from "./forest.jpg"
+import logoBlack from "./logoBlack.png"
 
 export {
   logo,
+  logoBlack,
   bannerImgOne,
   bannerImgTwo,
   bannerImgThree,
   bannerImgFour,
   bannerImgFive,
   vnFlag,
-  emptyCart
+  emptyCart,
+  error,
+  forest
 };

@@ -1,27 +1,45 @@
-import React, { useState } from "react";
-import { logo } from "../../assets";
+import React, { useEffect, useState } from "react";
+import { logo } from "../../../assets";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import LogoutIcon from "@mui/icons-material/Logout";
 import HeaderBottom from "./HeaderBottom";
-import { allItems } from "../../constants";
-import { useSelector } from "react-redux";
+import { allItems } from "../../../constants";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { logOutUser } from "../../../features/user/userSlice";
 
 function Header() {
   const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
-  const products = useSelector((state)=>state.cart.products);
-  console.log(products);
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const products = useSelector((state) => state.cart.products);
+  const [numberCart, setNumberCart] = useState(0);
+
+  useEffect(() => {
+    let quantity = 0;
+    products.map((item) => {
+      quantity += item.quantity;
+      return setNumberCart(quantity);
+    });
+  }, [products]);
+
+  const handleLogOut = async () => {
+    dispatch(logOutUser());
+    window.localStorage.removeItem("token");
+    console.log(userInfo);
+  };
 
   return (
     <div className="w-full sticky top-0 z-50">
-      <div className="w-full bg-amazon_blue text-white px-4 py-3 flex items-center gap-4">
+      <div className="w-full bg-amazon_blue text-white px-4 py-1 flex items-center gap-4">
         {/* Logo start */}
-        <div onClick={()=>navigate("/")} className="headerHover">
-          <img className="w-[5rem] mt-2" src={logo} alt="logo"></img>
+        <div onClick={() => navigate("/")} className="headerHover">
+          <img className="w-[7rem] mt-0" src={logo} alt="logo"></img>
         </div>
         {/* Logo end */}
 
@@ -65,6 +83,7 @@ function Header() {
           <input
             type="text"
             className="h-full text-base text-amazon_blue flex-grow outline-none border-none px-2"
+            placeholder="Search ForestDise"
           ></input>
           <span className="w-12 h-full flex items-center justify-center bg-amazon_yellow hover:bg-[#f3a847] duration-300 text-amazon_blue cursor-pointer rounded-tr-md rounded-br-md">
             <SearchIcon />
@@ -74,14 +93,21 @@ function Header() {
 
         {/* Signin start */}
         <div className="flex flex-col items-start justify-center headerHover">
-          <p
-            className="text-xs text-lightText font-light"
-            onClick={() => {
-              navigate("/signin");
-            }}
-          >
-            Hello, sign in
-          </p>
+          {userInfo ? (
+            <p className="text-xs text-lightText font-light">
+              Hello, {userInfo.clientName}
+            </p>
+          ) : (
+            <p
+              className="text-xs text-lightText font-light"
+              onClick={() => {
+                navigate("/signin");
+              }}
+            >
+              Hello, sign in
+            </p>
+          )}
+
           <p className="text-sm font-semibold -m1-1 text-whiteText hidden mdl:inline-flex">
             Accounts & Lists
             <span>
@@ -102,16 +128,26 @@ function Header() {
 
         {/* Carts start */}
         <Link to="/cart">
-          <div className="flex items-start justify-center headerHover relative">
+          <div
+            className="flex items-start justify-center headerHover relative"
+          >
             <ShoppingCartIcon />
             <p className="text-xs font-semibold mt-3 text-whiteText">
               Cart{" "}
               <span className="absolute text-xs -top-1 left-6 font-semibold p-1 h-4 bg-[#f3a847] text-amazon_blue rounded-full flex justify-center items-center">
-                {products.length > 0 ? products.length : 0}
+                {products.length > 0 ? numberCart : 0}
               </span>
             </p>
           </div>
         </Link>
+        {userInfo && (
+          <div onClick={handleLogOut} className="flex flex-col justify-center items-center headerHover relative">
+            <LogoutIcon />
+            <p className="hidden mdl:inline-flex text-xs font-semibold text-whiteText">
+              Log out
+            </p>
+          </div>
+        )}
         {/* Carts end */}
       </div>
       <HeaderBottom />
