@@ -66,6 +66,9 @@ function Registration() {
       .then(() => {
         setLoading(false);
         setSuccessNotify("Account created successfully");
+        setTimeout(() => {
+          navigate("/signin");
+        }, 2500);
       })
       .catch((err) => {
         setRegisteredEmail(true);

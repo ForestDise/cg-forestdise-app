@@ -103,9 +103,6 @@ function Products() {
               >
                 {product.title.substring(0, 20)}
               </h2>
-              <p className="text-sm text-gray-600 font-semibold">
-                ${product.price}
-              </p>
             </div>
             <div>
               <div>
