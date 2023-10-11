@@ -20,15 +20,10 @@ function Products() {
 
   async function fetchData() {
     await axios
-<<<<<<< HEAD
-      .get("http://localhost:8080/api/product/get-all-product")
-      .then((res) => setProductData(res.data))
-=======
       .get("http://localhost:8080/api/products")
       .then((res) => {
         console.log(res);
         setProductData(res.data)})
->>>>>>> 489eb1ce69ae03b45ef0f9296024bbf7d288a57d
       .catch((err) => {
         throw err;
       });
