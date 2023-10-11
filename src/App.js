@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import {
   Outlet,
   Route,
@@ -28,6 +28,7 @@ const Layout = () => {
 };
 
 function App() {
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Fragment>

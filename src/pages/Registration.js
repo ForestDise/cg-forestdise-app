@@ -49,7 +49,8 @@ function Registration() {
     if (!form.password) {
       errors.password = "Required";
     } else if (!REGEX.password.test(form.password)) {
-      errors.password = "Password must be at least 8 characters";
+      errors.password =
+        "Password must be minium 8 characters, at least one number, one letter";
     }
 
     if (form.cpassword !== form.password) {
@@ -99,8 +100,10 @@ function Registration() {
               onSubmit={handleSubmit}
               className="w-[350px] mx-auto flex flex-col items-center"
             >
-              <Link to="/">
-                <img className="w-36" src={logoBlack} alt="logo" />
+              <Link
+                to="/"
+              >
+                <img  className="w-36" src={logoBlack} alt="logo" />
               </Link>
               <div className="w-full border border-zinc-200 bg-gray-100 rounded-md p-6">
                 <h2 className="font-titleFont text-3xl font-medium mb-4">

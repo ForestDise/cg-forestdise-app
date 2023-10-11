@@ -41,8 +41,8 @@ function Header() {
   const handleLogOut = async () => {
     dispatch(logOutUser());
     window.localStorage.removeItem("token");
-    navigate("/signin");
     changeScroll();
+    navigate("/signin");
   };
 
   return (
@@ -123,8 +123,8 @@ function Header() {
               <p
                 className="text-xs text-lightText font-light"
                 onClick={() => {
-                  navigate("/signin");
                   changeScroll();
+                  navigate("/signin");
                 }}
               >
                 Hello, sign in
@@ -202,6 +202,9 @@ function Header() {
                   <Fragment>
                     <Link to="/signin">
                       <button
+                        onClick={() => {
+                          changeScroll();
+                        }}
                         className="w-full bg-yellow-400 rounded-md py-1
                 font-semibold cursor-pointer hover:bg-yellow-500 active:bg-yellow-700"
                       >
