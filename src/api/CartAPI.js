@@ -32,10 +32,10 @@ export const findProductsRecentlyViewed = async () => {
   return result;
 };
 
-export const findProductsInCart = async () => {
+export const findProductsInCart = async (userId) => {
   let result = null;
   try {
-    result = await axios.get(`https://fakestoreapi.com/products?limit=12`);
+    result = await axios.get(`${CART_MANAGEMENT_API}/${userId}`);
   } catch (e) {
     console.log("Find books API error: " + e);
   }
