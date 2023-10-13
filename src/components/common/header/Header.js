@@ -129,7 +129,6 @@ function Header() {
         {/* Carts start */}
         <Link to="/cart">
           <div
-            onClick={handleLogOut}
             className="flex items-start justify-center headerHover relative"
           >
             <ShoppingCartIcon />

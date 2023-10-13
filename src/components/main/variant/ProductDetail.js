@@ -10,7 +10,8 @@ import {
   selectSuccess,
   selectVariantDetail,
 } from "../../../features/variant/variantSlice";
-import { addToCart } from "../../../features/cart/cartSlice";
+import { addNewCartLine } from "../../../features/cart/cartSlice";
+import { addCartLine } from "../../../api/cartAPI";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -22,6 +23,8 @@ function ProductDetail() {
   const statusLoading = useSelector(selectLoading);
   const statusSuccess = useSelector(selectSuccess);
   const statusError = useSelector(selectError);
+
+  const {userInfo} = useSelector((state)=> state.user);
 
   console.log(statusLoading);
   console.log(statusSuccess);
@@ -376,17 +379,24 @@ function ProductDetail() {
               </div>
               <button
                 onClick={() =>
-                  dispatch(
-                    addToCart({
-                      id: variantDetail.variantDto.id,
-                      title: variantDetail.variantDto.name,
-                      description: variantDetail.variantDto.skuCode,
-                      price: variantDetail.variantDto.price,
-                      category: variantDetail.variantDto.img,
-                      image: variantDetail.variantDto.img,
-                      quantity: 1,
-                    })
-                  )
+                  {userInfo !== null
+                    ? dispatch(addNewCartLine({
+                        id: '',
+                        quantity: 1,
+                        cartId: userInfo.id,
+                        variantId: variantDetail.variantDto.id
+                      }))
+                    : dispatch(
+                        addCartLine({
+                          id: variantDetail.variantDto.id,
+                          title: variantDetail.variantDto.name,
+                          description: variantDetail.variantDto.skuCode,
+                          price: variantDetail.variantDto.price,
+                          category: variantDetail.variantDto.img,
+                          image: variantDetail.variantDto.img,
+                          quantity: 1,
+                        })
+                      );}
                 }
                 className="rounded-lg bg-yellow-500 py-3 my-2 hover:bg-yellow-300 duration-100"
               >

@@ -3,14 +3,16 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const CartPayment = () => {
+  
   const { products } = useSelector((state) => state.cart);
   const [totalPrice, setTotalPrice] = useState("");
+
   useEffect(() => {
-    let total = 0;
-    products.map((item) => {
-      total += item.price * item.quantity;
-      return setTotalPrice(total.toFixed(2));
-    });
+     let total = 0;
+     products.map((item) => {
+       total += item.variantDto.price * item.quantity;
+       return setTotalPrice(total.toFixed(2));
+     });
   }, [products]);
 
   return (

@@ -1,20 +1,29 @@
+import { useState, useEffect, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
 import {
   deleteItem,
+  deleteCartLine,
   resetCart,
   decrementQuantity,
   incrementQuantity,
   saveForLater,
+  editCartLine,
+  getCartLines,
+  clearCartLine,
 } from "../../../features/cart/cartSlice";
 import { emptyCart } from "../../../assets";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 const CartContent = () => {
-    const dispatch = useDispatch();
-    const { products} = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.user);
 
-    
+  useEffect(() => {
+    dispatch(getCartLines(userInfo.id));
+  }, []);
+
   return (
     <>
       <div class="bg-red-500">
@@ -40,39 +49,67 @@ const CartContent = () => {
                   <div className="w-1/5">
                     <img
                       className="w-full h-44 object-contain"
-                      src={item.image}
+                      src={item.variantDto.img}
                       alt="ProductImg"
                     />
                   </div>
                   <div className="w-4/5">
                     <h2 className="font-semibold md:text-lg sm:text-sm lg:text-lg">
-                      {item.title}
+                      {item.variantDto.name}
                     </h2>
-                    <p className="sm:text-xs md:text-md lg:text-sm">
+                    {/* <p className="sm:text-xs md:text-md lg:text-sm">
                       {item.description.substring(0, 200)}
-                    </p>
+                    </p> */}
                     <p className="md:text-lg sm:text-xs lg:text-lg">
                       Unit Price{" "}
-                      <span className="font-semibold">${item.price}</span>
+                      <span className="font-semibold">
+                        ${item.variantDto.price}
+                      </span>
                     </p>
                     <div className="bg-[#F0F2F2] md:text-lg sm:text-xs lg:text-lg flex justify-center items-center gap-1 w-24 py-1 text-center drop-shadow-lg rounded-md">
                       <p>Qty:</p>
                       <p
-                        onClick={() => dispatch(decrementQuantity(item.id))}
+                        onClick={() => {
+                          userInfo !== null && item.quantity > 0 ? (
+                            dispatch(
+                              editCartLine({
+                                quantity: item.quantity - 1,
+                                id: item.id,
+                              })
+                            )
+                          ) : (
+                            <></>
+                          );
+                        }}
                         className="cursor-pointer bg-gray-200 px-1 rounded-md hover:bg-gray-400 duration-300"
                       >
                         -
                       </p>
                       <p>{item.quantity}</p>
                       <p
-                        onClick={() => dispatch(incrementQuantity(item.id))}
+                        onClick={() => {
+                          userInfo !== null ? (
+                            dispatch(
+                              editCartLine({
+                                quantity: item.quantity + 1,
+                                id: item.id,
+                              })
+                            )
+                          ) : (
+                            <></>
+                          );
+                        }}
                         className="cursor-pointer bg-gray-200 px-1 rounded-md hover:bg-gray-400 duration-300"
                       >
                         +
                       </p>
                     </div>
                     <button
-                      onClick={() => dispatch(deleteItem(item.id))}
+                      onClick={() => {
+                        userInfo !== null
+                          ? dispatch(deleteCartLine(item.id))
+                          :<></>
+                      }}
                       className="bg-white p-1.5 sm:px-2 lg:px-4 border border-gray-300  py-1 rounded-lg md:text-md sm:text-xs lg:text-sm mt-2 hover:bg-gray-100 shadow-md duration-300"
                     >
                       Delete Item
@@ -98,7 +135,7 @@ const CartContent = () => {
                   </div>
                   <div>
                     <p className="md:text-md sm:text-sm lg:text-lg font-titleFont font-semibold">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      ${(item.variantDto.price * item.quantity).toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -108,7 +145,7 @@ const CartContent = () => {
           {products.length > 0 ? (
             <div className="w-full py-2">
               <button
-                onClick={() => dispatch(resetCart())}
+                onClick={() => dispatch(clearCartLine(userInfo.id))}
                 className="sm:px-4 lg:px-8 sm:py-1 lg:py-2 border border-gray-300 bg-white hover:bg-gray-100 text-md rounded-lg font-titleFont md:text-md sm:text-sm lg:text-lg shadow-md active:bg-teal-100 tracking-wide"
               >
                 Clear Cart
