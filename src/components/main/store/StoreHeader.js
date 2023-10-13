@@ -33,35 +33,6 @@ export default function StoreHeader() {
     });
   }, []);
 
-  const resetCategory = () => {
-    setBreadcrumb({
-      ...breadcrumb,
-      category: "",
-    });
-  };
-
-  const changeCategory = (e) => {
-    setBreadcrumb({
-      ...breadcrumb,
-      category: e.target.name,
-    });
-  };
-
-  const resetSubCategory = () => {
-    setBreadcrumb({
-      ...breadcrumb,
-      category: "",
-      subCategory: "",
-    });
-  };
-
-  const changeSubCategory = (e) => {
-    setBreadcrumb({
-      ...breadcrumb,
-      subCategory: e.target.name,
-    });
-  };
-
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollPosition(position);
@@ -134,7 +105,7 @@ export default function StoreHeader() {
                         </div>
                       </li>
                     )}
-                    {breadcrumb.category && breadcrumb.subCategory && (
+                    {breadcrumb.category && breadcrumb.subCategory !== "" && (
                       <li>
                         <div className="flex items-center">
                           <svg
@@ -217,7 +188,7 @@ export default function StoreHeader() {
               <li name="Home">
                 <a
                   href="#"
-                  className="block text-lg py-2 px-1 text-gray-700 rounded md:bg-transparent hover:underline md:p-0"
+                  className="block text-lg py-2 px-1 text-gray-500 rounded md:bg-transparent hover:underline md:p-0"
                 >
                   HOME
                 </a>
@@ -234,14 +205,13 @@ export default function StoreHeader() {
               >
                 <button
                   name="Deals"
-                  onClick={(e) => {
-                    changeCategory(e);
+                  onClick={() => {
                     setShowDropDown({
                       ...showDropDown,
                       deals: !showDropDown.deals,
                     });
                   }}
-                  className="flex items-center text-lg justify-between w-full py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:underline md:p-0 md:w-auto dark:text-white md:dark:hover:underline dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+                  className="flex items-center text-lg justify-between w-full py-2 pl-3 pr-4 text-gray-500 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:underline md:p-0 md:w-auto dark:text-white md:dark:hover:underline dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
                 >
                   DEALS{" "}
                   <svg
@@ -261,16 +231,24 @@ export default function StoreHeader() {
                   </svg>
                 </button>
                 {showDropDown.deals && (
-                  <div className="z-20 font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                  <div
+                    className="z-20 font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+                  >
                     <ul
                       className="py-2 text-sm text-gray-700 dark:text-gray-400"
                       aria-labelledby="dropdownLargeButton"
                     >
                       <li>
                         <a
-                          onClick={(e) => {
-                            changeSubCategory(e);
-                          }}
+                          name="Deals"
+                          href="#"
+                          className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          Deals
+                        </a>
+                      </li>
+                      <li>
+                        <a
                           name="Phones & Watches"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -280,9 +258,6 @@ export default function StoreHeader() {
                       </li>
                       <li>
                         <a
-                          onClick={(e) => {
-                            changeSubCategory(e);
-                          }}
                           name="TV & Audio"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -292,9 +267,6 @@ export default function StoreHeader() {
                       </li>
                       <li>
                         <a
-                          onClick={(e) => {
-                            changeSubCategory(e);
-                          }}
                           name="Computing"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -319,14 +291,13 @@ export default function StoreHeader() {
               >
                 <button
                   name="Phones & Watches"
-                  onClick={(e) => {
-                    changeCategory(e);
+                  onClick={() => {
                     setShowDropDown({
                       ...showDropDown,
                       category1: !showDropDown.category1,
                     });
                   }}
-                  className="flex items-center text-lg justify-between w-full py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:underline md:p-0 md:w-auto dark:text-white md:dark:hover:underline dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+                  className="flex items-center text-lg justify-between w-full py-2 pl-3 pr-4 text-gray-500 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:underline md:p-0 md:w-auto dark:text-white md:dark:hover:underline dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
                 >
                   PHONES & WATCHES{" "}
                   <svg
@@ -346,16 +317,26 @@ export default function StoreHeader() {
                   </svg>
                 </button>
                 {showDropDown.category1 && (
-                  <div className="z-20 font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                  <div
+                    
+                    className="z-20 font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+                  >
                     <ul
                       className="py-2 text-sm text-gray-700 dark:text-gray-400"
                       aria-labelledby="dropdownLargeButton"
                     >
                       <li>
                         <a
-                          onClick={(e) => {
-                            changeSubCategory(e);
-                          }}
+                         
+                          name="Phones & Watches"
+                          href="#"
+                          className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          Phones & Watches
+                        </a>
+                      </li>
+                      <li>
+                        <a
                           name="Galaxy Z Series"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -365,9 +346,7 @@ export default function StoreHeader() {
                       </li>
                       <li name="Galaxy S Series">
                         <a
-                          onClick={(e) => {
-                            changeSubCategory(e);
-                          }}
+                          
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
@@ -376,9 +355,7 @@ export default function StoreHeader() {
                       </li>
                       <li name="Galaxy A Series">
                         <a
-                          onClick={(e) => {
-                            changeSubCategory(e);
-                          }}
+                          
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
@@ -403,7 +380,6 @@ export default function StoreHeader() {
                 <button
                   name="TV & Audios"
                   onClick={(e) => {
-                    changeCategory(e);
                     setShowDropDown({
                       ...showDropDown,
                       deals: false,
@@ -411,7 +387,7 @@ export default function StoreHeader() {
                       category2: !showDropDown.category2,
                     });
                   }}
-                  className="flex items-center text-lg justify-between w-full py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:underline md:p-0 md:w-auto dark:text-white md:dark:hover:underline dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+                  className="flex items-center text-lg justify-between w-full py-2 pl-3 pr-4 text-gray-500 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:underline md:p-0 md:w-auto dark:text-white md:dark:hover:underline dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
                 >
                   TV & AUDIO{" "}
                   <svg
@@ -431,16 +407,28 @@ export default function StoreHeader() {
                   </svg>
                 </button>
                 {showDropDown.category2 && (
-                  <div className="z-20 font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                  <div
+                    
+                    className="z-20 font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+                  >
                     <ul
                       className="py-2 text-sm text-gray-700 dark:text-gray-400"
                       aria-labelledby="dropdownLargeButton"
                     >
                       <li>
                         <a
-                          onClick={(e) => {
-                            changeSubCategory(e);
-                          }}
+                          
+                          
+                          name="TV & Audio"
+                          href="#"
+                          className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          TV & Audio
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          
                           name="QLED"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -450,9 +438,7 @@ export default function StoreHeader() {
                       </li>
                       <li>
                         <a
-                          onClick={(e) => {
-                            changeSubCategory(e);
-                          }}
+                          
                           name="Neo QLED"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -462,9 +448,7 @@ export default function StoreHeader() {
                       </li>
                       <li>
                         <a
-                          onClick={(e) => {
-                            changeSubCategory(e);
-                          }}
+                          
                           name="OLED"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -482,7 +466,7 @@ export default function StoreHeader() {
                   onClick={() => {
                     setMoreSidebar(true);
                   }}
-                  className="flex items-center text-lg justify-between w-full py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:underline md:p-0 md:w-auto dark:text-white md:dark:hover:underline dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+                  className="flex items-center text-lg justify-between w-full py-2 pl-3 pr-4 text-gray-500 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:underline md:p-0 md:w-auto dark:text-white md:dark:hover:underline dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
                 >
                   MORE{" "}
                   <svg

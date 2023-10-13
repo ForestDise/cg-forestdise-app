@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Slider from "react-slick";
 
 function StoreBanner() {
@@ -45,7 +45,7 @@ function StoreBanner() {
           <div>
             <img
               src={
-                "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/1d955663-42a4-473e-9ff7-4fdde13253c1._CR0%2C0%2C3000%2C600_SX1920_.png"
+                "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/1f6cbd86-1e6a-42d5-bd7c-e137bfef3fc6._CR0%2C0%2C3000%2C600_SX1920_.jpg"
               }
               alt="banner"
             ></img>
