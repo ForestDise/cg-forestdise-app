@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { logOutUser } from "../../../features/user/userSlice";
 import { motion } from "framer-motion";
+import { getCartLines } from "../../../features/cart/cartSlice";
 
 function Header() {
   const [showAll, setShowAll] = useState(false);
@@ -22,7 +23,7 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
-  const products = useSelector((state) => state.cart.products);
+  const {products} = useSelector((state) => state.cart);
   const [numberCart, setNumberCart] = useState(0);
 
   useEffect(() => {
@@ -57,6 +58,7 @@ function Header() {
             <img className="w-[7rem] mt-0" src={logo} alt="logo"></img>
           </div>
           {/* Logo end */}
+
 
           {/* Deliver start */}
           <div className="headerHover hidden mdl:inline-flex">

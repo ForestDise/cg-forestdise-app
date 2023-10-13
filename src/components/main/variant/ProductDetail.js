@@ -14,7 +14,8 @@ import {
   selectSuccess,
   selectVariantDetail,
 } from "../../../features/variant/variantSlice";
-import { addToCart } from "../../../features/cart/cartSlice";
+import { addNewCartLine } from "../../../features/cart/cartSlice";
+import { addCartLine } from "../../../api/cartAPI";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -24,7 +25,9 @@ function ProductDetail() {
   const [showRecommend, setShowRecommend] = useState(false);
   const dispatch = useDispatch();
 
-  console.log(variantId);
+
+  const {userInfo} = useSelector((state)=> state.user);
+
 
   const getVariantDetail = async () => {
     if (id != null) {
@@ -124,9 +127,9 @@ function ProductDetail() {
               <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
                 <h2>{variantDetail.variantDto.name}</h2>
               </div>
-              <Link to={`/shop`}>
+              <Link to={`/store`}>
                 <div className="font-titleFont tracking-wide text-green-900 size text-sm sm:text-xs hover:text-green-700 underline">
-                  <span>Visit to the Helu Store</span>
+                  <span>Visit to the Samsung Store</span>
                 </div>
               </Link>
               <div className="font-titleFont flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
@@ -389,17 +392,24 @@ function ProductDetail() {
               </div>
               <button
                 onClick={() =>
-                  dispatch(
-                    addToCart({
-                      id: variantDetail.variantDto.id,
-                      title: variantDetail.variantDto.name,
-                      description: variantDetail.variantDto.skuCode,
-                      price: variantDetail.variantDto.price,
-                      category: variantDetail.variantDto.img,
-                      image: variantDetail.variantDto.img,
-                      quantity: 1,
-                    })
-                  )
+                  {userInfo !== null
+                    ? dispatch(addNewCartLine({
+                        id: '',
+                        quantity: 1,
+                        cartId: userInfo.id,
+                        variantId: variantDetail.variantDto.id
+                      }))
+                    : dispatch(
+                        addCartLine({
+                          id: variantDetail.variantDto.id,
+                          title: variantDetail.variantDto.name,
+                          description: variantDetail.variantDto.skuCode,
+                          price: variantDetail.variantDto.price,
+                          category: variantDetail.variantDto.img,
+                          image: variantDetail.variantDto.img,
+                          quantity: 1,
+                        })
+                      );}
                 }
                 className="rounded-lg bg-yellow-400 py-3 my-2 hover:bg-yellow-300 duration-100 cursor-pointer"
               >

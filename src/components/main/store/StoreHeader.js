@@ -1,19 +1,23 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  changeCategory,
+  changeSubCategory,
+} from "../../../features/sellerStore/sellerStoreSlice";
 
 export default function StoreHeader() {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const dispatch = useDispatch();
+  const breadcrumb = useSelector((state) => state.sellerStore.breadcrumb);
+  let category = useRef("");
   const [showDropDown, setShowDropDown] = useState({
     deals: false,
     category1: false,
     category2: false,
   });
   const [follow, setFollow] = useState(false);
-  const [breadcrumb, setBreadcrumb] = useState({
-    category: "",
-    subCategory: "",
-  });
   const [moreSidebar, setMoreSidebar] = useState(false);
   const motionMoreDivRef = useRef();
 
@@ -36,6 +40,7 @@ export default function StoreHeader() {
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollPosition(position);
+    console.log(scrollPosition);
   };
 
   useEffect(() => {
@@ -44,115 +49,104 @@ export default function StoreHeader() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [scrollPosition]);
 
   return (
-    <div>
-      <nav
-        className={
-          scrollPosition >= 400
-            ? "bg-white dark:bg-gray-900 fixed w-full z-5 top-0 left-0 border-b border-gray-200 dark:border-gray-600"
-            : "bg-white dark:bg-gray-900 sticky w-full z-5 top-[400px] left-0 border-b border-gray-200 dark:border-gray-600"
-        }
+    <nav
+      className={
+        scrollPosition >= 400
+          ? "bg-white dark:bg-gray-900 fixed w-full z-[5] top-0 left-0 border-b border-gray-200 dark:border-gray-600"
+          : "bg-white dark:bg-gray-900 sticky w-full z-[5] top-0 left-0 border-b border-gray-200 dark:border-gray-600"
+      }
       >
+      <nav className="flex w-full bg-white pl-6">
+        <ol className="inline-flex items-center space-x-1 md:space-x-0 max-w-full">
+          <li className="inline-flex items-center">
+            <a
+              href="#"
+              className="inline-flex items-center text-xs font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
+            >
+              Samsung
+            </a>
+          </li>
+          {breadcrumb.category && (
+            <li>
+              <div className="flex items-center">
+                <svg
+                  className="w-3 h-3 text-gray-400 mx-1"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 6 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m1 9 4-4-4-4"
+                  />
+                </svg>
+                <a
+                  href="#"
+                  className="inline-flex items-center text-xs font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
+                >
+                  {breadcrumb.category}
+                </a>
+              </div>
+            </li>
+          )}
+          {breadcrumb.category && breadcrumb.subCategory !== "" && (
+            <li>
+              <div className="flex items-center">
+                <svg
+                  className="w-3 h-3 text-gray-400 mx-1"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 6 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m1 9 4-4-4-4"
+                  />
+                </svg>
+                <a
+                  href="#"
+                  className="inline-flex items-center text-xs font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
+                >
+                  {breadcrumb.subCategory}
+                </a>
+              </div>
+            </li>
+          )}
+        </ol>
+      </nav>
+      <nav>
         <div className="font-shopFont max-w-screen-xl flex flex-wrap items-center justify-between mx-6 py-2">
-          <div className="flex flex-col pr-8 w-[340px] max-w-[340px]">
-            <div className="flex flex-auto items-center">
+          <div className="grid grid-cols-2 w-[160px]">
+            <div className="w-full h-full">
               <img
                 src="https://1000logos.net/wp-content/uploads/2017/06/Samsung-emblem.png"
-                className="h-8 mr-3 w-12"
+                className="h-8 w-12 pr-0 mr-0"
                 alt="Seller Shop Logo"
               />
-              <div className="grid grid-rows-8 items-center">
-                {/* Breadcumb start */}
-                <nav
-                  className="flex pb-2 max-w-[260px]"
-                  aria-label="Breadcrumb"
-                >
-                  <ol className="inline-flex items-center space-x-1 md:space-x-0 max-w-full">
-                    <li className="inline-flex items-center">
-                      <a
-                        href="#"
-                        className="inline-flex items-center text-sm font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
-                      >
-                        Samsung
-                      </a>
-                    </li>
-                    {breadcrumb.category && (
-                      <li>
-                        <div className="flex items-center">
-                          <svg
-                            className="w-3 h-3 text-gray-400 mx-1"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 6 10"
-                          >
-                            <path
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="m1 9 4-4-4-4"
-                            />
-                          </svg>
-                          <a
-                            href="#"
-                            className="inline-flex items-center text-sm font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
-                          >
-                            {breadcrumb.category}
-                          </a>
-                        </div>
-                      </li>
-                    )}
-                    {breadcrumb.category && breadcrumb.subCategory !== "" && (
-                      <li>
-                        <div className="flex items-center">
-                          <svg
-                            className="w-3 h-3 text-gray-400 mx-1"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 6 10"
-                          >
-                            <path
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="m1 9 4-4-4-4"
-                            />
-                          </svg>
-                          <a
-                            href="#"
-                            className="inline-flex items-center text-sm font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
-                          >
-                            {breadcrumb.subCategory}
-                          </a>
-                        </div>
-                      </li>
-                    )}
-                  </ol>
-                </nav>
-                {/* Breadcumb end */}
-                <div
-                  onClick={() => {
-                    setFollow(!follow);
-                  }}
-                  className="text-xs border flex flex-none border-gray-400 outline outline-1 rounded-sm text-center justify-center w-[100px] max-w-[100px] h-[110%] hover:cursor-pointer hover:bg-gray-200 py-1"
-                >
-                  {follow ? (
-                    <p className="text-xs">✓ Following</p>
-                  ) : (
-                    <p className="text-xs">+ Follow</p>
-                  )}
-                </div>
-              </div>
+            </div>
+            <div
+              onClick={() => {
+                setFollow(!follow);
+              }}
+              className="text-sm border border-gray-400 outline outline-gray-400 outline-1 rounded-sm text-center w-[100px] max-w-[100px] h-[30px] hover:cursor-pointer hover:bg-gray-200 py-1 max-auto"
+            >
+              {follow ? <p>✓ Following</p> : <p>+ Follow</p>}
             </div>
           </div>
 
           {/* Search start */}
-          <div className="flex md:order-2 w-[200px] max-w-[200px] pl-[180px]">
+          <div className="flex md:order-2 w-[200px] pl-[100px]">
             <div className="relative md:block">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg
@@ -164,16 +158,16 @@ export default function StoreHeader() {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                   />
                 </svg>
                 <span className="sr-only">Search icon</span>
               </div>
               <input
-                className="block p-2 pl-10 rounded-lg text-sm border w-[200px] border-gray-300"
+                className="block p-2 pl-10 rounded-lg text-sm border w-[240px] border-gray-300"
                 placeholder="Search..."
               ></input>
             </div>
@@ -181,10 +175,10 @@ export default function StoreHeader() {
           {/* Search end */}
 
           <div
-            className="items-center justify-between w-full md:flex md:w-auto md:order-1"
+            className="items-center justify-between w-full md:flex md:w-auto md:order-1 pl-[72px]"
             id="navbar-sticky"
           >
-            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 gap-6">
+            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 gap-8">
               <li name="Home">
                 <a
                   href="#"
@@ -223,17 +217,15 @@ export default function StoreHeader() {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="m1 1 4 4 4-4"
                     />
                   </svg>
                 </button>
                 {showDropDown.deals && (
-                  <div
-                    className="z-20 font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
-                  >
+                  <div className="font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                     <ul
                       className="py-2 text-sm text-gray-700 dark:text-gray-400"
                       aria-labelledby="dropdownLargeButton"
@@ -241,6 +233,13 @@ export default function StoreHeader() {
                       <li>
                         <a
                           name="Deals"
+                          onMouseOver={(e) => {
+                            category.current = e.target.name;
+                          }}
+                          onClick={() => {
+                            dispatch(changeCategory(category.current));
+                            dispatch(changeSubCategory(""));
+                          }}
                           href="#"
                           className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
@@ -250,6 +249,10 @@ export default function StoreHeader() {
                       <li>
                         <a
                           name="Phones & Watches"
+                          onClick={(e) => {
+                            dispatch(changeCategory(category.current));
+                            dispatch(changeSubCategory(e.target.name));
+                          }}
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
@@ -258,6 +261,10 @@ export default function StoreHeader() {
                       </li>
                       <li>
                         <a
+                          onClick={(e) => {
+                            dispatch(changeCategory(category.current));
+                            dispatch(changeSubCategory(e.target.name));
+                          }}
                           name="TV & Audio"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -267,6 +274,10 @@ export default function StoreHeader() {
                       </li>
                       <li>
                         <a
+                          onClick={(e) => {
+                            dispatch(changeCategory(category.current));
+                            dispatch(changeSubCategory(e.target.name));
+                          }}
                           name="Computing"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -309,25 +320,28 @@ export default function StoreHeader() {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="m1 1 4 4 4-4"
                     />
                   </svg>
                 </button>
                 {showDropDown.category1 && (
-                  <div
-                    
-                    className="z-20 font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
-                  >
+                  <div className="font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                     <ul
                       className="py-2 text-sm text-gray-700 dark:text-gray-400"
                       aria-labelledby="dropdownLargeButton"
                     >
                       <li>
                         <a
-                         
+                          onMouseOver={(e) => {
+                            category.current = e.target.name;
+                          }}
+                          onClick={() => {
+                            dispatch(changeCategory(category.current));
+                            dispatch(changeSubCategory(""));
+                          }}
                           name="Phones & Watches"
                           href="#"
                           className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -337,6 +351,11 @@ export default function StoreHeader() {
                       </li>
                       <li>
                         <a
+                          onClick={(e) => {
+                            dispatch(changeCategory(category.current));
+
+                            dispatch(changeSubCategory(e.target.name));
+                          }}
                           name="Galaxy Z Series"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -344,19 +363,27 @@ export default function StoreHeader() {
                           Galaxy Z Series
                         </a>
                       </li>
-                      <li name="Galaxy S Series">
+                      <li>
                         <a
-                          
+                          onClick={(e) => {
+                            dispatch(changeCategory(category.current));
+                            dispatch(changeSubCategory(e.target.name));
+                          }}
                           href="#"
+                          name="Galaxy S Series"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           Galaxy S Series
                         </a>
                       </li>
-                      <li name="Galaxy A Series">
+                      <li>
                         <a
-                          
+                          onClick={(e) => {
+                            dispatch(changeCategory(category.current));
+                            dispatch(changeSubCategory(e.target.name));
+                          }}
                           href="#"
+                          name="Galaxy A Series"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           Galaxy A Series
@@ -399,26 +426,28 @@ export default function StoreHeader() {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="m1 1 4 4 4-4"
                     />
                   </svg>
                 </button>
                 {showDropDown.category2 && (
-                  <div
-                    
-                    className="z-20 font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
-                  >
+                  <div className="font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                     <ul
                       className="py-2 text-sm text-gray-700 dark:text-gray-400"
                       aria-labelledby="dropdownLargeButton"
                     >
                       <li>
                         <a
-                          
-                          
+                          onMouseOver={(e) => {
+                            category.current = e.target.name;
+                          }}
+                          onClick={() => {
+                            dispatch(changeCategory(category.current));
+                            dispatch(changeSubCategory(""));
+                          }}
                           name="TV & Audio"
                           href="#"
                           className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -428,7 +457,10 @@ export default function StoreHeader() {
                       </li>
                       <li>
                         <a
-                          
+                          onClick={(e) => {
+                            dispatch(changeCategory(category.current));
+                            dispatch(changeSubCategory(e.target.name));
+                          }}
                           name="QLED"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -438,7 +470,10 @@ export default function StoreHeader() {
                       </li>
                       <li>
                         <a
-                          
+                          onClick={(e) => {
+                            dispatch(changeCategory(category.current));
+                            dispatch(changeSubCategory(e.target.name));
+                          }}
                           name="Neo QLED"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -448,7 +483,10 @@ export default function StoreHeader() {
                       </li>
                       <li>
                         <a
-                          
+                          onClick={(e) => {
+                            dispatch(changeCategory(category.current));
+                            dispatch(changeSubCategory(e.target.name));
+                          }}
                           name="OLED"
                           href="#"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -478,9 +516,9 @@ export default function StoreHeader() {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="m1 1 4 4 4-4"
                     />
                   </svg>
@@ -643,9 +681,9 @@ export default function StoreHeader() {
                       >
                         <path
                           stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
                         />
                       </svg>
@@ -681,6 +719,6 @@ export default function StoreHeader() {
           </motion.div>
         </div>
       )}
-    </div>
+    </nav>
   );
 }

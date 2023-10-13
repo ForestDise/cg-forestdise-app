@@ -13,6 +13,7 @@ import storage from "redux-persist/lib/storage";
 import cartReducer from "../features/cart/cartSlice";
 import variantReducer from "../features/variant/variantSlice";
 import userReducer from "../features/user/userSlice";
+import sellerStoreReducer from "../features/sellerStore/sellerStoreSlice";
 
 const persistConfig = {
   key: "root",
@@ -20,13 +21,12 @@ const persistConfig = {
   storage,
 };
 
-
-const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
 
 export const store = configureStore({
   reducer: {
-    cart: cartPersistedReducer,
+    cart: cartReducer,
+    sellerStore: sellerStoreReducer,
     variant: variantReducer,
     user: userPersistedReducer
   },

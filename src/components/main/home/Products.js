@@ -5,14 +5,21 @@ import ApiIcon from "@mui/icons-material/Api";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getCartLines } from "../../../features/cart/cartSlice";
 
 function Products() {
-  
+  const dispatch = useDispatch();
+  const {userInfo} = useSelector((state)=>state.user);
   const [productData, setProductData] = useState([]);
   const navigate = useNavigate();
+  
   useEffect(() => {
     fetchData();
-  }, []);
+    if(userInfo){
+      dispatch(getCartLines(userInfo.id));
+    }
+  }, [userInfo]);
 
   async function fetchData() {
     await axios

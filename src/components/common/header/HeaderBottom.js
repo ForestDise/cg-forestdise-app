@@ -55,7 +55,7 @@ function HeaderBottom() {
           className="w-full h-screen text-black fixed top-0 left-0 bg-amazon_blue
             bg-opacity-50"
         >
-          <div className="w-full h-full relative z-100">
+          <div className="w-full h-full relative z-50">
             <motion.div
               ref={motionDivRef}
               initial={{ x: -500, opacity: 0 }}
