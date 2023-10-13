@@ -20,9 +20,9 @@ const CartContent = () => {
   const { products } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.user);
 
-  useEffect(() => {
-    dispatch(getCartLines(userInfo.id));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getCartLines(userInfo.id));
+  // }, []);
 
   return (
     <>

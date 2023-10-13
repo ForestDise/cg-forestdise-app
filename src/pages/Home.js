@@ -7,7 +7,7 @@ function Home() {
   return (
     <div className="font-bodyFont bg-gray-100">
       <Banner />
-      <div className="w-full -mt-10 xl:-mt-36 py-10">
+      <div className="relative w-full -mt-10 xl:-mt-36 py-10 z-0">
         <Products />
       </div>
     </div>

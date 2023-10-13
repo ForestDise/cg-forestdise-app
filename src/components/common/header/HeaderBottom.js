@@ -8,8 +8,8 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function HeaderBottom() {
-  const [sideBar, setSidebar] = useState(false);
   const userInfo = useSelector((state) => state.user.userInfo);
+  const [sideBar, setSidebar] = useState(false);
   const motionDivRef = useRef();
 
   useEffect(() =>{
@@ -53,9 +53,9 @@ function HeaderBottom() {
       {sideBar && (
         <div
           className="w-full h-screen text-black fixed top-0 left-0 bg-amazon_blue
-            bg-opacity-50 z-10"
+            bg-opacity-50"
         >
-          <div className="w-full h-full relative">
+          <div className="w-full h-full relative z-100">
             <motion.div
               ref={motionDivRef}
               initial={{ x: -500, opacity: 0 }}

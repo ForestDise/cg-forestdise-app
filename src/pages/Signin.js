@@ -14,7 +14,7 @@ function Signin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [form, setForm] = useState({});
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [errorNotify, setErrorNotify] = useState("");
   const [successNotify, setSuccessNotify] = useState("");
 
@@ -41,23 +41,22 @@ function Signin() {
   const handleSubmit = async () => {
     setLoading(true);
     await axios
-    .post("http://localhost:8080/api/login", form)
-    .then(
-      (res) => {
-      setErrorNotify("");
-      setLoading(false);
-      window.localStorage.setItem('token', res.data)
-      setSuccessNotify("Log in succesfully! Welcome back");
-      dispatch(setUserInfo(jwt_decode(res.data).sub));
-      setTimeout(() => {
-        navigate("/");
-      }, 2500);
-    })
-    .catch((err) => {
-      setLoading(false);
-      setErrorNotify("Invalid email or password");
-      throw err;
-    })
+      .post("http://localhost:8080/api/login", form)
+      .then((res) => {
+        setErrorNotify("");
+        setLoading(false);
+        window.localStorage.setItem("token", res.data);
+        setSuccessNotify("Log in succesfully! Welcome back");
+        dispatch(setUserInfo(jwt_decode(res.data).sub));
+        setTimeout(() => {
+          navigate("/");
+        }, 2500);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setErrorNotify("Invalid email or password");
+        throw err;
+      });
   };
 
   return (
@@ -74,7 +73,11 @@ function Signin() {
               className="w-[350px] mx-auto flex flex-col items-center"
             >
               <Link to="/">
-                <img className="w-36" src={logoBlack} alt="logo" />
+                <img
+                  className="w-36"
+                  src={logoBlack}
+                  alt="logo"
+                />
               </Link>
               <div className="w-full bg-gray-100 border border-zinc-300 rounded-md p-6">
                 <h2 className="font-titleFont text-3xl font-medium mb-4">
