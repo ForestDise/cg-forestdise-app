@@ -15,11 +15,23 @@ import Registration from "./pages/Registration";
 import Header from "./components/common/header/Header";
 import Footer from "./components/common/footer/Footer";
 import ProductDetail from "./components/main/variant/ProductDetail";
+import SellingHeader from "./components/common/sellingheader/SellingHeader";
+import Selling from "./components/main/selling/Selling";
 
 const Layout = () => {
   return (
     <div>
       <Header />
+      <ScrollRestoration />
+      <Outlet />
+      <Footer />
+    </div>
+  );
+};
+const SellingLayout = () => {
+  return (
+    <div>
+      <SellingHeader />
       <ScrollRestoration />
       <Outlet />
       <Footer />
@@ -38,6 +50,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+        </Route>
+        <Route path="/selling" element={<SellingLayout />}>
+          <Route index element={<Selling />} />
         </Route>
       </Fragment>
     )

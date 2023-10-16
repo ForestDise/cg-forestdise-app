@@ -66,7 +66,7 @@ function ProductDetail() {
       src: mainImage,
       width: 1200,
       height: 1800
-    
+
     },
     enlargedImageContainerStyle: { background: '#fff', zIndex: 9 },
     lensStyle: { borderColor: 'rgba(0,0,0,.6)' },
@@ -102,7 +102,7 @@ function ProductDetail() {
           </div>
           <div>
             <div className="flex flex-wrap text-center justify-between object-contain hover:py-4 mx-21">
-              {variantDetail && variantDetail.imageDtos.map((item) => (
+              {variantDetail && variantDetail.variantDto.imageDtoList?.map((item) => (
                 <img
                   className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
                   src={item.imgPath}
@@ -111,11 +111,11 @@ function ProductDetail() {
                 ></img>
               ))}
 
-              {variantDetail && variantDetail.videoDtos.map((item) => (
+              {variantDetail && variantDetail.videoDtoList?.map((item) => (
                 <video controls className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300 px-4">
                   <source src={item.videoPath} type="video/mp4" />
                 </video>
-              ))}         
+              ))}
             </div>
           </div>
         </div>
@@ -123,14 +123,14 @@ function ProductDetail() {
         {/* Detail Product Start */}
         <div className="w-full h-full bg-white px-4 col-span-2 border-gray-300 border-2 rounded-3xl">
           <div className="w-full h-full bg-white px-4 col-span-2 flex flex-col py-10">
-            <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
+            <div className="font-bodyFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
               <h2>
                 {variantDetail.variantDto.name}
               </h2>
             </div>
             <Link to={`/shop`}>
-              <div className="font-titleFont tracking-wide text-green-900 size text-sm sm:text-xs hover:text-green-700 underline">
-                <span>Visit to the Helu Store</span>
+              <div className="font-titleFont tracking-wide text-green-900 size text-sm sm:text-xs hover:text-green-700 underline mb-6">
+                <span>Visit to the {variantDetail.storeDto.name}</span>
               </div>
             </Link>
             <div className="font-titleFont flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
@@ -164,23 +164,26 @@ function ProductDetail() {
                   />
                 </svg>
               </button>
-              <Link to={`/review`} className="text-green-900"> See all reviews</Link>
+              <Link to={`/review/{productId}`} className="text-green-900"> See all reviews</Link>
             </div>
             <hr></hr>
-            <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl flex ">
-              <h2>
-                <span className="">${variantDetail.variantDto.price}</span>
-              </h2>
-              <span className="text-yellow-500 text-xs ml-4 pb-0">{variantDetail.variantDto.stockQuantity} Đã bán</span>
-            </div>
-            {/* status */}
-            <div className=" text-green-900 mt-6 flex flex-col mb-2">
-              <h1>Currently unavailable.</h1>
-              <span className="text-xs text-black">
-                We don't know when or if this item will be back in stock.
-              </span>
-            </div>
-            <div className="flex text-start justify-start ">
+            {variantDetail.variantDto.stockQuantity > 0 ?
+              <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl flex mb-6 mt-4 ">
+                <h2 className="line-through mr-4 text-red-700">${variantDetail.variantDto.price}</h2>
+                <h2>
+                  <span className="">${variantDetail.variantDto.salePrice}</span>
+                </h2>
+                <span className="text-yellow-500 text-xs ml-4 pb-0">{variantDetail.variantDto.stockQuantity} Đã bán</span>
+              </div>
+              :
+              <div className=" text-green-900 mt-6 flex flex-col mb-6">
+                <h1>Currently unavailable.</h1>
+                <span className="text-xs text-black">
+                  We don't know when or if this item will be back in stock.
+                </span>
+              </div>
+            }
+            {/* <div className="flex text-start justify-start ">
               <div className="text-gray mr-2">Color : </div>
               <div> Red and Blue</div>
             </div>
@@ -243,119 +246,55 @@ function ProductDetail() {
                   </div>
                 </label>
               </div>
-            </div>
-            <div className="flex flex-start justify-start">
-              <div className="text-black mr-2">Style : </div>
-              <div>SE - Pink Stripes</div>
-            </div>
-            <div className="flex items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
-              <div className="space-x-2 flex text-xs">
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="style"
-                    type="radio"
-                    value="SE - Pink Stripes"
-                  />
-                  <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    SE - Pink Stripes
-                  </div>
-                </label>
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="style"
-                    type="radio"
-                    value="PROMAX - Pink Stripes"
-                  />
-                  <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    PROMAX - Pink Stripes
-                  </div>
-                </label>
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="style"
-                    type="radio"
-                    value="PLUS - Pink Stripes"
-                  />
-                  <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    PLUS - Pink Stripes
-                  </div>
-                </label>
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="style"
-                    type="radio"
-                    value="l"
-                  />
-                  <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    SE - BLACK Stripes
-                  </div>
-                </label>
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="style"
-                    type="radio"
-                    value="xl"
-                  />
-                  <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    PROMAX - Pink Stripes
-                  </div>
-                </label>
-              </div>
-            </div>
+            </div> */}
+            {variantDetail && variantDetail.optionTableDto.map((option) => (
+              <>
+                <div className="flex flex-start justify-start">
+                  <div className="text-black mr-2">{option.name} : </div>
+                  <div>SE - Pink Stripes</div>
+                </div>
+                <div className="flex justify-between items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
+                  <div className="space-x-4 flex text-xl">
+                    {option.optionValueDtoList.map((ele) => (
+                      <label>
+                        <input
+                          className="sr-only peer"
+                          name="style"
+                          type="radio"
+                          value=""
+                        />
+                        <div className="w-18 h-18 pl-4 pr-4 rounded-sm flex text-center justify-between text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                          {ele.value}
+                        </div>
+                      </label>
 
-            <div className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0 ">
-              <div className=" w-full h-full bg-white  col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
-                Brand
-              </div>
-              <div className="w-full h-full bg-white col-span-3 border-1">
-                X Rocker
-              </div>
-              <div className=" w-full h-full bg-white  col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
-                Material
-              </div>
-              <div className="w-full h-full bg-white col-span-3 border-1">
-                Wood
-              </div>
-              <div className=" w-full h-full bg-white  col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
-                Color
-              </div>
-              <div className="w-full h-full bg-white col-span-3 border-1">
-                Pink
-              </div>
-              <div className=" w-full h-full bg-white  col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
-                Size
-              </div>
-              <div className="w-full h-full bg-white col-span-3 border-1">
-                33.46" x 16.14" x 25.59"
-              </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ))}
+
+            <div className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0">
+              {variantDetail && variantDetail.productAttributeDtoList.map((attr) => (
+                <>
+                  <div className=" w-full h-full bg-white col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
+                    {attr.name}
+                  </div>
+                  <div className="w-full h-full bg-white col-span-3 text-left font-titleFont border-1">
+                    {attr.value}
+                  </div>
+                </>
+              ))}
             </div>
             <hr></hr>
             <div>
               <h2 className="font-bold mt-2">About this item </h2>
-              <ul className="list-disc">
-                <li className="font-titleFont tracking-wide text-xs text-amazon_blue">
-                  BUILT IN SPEAKERS & BASE I Features an integrated 2.0
-                  bluetooth audio system with headrest mounted speakers to make
-                  you feel like you are actually inside of the game
-                </li>
-                <li className="font-titleFont tracking-wide text-xs text-amazon_blue">
-                  BUILT IN audio system with headrest mounted speakers to make
-                  you feel like you are actually inside of the game
-                </li>
-                <li className="font-titleFont tracking-wide text-xs text-amazon_blue">
-                  WIRELESS I Live free from wires with Wireless Bluetooth
-                  Connectivity to all your compatible devices
-                </li>
-                <li className="font-titleFont tracking-wide text-xs text-amazon_blue">
-                  PREMIUM COMFORT I The rocking design moves and reclines to
-                  provide comfortable playing positions throughout the longest
-                  gaming sessions
-                </li>
+              <ul className="list-disc ml-4">
+                {variantDetail && variantDetail.productDTO.bulletDtoList.map((bullet) => (
+                  <li className="font-titleFont tracking-wide text-sm text-amazon_blue">
+                    {bullet.name}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -367,7 +306,7 @@ function ProductDetail() {
             <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
               <h2>
                 <span className="">$</span>
-                {variantDetail.variantDto.price}
+                {variantDetail.variantDto.salePrice}
               </h2>
             </div>
             <div>
@@ -442,7 +381,7 @@ function ProductDetail() {
         <h1>FROM THE BRAND</h1>
         <img
           className="w-full object-contain"
-          src="https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/163985260/original/99b2303744d92a405c9d4ebb04da8040ecaae64e/design-high-quality-banner-for-amazon-ebay-and-you-tube.jpg"
+          src={variantDetail.storeDto.interactiveImage}
           alt="ProductImg"
         ></img>
       </div>
@@ -451,17 +390,17 @@ function ProductDetail() {
         <h1>From the manufacturer</h1>
         <img
           className="w-full px-48 my-4 object-contain"
-          src="https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/163985260/original/99b2303744d92a405c9d4ebb04da8040ecaae64e/design-high-quality-banner-for-amazon-ebay-and-you-tube.jpg"
+          src={variantDetail.storeDto.interactiveImage}
           alt="ProductImg"
         ></img>
         <img
           className="w-full px-48 my-4  object-contain"
-          src="https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/163985260/original/99b2303744d92a405c9d4ebb04da8040ecaae64e/design-high-quality-banner-for-amazon-ebay-and-you-tube.jpg"
+          src={variantDetail.storeDto.interactiveImage}
           alt="ProductImg"
         ></img>
         <img
-          className="w-full px-48 my-4  object-contain"
-          src="https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/163985260/original/99b2303744d92a405c9d4ebb04da8040ecaae64e/design-high-quality-banner-for-amazon-ebay-and-you-tube.jpg"
+          className="w-full px-48 my-4  object-contain"         
+          src={variantDetail.storeDto.interactiveImage} 
           alt="ProductImg"
         ></img>
       </div>
