@@ -18,7 +18,7 @@ const Cart = () => {
         </div>
         <div>
           <div className="col-span-3 ">
-            {/*<CartHotItems />*/}
+            <CartHotItems />
           </div>
         </div>
         <div className="col-span-4 bg-white">
