@@ -17,7 +17,7 @@ function Registration() {
 
   const REGEX = {
     email: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-    password: /^[0-9a-zA-Z]{8,}$/
+    password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
   };
 
   const handleChange = (event) => {
@@ -26,13 +26,12 @@ function Registration() {
       [event.target.name]: event.target.value,
     });
 
-    if(event.target.name !== "cpassword"){
+    if (event.target.name !== "cpassword") {
       setRegisterData({
         ...registerData,
         [event.target.name]: event.target.value,
-      })
+      });
     }
-    
   };
 
   const handleValidate = () => {
@@ -45,16 +44,17 @@ function Registration() {
       errors.email = "Required";
     } else if (!REGEX.email.test(form.email)) {
       errors.email = "Invalid email";
-    } 
+    }
 
     if (!form.password) {
       errors.password = "Required";
     } else if (!REGEX.password.test(form.password)) {
-      errors.password = "Password must be at least 8 characters";
+      errors.password =
+        "Password must be minium 8 characters, at least one number, one letter";
     }
 
-    if(form.cpassword !== form.password){
-      errors.cpassword = "Password does not match"
+    if (form.cpassword !== form.password) {
+      errors.cpassword = "Password does not match";
     }
     return errors;
   };
@@ -63,19 +63,28 @@ function Registration() {
     setLoading(true);
     setRegisteredEmail(false);
     await axios
-        .post("http://localhost:8080/api/register", registerData)
-        .then(() => {
-          setLoading(false);
-          setSuccessNotify("Account created successfully");
-          setTimeout(() => {
-            navigate("/signin")
-          }, 2500)}
-        )
-        .catch((err) => {
-          setRegisteredEmail(true);
-          setLoading(false);
-          throw err;
-        });
+      .post("http://localhost:8080/api/register", registerData)
+      .then(() => {
+        setLoading(false);
+        setSuccessNotify("Account created successfully");
+        setTimeout(() => {
+          navigate("/signin");
+        }, 2500);
+      })
+      .catch((err) => {
+        setRegisteredEmail(true);
+        setLoading(false);
+        throw err;
+      });
+
+    await axios
+      .post("http://localhost:8080/api/cart", registerData)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        throw err;
+      });
   };
 
   return (
@@ -91,8 +100,10 @@ function Registration() {
               onSubmit={handleSubmit}
               className="w-[350px] mx-auto flex flex-col items-center"
             >
-              <Link to="/">
-                <img className="w-36" src={logoBlack} alt="logo" />
+              <Link
+                to="/"
+              >
+                <img  className="w-36" src={logoBlack} alt="logo" />
               </Link>
               <div className="w-full border border-zinc-200 bg-gray-100 rounded-md p-6">
                 <h2 className="font-titleFont text-3xl font-medium mb-4">
@@ -165,7 +176,7 @@ function Registration() {
                       name="password"
                       onChange={handleChange}
                       value={form.password || ""}
-                      placeholder="At least 8 characters"
+                      placeholder="At least 8 characters, one number and one letter"
                       className="w-full placeholder:normal-case placeholder:text-sm normal-case py-1 bordder border-zinc-400
                     px-2 text-base rounded-sm outline-none focus-within:border-[#e77600]
                     focus-within:shadow-amazonInput duration-100
@@ -218,27 +229,28 @@ function Registration() {
                   </button>
                   {loading && (
                     <div className="flex justify-center">
-                    <RotatingLines
-                      strokeColor="#febd69"
-                      strokeWidth="5"
-                      animationDuration="0.75"
-                      width="50"
-                      visible={true}
-                    />
+                      <RotatingLines
+                        strokeColor="#febd69"
+                        strokeWidth="5"
+                        animationDuration="0.75"
+                        width="50"
+                        visible={true}
+                      />
                     </div>
                   )}
-                  {
-                    successNotify && (
-                      <div>
-                        <motion.p
-                        initial={{y: 10, opacity: 0}}
-                        animate={{y:0, opacity: 1}}
-                        transition={{duration: 0.5}}
+                  {successNotify && (
+                    <div>
+                      <motion.p
+                        initial={{ y: 10, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.5 }}
                         className="text-base font-titleFont font-semibold text-green-500
-                        border-[1px] border-green-500 px-2 text-center">{successNotify}</motion.p>
-                      </div>
-                    )
-                  }
+                        border-[1px] border-green-500 px-2 text-center"
+                      >
+                        {successNotify}
+                      </motion.p>
+                    </div>
+                  )}
                 </div>
                 <p className="text-xs text-black leading-4 mt-4">
                   By creating an account, you agree to ForestDise's{" "}

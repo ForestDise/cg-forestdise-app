@@ -20,13 +20,11 @@ const persistConfig = {
   storage,
 };
 
-
-const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
 
 export const store = configureStore({
   reducer: {
-    cart: cartPersistedReducer,
+    cart: cartReducer,
     variant: variantReducer,
     user: userPersistedReducer
   },

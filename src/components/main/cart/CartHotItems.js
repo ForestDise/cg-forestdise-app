@@ -12,14 +12,14 @@ const CartSidebar = () => {
   const [list, setList] = useState([]);
   const [isSuccess, setIsSuccess] = useState(false);
   
-  useEffect(() => {
-    findFiveProducts().then((item) => { 
-      if (!isSuccess) {
-        setList(item.data);
-        setIsSuccess(true);
-      }
-    });
-  }, [isSuccess]);
+  // useEffect(() => {
+  //   findFiveProducts().then((item) => { 
+  //     if (!isSuccess) {
+  //       setList(item.data);
+  //       setIsSuccess(true);
+  //     }
+  //   });
+  // }, [isSuccess]);
 
   return (
     <div>
