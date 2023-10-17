@@ -14,8 +14,7 @@ import {
   selectSuccess,
   selectVariantDetail,
 } from "../../../features/variant/variantSlice";
-import { addNewCartLine } from "../../../features/cart/cartSlice";
-import { addCartLine } from "../../../api/cartAPI";
+import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";;
 
 function ProductDetail() {
   const { id } = useParams();
@@ -392,22 +391,32 @@ function ProductDetail() {
               </div>
               <button
                 onClick={() =>
-                  {userInfo !== null
-                    ? dispatch(addNewCartLine({
-                        id: '',
-                        quantity: 1,
-                        cartId: userInfo.id,
-                        variantId: variantDetail.variantDto.id
-                      }))
-                    : dispatch(
-                        addCartLine({
-                          id: variantDetail.variantDto.id,
-                          title: variantDetail.variantDto.name,
-                          description: variantDetail.variantDto.skuCode,
-                          price: variantDetail.variantDto.price,
-                          category: variantDetail.variantDto.img,
-                          image: variantDetail.variantDto.img,
+                  {userInfo
+                    ? dispatch(
+                        addNewCartLine({
+                          id: "",
                           quantity: 1,
+                          cartId: userInfo.id,
+                          variantId: variantDetail.variantDto.id,
+                        })
+                      )
+                    : dispatch(
+                        addToCart({
+                          id: "",
+                          quantity: 1,
+                          cartDto: {
+                            id: "",
+                            userId: "",
+                          },
+                          variantDto: {
+                            id: variantDetail.variantDto.id,
+                            name: variantDetail.variantDto.name,
+                            skuCode: variantDetail.variantDto.skuCode,
+                            stockQuantity: variantDetail.variantDto.stockQuantity,
+                            weight: variantDetail.variantDto.weight,
+                            price: variantDetail.variantDto.price,
+                            img: variantDetail.variantDto.img,
+                          }
                         })
                       );}
                 }
