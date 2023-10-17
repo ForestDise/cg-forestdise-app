@@ -5,6 +5,10 @@ const initialState = {
     category: "",
     subCategory: "",
   },
+  moreSideBar: false,
+  moreCategoryToggle: {
+    deals: false
+  },
   loading: false,
   error: null,
   success: false,
@@ -29,6 +33,22 @@ export const sellerStoreSlice = createSlice({
     changeSubCategory: (state, action) => {
       state.breadcrumb.subCategory = action.payload;
     },
+    toggleMoreSideBar: (state, action) => {
+      state.moreSideBar = action.payload;
+    },
+    addMoreCategoryToggle: (state, action) => {
+      state.moreCategoryToggle = {
+        ...state.moreCategoryToggle,
+        [action.payload]: false,
+      };
+    },
+    toggleMoreCategory: (state, action) => {
+      const categoryName = action.payload
+      state.moreCategoryToggle = {
+        ...state.moreCategoryToggle,
+        [categoryName]: !state.moreCategoryToggle[categoryName],
+      };
+    },
   },
 });
 
@@ -38,6 +58,9 @@ export const {
   setSuccess,
   changeCategory,
   changeSubCategory,
+  toggleMoreSideBar,
+  addMoreCategoryToggle,
+  toggleMoreCategory,
 } = sellerStoreSlice.actions;
 
 export const selectLoading = (state) => state.sellerStore.loading;
