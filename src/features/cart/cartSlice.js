@@ -5,6 +5,9 @@ import {
   addCartLine,
   removeCartLine,
   clearAllCartLine,
+  findSaveForLater,
+  addSaveForLater,
+  removeSaveForLater
 } from "../../api/cartAPI";
 
 export const getCartLines = createAsyncThunk(
@@ -47,6 +50,30 @@ export const deleteCartLine = createAsyncThunk(
   }
 );
 
+export const getSaveForLater = createAsyncThunk(
+  "saveForLater/list",
+  async (cartId) => {
+    const response = await findSaveForLater(cartId);
+    return response.data;
+  }
+);
+
+export const createSaveForLater = createAsyncThunk(
+  "saveForLater/add",
+  async (product) => {
+    const response = await addSaveForLater(product);
+    return response.data;
+  }
+);
+
+export const deleteSaveForLater = createAsyncThunk(
+  "saveForLater/delete",
+  async (saveForLaterId) => {
+    const response = await removeSaveForLater(saveForLaterId);
+    return response.data;
+  }
+);
+
 const initialState = {
   products: [],
   empties: [],
@@ -59,49 +86,50 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    // addToCart: (state, action) => {
-    //   const item = state.products.find((item) => item.id === action.payload.id);
-    //   if (item) {
-    //     item.quantity += action.payload.quantity;
-    //   } else {
-    //     state.products.push(action.payload);
-    //   }
-    // },
-    // incrementQuantity: (state, action) => {
-    //   const item = state.products.find((item) => item.id === action.payload);
-    //   item.quantity++;
-    // },
-    // decrementQuantity: (state, action) => {
-    //   const item = state.products.find((item) => item.id === action.payload);
-    //   if (item.quantity === 1) {
-    //     item.quantity = 1;
-    //   } else {
-    //     item.quantity--;
-    //   }
-    // },
-    // deleteItem: (state, action) => {
-    //   state.products = state.products.filter(
-    //     (item) => item.id !== action.payload
-    //   );
-    // },
-    // resetCart: (state) => {
-    //   state.products = [];
-    // },
-    // saveForLater: (state, action) => {
-    //   const item = state.empties.find((item) => item.id === action.payload.id);
-    //   if (item) {
-    //     state.products = state.products.filter(
-    //       (item) => item.id !== action.payload.id
-    //     );
-    //   } else {
-    //     state.empties.push(action.payload);
-    //   }
-    // },
-    // deleteEmpties: (state, action) => {
-    //   state.empties = state.empties.filter(
-    //     (item) => item.id !== action.payload
-    //   );
-    // },
+    addToCart: (state, action) => {
+      const item = state.products.find((item) => item.variantDto.id === action.payload.variantDto.id);
+      if (item) {
+        item.quantity += action.payload.quantity;
+      } else {
+        state.products.push(action.payload);
+      }
+    },
+    incrementQuantity: (state, action) => {
+      const item = state.products.find((item) => item.variantDto.id === action.payload.variantDto.id);
+      item.quantity++;
+    },
+    decrementQuantity: (state, action) => {
+      const item = state.products.find(
+        (item) => item.variantDto.id === action.payload.variantDto.id
+      );
+      if (item.quantity === 1) {
+        item.quantity = 1;
+      } else {
+        item.quantity--;
+      }
+    },
+    deleteItem: (state, action) => {
+      state.products = state.products.filter(
+        (item) => item.variantDto.id !== action.payload
+      );
+    },
+    resetCart: (state) => {
+      state.products = [];
+    },
+    resetSaveForLater: (state) =>{
+      state.empties = [];
+    },
+    saveForLater: (state, action) => {
+      const item = state.empties.find((item) => item.variantDto.id === action.payload.variantDto.id);
+      if (!item) {
+        state.empties.push(action.payload);
+      }
+    },
+    deleteEmpties: (state, action) => {
+      state.empties = state.empties.filter(
+        (item) => item.variantDto.id !== action.payload
+      );
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -196,6 +224,61 @@ export const cartSlice = createSlice({
         state.products = state.products.filter(
           (item) => item.id !== action.meta.arg
         );
+      })
+      .addCase(getSaveForLater.pending, (state) => {
+        state.success = false;
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getSaveForLater.rejected, (state, action) => {
+        state.success = false;
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(getSaveForLater.fulfilled, (state, action) => {
+        state.success = true;
+        state.loading = false;
+        state.error = false;
+        state.empties = action.payload;
+      })
+      .addCase(createSaveForLater.pending, (state) => {
+        state.success = false;
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(createSaveForLater.rejected, (state, action) => {
+        state.success = false;
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(createSaveForLater.fulfilled, (state, action) => {
+        state.success = true;
+        state.loading = false;
+        state.error = false;
+        const item = state.empties.find(
+          (item) => item.variantDto.id === action.payload.variantDto.id
+        );
+        if (!item) {
+          state.empties.push(action.payload);
+        }
+      })
+      .addCase(deleteSaveForLater.pending, (state) => {
+        state.success = false;
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(deleteSaveForLater.rejected, (state, action) => {
+        state.success = false;
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(deleteSaveForLater.fulfilled, (state, action) => {
+        state.success = true;
+        state.loading = false;
+        state.error = false;
+        state.empties = state.empties.filter(
+          (item) => item.id !== action.meta.arg
+        );
       });
   },
 });
@@ -209,6 +292,7 @@ export const {
   incrementQuantity,
   saveForLater,
   deleteEmpties,
+  resetSaveForLater
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

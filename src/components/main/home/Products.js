@@ -10,21 +10,24 @@ import { getCartLines } from "../../../features/cart/cartSlice";
 
 function Products() {
   const dispatch = useDispatch();
-  const {userInfo} = useSelector((state)=>state.user);
+  const { userInfo } = useSelector((state) => state.user);
   const [productData, setProductData] = useState([]);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     fetchData();
-    dispatch(getCartLines(userInfo.id));
-  }, []);
+    if (userInfo) {
+      dispatch(getCartLines(userInfo.id));
+      console.log("====products=====");
+    }
+  }, [userInfo]);
 
   async function fetchData() {
     await axios
       .get("http://localhost:8080/api/products")
       .then((res) => {
-        console.log(res);
-        setProductData(res.data)})
+        setProductData(res.data);
+      })
       .catch((err) => {
         throw err;
       });
@@ -99,9 +102,7 @@ function Products() {
               </div>
             </div>
             <button
-              onClick={() =>
-                navigate(`/product/${product.id}`)
-              }
+              onClick={() => navigate(`/product/${product.id}`)}
               className="w-full font-titleFont font-medium text-base bg-gradient-to-tr
             from-yellow-400 to-yellow-200 border hover:from-yellow-300 hover:to-yellow-400
             border-yellow-500 hover:border-yellow-700 active:bg-gradient-to-bl

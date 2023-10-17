@@ -2,7 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { findUser } from "../../api/userAPI";
 
 const initialState = {
-  userInfo: null
+  userInfo: null,
+  loading: false,
+  success: false,
+  error: false,
 };
 
 export const setUserInfo = createAsyncThunk(

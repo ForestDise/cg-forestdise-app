@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { logoBlack } from "../assets";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,10 +6,15 @@ import { Formik } from "formik";
 import { RotatingLines } from "react-loader-spinner";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserInfo } from "../features/user/userSlice";
 import jwt_decode from "jwt-decode";
-
+import {
+  addNewCartLine,
+  resetCart,
+  createSaveForLater,
+  resetSaveForLater
+} from "../features/cart/cartSlice";
 function Signin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,6 +22,8 @@ function Signin() {
   const [loading, setLoading] = useState(false);
   const [errorNotify, setErrorNotify] = useState("");
   const [successNotify, setSuccessNotify] = useState("");
+  const { userInfo } = useSelector((state) => state.user);
+  const { products, empties } = useSelector((state) => state.cart);
 
   const handleValidate = () => {
     let errors = {};
@@ -59,6 +66,38 @@ function Signin() {
       });
   };
 
+  useEffect(()=>{
+    if(userInfo){
+        sendValuesInDatabase();
+    }
+  },[userInfo])
+
+  const sendValuesInDatabase = () => {
+    console.log("========signin==========");
+    console.log(userInfo);
+    products.map((item) =>
+      dispatch(
+        addNewCartLine({
+          id: '',
+          quantity: item.quantity,
+          cartId: userInfo.id,
+          variantId: item.variantDto.id,
+        })
+      )
+    );
+    empties.map((item) =>
+      dispatch(
+        createSaveForLater({
+          id: '',
+          quantity: item.quantity,
+          cartId: userInfo.id,
+          variantId: item.variantDto.id,
+        })
+      ));
+    dispatch(resetCart());
+    dispatch(resetSaveForLater());
+  };
+
   return (
     <div className="w-full font-bodyFont">
       <div className="w-full bg-gray-100 pb-10">
@@ -73,11 +112,7 @@ function Signin() {
               className="w-[350px] mx-auto flex flex-col items-center"
             >
               <Link to="/">
-                <img
-                  className="w-36"
-                  src={logoBlack}
-                  alt="logo"
-                />
+                <img className="w-36" src={logoBlack} alt="logo" />
               </Link>
               <div className="w-full bg-gray-100 border border-zinc-300 rounded-md p-6">
                 <h2 className="font-titleFont text-3xl font-medium mb-4">

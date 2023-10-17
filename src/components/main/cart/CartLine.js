@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   deleteItem,
@@ -10,6 +10,7 @@ import {
   editCartLine,
   getCartLines,
   clearCartLine,
+  createSaveForLater,
 } from "../../../features/cart/cartSlice";
 import { emptyCart } from "../../../assets";
 import { Link } from "react-router-dom";
@@ -20,9 +21,11 @@ const CartContent = () => {
   const { products } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.user);
 
-  // useEffect(() => {
-  //   dispatch(getCartLines(userInfo.id));
-  // }, []);
+  useEffect(() => {
+    if (userInfo) {
+      dispatch(getCartLines(userInfo.id));
+    }
+  }, [userInfo]);
 
   return (
     <>
@@ -42,7 +45,7 @@ const CartContent = () => {
           <div>
             {products.map((item) => (
               <div
-                key={item.id}
+                key={item.variantDto.id}
                 className="w-full border-b-[1px] border-b-gray-300 p-4 flex items-center gap-6"
               >
                 <div className="w-full flex items-center justify-between gap-6">
@@ -70,16 +73,33 @@ const CartContent = () => {
                       <p>Qty:</p>
                       <p
                         onClick={() => {
-                          userInfo !== null && item.quantity > 0 ? (
-                            dispatch(
-                              editCartLine({
-                                quantity: item.quantity - 1,
-                                id: item.id,
-                              })
-                            )
-                          ) : (
-                            <></>
-                          );
+                          userInfo && item.quantity > 1
+                            ? dispatch(
+                                editCartLine({
+                                  quantity: item.quantity - 1,
+                                  id: item.id,
+                                })
+                              )
+                            : dispatch(
+                                decrementQuantity({
+                                  id: "",
+                                  quantity: 1,
+                                  cartDto: {
+                                    id: "",
+                                    userId: "",
+                                  },
+                                  variantDto: {
+                                    id: item.variantDto.id,
+                                    name: item.variantDto.name,
+                                    skuCode: item.variantDto.skuCode,
+                                    stockQuantity:
+                                      item.variantDto.stockQuantity,
+                                    weight: item.variantDto.weight,
+                                    price: item.variantDto.price,
+                                    img: item.variantDto.img,
+                                  },
+                                })
+                              );
                         }}
                         className="cursor-pointer bg-gray-200 px-1 rounded-md hover:bg-gray-400 duration-300"
                       >
@@ -88,16 +108,33 @@ const CartContent = () => {
                       <p>{item.quantity}</p>
                       <p
                         onClick={() => {
-                          userInfo !== null ? (
-                            dispatch(
-                              editCartLine({
-                                quantity: item.quantity + 1,
-                                id: item.id,
-                              })
-                            )
-                          ) : (
-                            <></>
-                          );
+                          userInfo
+                            ? dispatch(
+                                editCartLine({
+                                  quantity: item.quantity + 1,
+                                  id: item.id,
+                                })
+                              )
+                            : dispatch(
+                                incrementQuantity({
+                                  id: "",
+                                  quantity: 1,
+                                  cartDto: {
+                                    id: "",
+                                    userId: "",
+                                  },
+                                  variantDto: {
+                                    id: item.variantDto.id,
+                                    name: item.variantDto.name,
+                                    skuCode: item.variantDto.skuCode,
+                                    stockQuantity:
+                                      item.variantDto.stockQuantity,
+                                    weight: item.variantDto.weight,
+                                    price: item.variantDto.price,
+                                    img: item.variantDto.img,
+                                  },
+                                })
+                              );
                         }}
                         className="cursor-pointer bg-gray-200 px-1 rounded-md hover:bg-gray-400 duration-300"
                       >
@@ -108,26 +145,43 @@ const CartContent = () => {
                       onClick={() => {
                         userInfo !== null
                           ? dispatch(deleteCartLine(item.id))
-                          :<></>
+                          : dispatch(deleteItem(item.variantDto.id));
                       }}
                       className="bg-white p-1.5 sm:px-2 lg:px-4 border border-gray-300  py-1 rounded-lg md:text-md sm:text-xs lg:text-sm mt-2 hover:bg-gray-100 shadow-md duration-300"
                     >
                       Delete Item
                     </button>
                     <button
-                      onClick={() =>
-                        dispatch(
-                          saveForLater({
-                            id: item.id,
-                            title: item.title,
-                            description: item.description,
-                            price: item.price,
-                            category: item.category,
-                            image: item.image,
-                            quantity: 1,
-                          })
-                        ) && dispatch(deleteItem(item.id))
-                      }
+                      onClick={() => {
+                        userInfo
+                          ? dispatch(
+                              createSaveForLater({
+                                id: "",
+                                quantity: item.quantity,
+                                cartId: item.cartDto.id,
+                                variantId: item.variantDto.id,
+                              })
+                            ) && dispatch(deleteCartLine(item.id))
+                          : dispatch(
+                              saveForLater({
+                                id: "",
+                                quantity: item.quantity,
+                                cartDto: {
+                                  id: item.cartDto.id,
+                                  userId: item.cartDto.userId,
+                                },
+                                variantDto: {
+                                  id: item.variantDto.id,
+                                  name: item.variantDto.name,
+                                  skuCode: item.variantDto.skuCode,
+                                  stockQuantity: item.variantDto.stockQuantity,
+                                  weight: item.variantDto.weight,
+                                  price: item.variantDto.price,
+                                  img: item.variantDto.img,
+                                },
+                              })
+                            ) && dispatch(deleteItem(item.variantDto.id));
+                      }}
                       className="sm:px-1 lg:px-4 md:text-sm sm:text-xs lg:text-md text-cyan-600 hover:underline"
                     >
                       Save for later
@@ -145,7 +199,11 @@ const CartContent = () => {
           {products.length > 0 ? (
             <div className="w-full py-2">
               <button
-                onClick={() => dispatch(clearCartLine(userInfo.id))}
+                onClick={() => {
+                  userInfo
+                    ? dispatch(clearCartLine(userInfo.id))
+                    : dispatch(resetCart());
+                }}
                 className="sm:px-4 lg:px-8 sm:py-1 lg:py-2 border border-gray-300 bg-white hover:bg-gray-100 text-md rounded-lg font-titleFont md:text-md sm:text-sm lg:text-lg shadow-md active:bg-teal-100 tracking-wide"
               >
                 Clear Cart
