@@ -12,6 +12,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { logOutUser } from "../../../features/user/userSlice";
 
+
+
 function Header() {
   const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ function Header() {
   const userInfo = useSelector((state) => state.user.userInfo);
   const products = useSelector((state) => state.cart.products);
   const [numberCart, setNumberCart] = useState(0);
+
 
   useEffect(() => {
     let quantity = 0;
@@ -33,6 +36,14 @@ function Header() {
     window.localStorage.removeItem("token");
     console.log(userInfo);
   };
+
+  const [searchText, setSearchText] = useState('');
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchText(value);
+  }
+
 
   return (
     <div className="w-full sticky top-0 z-50">
@@ -84,8 +95,15 @@ function Header() {
             type="text"
             className="h-full text-base text-amazon_blue flex-grow outline-none border-none px-2"
             placeholder="Search ForestDise"
+            value={searchText}
+            onChange={handleInputChange}
           ></input>
-          <span className="w-12 h-full flex items-center justify-center bg-amazon_yellow hover:bg-[#f3a847] duration-300 text-amazon_blue cursor-pointer rounded-tr-md rounded-br-md">
+          <span className="w-12 h-full flex items-center justify-center bg-amazon_yellow hover:bg-[#f3a847] duration-300 text-amazon_blue cursor-pointer rounded-tr-md rounded-br-md"
+                onClick={() => {
+                  if (searchText !== "") {
+                    navigate(`/search?searchText=${searchText}`);
+                  }
+                }}>
             <SearchIcon />
           </span>
         </div>

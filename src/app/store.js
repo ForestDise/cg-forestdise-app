@@ -13,6 +13,7 @@ import storage from "redux-persist/lib/storage";
 import cartReducer from "../features/cart/cartSlice";
 import variantReducer from "../features/variant/variantSlice";
 import userReducer from "../features/user/userSlice";
+import searchProductReducer from "../features/search/searchProductSlice"; // Import reducer của bạn
 
 const persistConfig = {
   key: "root",
@@ -28,7 +29,8 @@ export const store = configureStore({
   reducer: {
     cart: cartPersistedReducer,
     variant: variantReducer,
-    user: userPersistedReducer
+    user: userPersistedReducer,
+    searchProduct: searchProductReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

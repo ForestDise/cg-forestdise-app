@@ -27,4 +27,5 @@
     border-b-gray-400 hover:border-b-gray-700 flex items-center justify-end gap-2
     hover:cursor-pointer duration-300 w-full;
   }
+
 }
