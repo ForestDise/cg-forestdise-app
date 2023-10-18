@@ -36,7 +36,6 @@ const StoreLayout = () => {
     <div>
       <StoreBanner />
       <StoreHeader />
-      <ScrollRestoration />
       <Outlet />
       <StoreFooter />
     </div>
@@ -55,7 +54,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/store" element={<StoreLayout />}>
+          <Route path="/store/:id" element={<StoreLayout />}>
             <Route index element={<HomeContent />} />
           </Route>
         </Route>

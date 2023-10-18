@@ -14,7 +14,8 @@ import {
   selectSuccess,
   selectVariantDetail,
 } from "../../../features/variant/variantSlice";
-import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";;
+import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";import { setCategory } from "../../../features/sellerStore/sellerStoreSlice";
+;
 
 function ProductDetail() {
   const { id } = useParams();
@@ -22,9 +23,8 @@ function ProductDetail() {
   const [product, setProduct] = useState({});
   const [mainImage, setMainImage] = useState("");
   const [showRecommend, setShowRecommend] = useState(false);
+  const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
   const dispatch = useDispatch();
-
-
   const {userInfo} = useSelector((state)=> state.user);
 
 
@@ -126,9 +126,11 @@ function ProductDetail() {
               <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
                 <h2>{variantDetail.variantDto.name}</h2>
               </div>
-              <Link to={`/store`}>
+              <Link to={`/store/${storeInfo.id}`}>
                 <div className="font-titleFont tracking-wide text-green-900 size text-sm sm:text-xs hover:text-green-700 underline">
-                  <span>Visit to the Samsung Store</span>
+                  <span onClick={() => {
+                    dispatch(setCategory(storeInfo.storeCategoryList));
+                  }}>Vist the {storeInfo.name}</span>
                 </div>
               </Link>
               <div className="font-titleFont flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
@@ -412,11 +414,19 @@ function ProductDetail() {
                             id: variantDetail.variantDto.id,
                             name: variantDetail.variantDto.name,
                             skuCode: variantDetail.variantDto.skuCode,
-                            stockQuantity: variantDetail.variantDto.stockQuantity,
+                            stockQuantity:
+                              variantDetail.variantDto.stockQuantity,
                             weight: variantDetail.variantDto.weight,
                             price: variantDetail.variantDto.price,
                             img: variantDetail.variantDto.img,
-                          }
+                            salePrice: variantDetail.variantDto.salePrice,
+                            optionValueDtoList:
+                              variantDetail.variantDto.optionValueDtoList,
+                            imageDtoList: variantDetail.variantDto.mageDtoList,
+                            videoDtoList: variantDetail.variantDto.videoDtoList,
+                            reviewDtoList:
+                              variantDetail.variantDto.reviewDtoList,
+                          },
                         })
                       );}
                 }
