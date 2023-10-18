@@ -14,7 +14,7 @@ import {
   selectSuccess,
   selectVariantDetail,
 } from "../../../features/variant/variantSlice";
-import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";;
+import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -24,9 +24,7 @@ function ProductDetail() {
   const [showRecommend, setShowRecommend] = useState(false);
   const dispatch = useDispatch();
 
-
-  const {userInfo} = useSelector((state)=> state.user);
-
+  const { userInfo } = useSelector((state) => state.user);
 
   const getVariantDetail = async () => {
     if (id != null) {
@@ -81,7 +79,7 @@ function ProductDetail() {
   return (
     variantDetail && (
       <div className="font-bodyFont w-full bg-gray-100 p-1">
-        <div className="container mx-auto h-auto grid grid-cols-5 gap-2">
+        <div className="container mx-auto h-auto grid qqqgrid-cols-5 gap-2">
           {/* Thumnail start */}
           <div className="w-full h-full bg-white px-4 col-span-2 flex flex-col py-10 border-gray-300 border-2 rounded-3xl">
             <div className="w-full h-96 object-contain fluid__image-container ">
@@ -390,8 +388,8 @@ function ProductDetail() {
                 <h1 className="my-4 text-2xl text-green-900">In Stock</h1>
               </div>
               <button
-                onClick={() =>
-                  {userInfo
+                onClick={() => {
+                  userInfo
                     ? dispatch(
                         addNewCartLine({
                           id: "",
@@ -412,14 +410,15 @@ function ProductDetail() {
                             id: variantDetail.variantDto.id,
                             name: variantDetail.variantDto.name,
                             skuCode: variantDetail.variantDto.skuCode,
-                            stockQuantity: variantDetail.variantDto.stockQuantity,
+                            stockQuantity:
+                              variantDetail.variantDto.stockQuantity,
                             weight: variantDetail.variantDto.weight,
                             price: variantDetail.variantDto.price,
                             img: variantDetail.variantDto.img,
-                          }
+                          },
                         })
-                      );}
-                }
+                      );
+                }}
                 className="rounded-lg bg-yellow-400 py-3 my-2 hover:bg-yellow-300 duration-100 cursor-pointer"
               >
                 Add To Cart
@@ -709,123 +708,289 @@ function ProductDetail() {
               <div className="text-bodyFont text-xs text-gray-500 mb-2">
                 Style: Men's Size 8-13 | Size: 1 Pair (Pack of 1)
                 <span className="text-amber-700 ml-2 font-bold">
-                  Verified Purchase
+                  Verified Purchase{" "}
                 </span>
-              </div>
-              <div className="text-bodyFont text-xs text-black">
-                Seriously these are the best things I've found. They have helped
-                my plantar fasciitis better than the Shot the foot doctor gave,
-                and the many physical therapy appointments which cost me every
-                time I went. I wish I had found them before all that. Even after
-                all that I still had pain, it was better, but not 100%, these
-                inserts have helped me profoundly. Please note that they do not
-                work in all shoes, but so far I've only had one pair of my shoes
-                that they didn't work in. I'll be chucking those. They've worked
-                in dress shoes, and my Puma workout shoes along with my Keen
-                hiking shoes. So if they don't work for you, try them in a
-                different shoe. I bet they will work in any flat shoe with
-                little or no arch support. Give them a shot if you suffer as I
-                did.
-              </div>
+                {variantDetail.variantDto.stockQuantity > 0 ? (
+                  <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl flex mb-6 mt-4 ">
+                    <h2 className="line-through mr-4 text-red-700">
+                      ${variantDetail.variantDto.price}
+                    </h2>
+                    <h2>
+                      <span className="">
+                        ${variantDetail.variantDto.salePrice}
+                      </span>
+                    </h2>
+                    <span className="text-yellow-500 text-xs ml-4 pb-0">
+                      {variantDetail.variantDto.stockQuantity} Đã bán
+                    </span>
+                  </div>
+                ) : (
+                  <div className=" text-green-900 mt-6 flex flex-col mb-6">
+                    <h1>Currently unavailable.</h1>
+                    <span className="text-xs text-black">
+                      We don't know when or if this item will be back in stock.
+                    </span>
+                  </div>
+                )}
+                {/* <div className="flex text-start justify-start ">
+              <div className="text-gray mr-2">Color : </div>
+              <div> Red and Blue</div>
             </div>
-            <hr></hr>
-            <div className="m-4">
-              <div className="flex mb-2">
-                <img
-                  src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.6435-9/116429521_1655876004585921_941667011043408186_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=84a396&_nc_ohc=jX_SP-XeWGUAX8gd9Dl&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfB8K54ttI7F3njd8xLWtnInOErSx2FkaIhUXEuNjobBRw&oe=654A001A"
-                  className="rounded-full w-5 h-5"
-                />
-                <div className="ml-4 text-titleFont">Meomeocute</div>
+            <div className="flex items-baseline mt-2 mb-6 pb-6 border-b border-slate-200">
+              <div className="space-x-2 flex text-sm">
+                <label>
+                  <input
+                    className="sr-only peer"
+                    name="size"
+                    type="radio"
+                    value="xs"
+                  // checked
+                  />
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                    XS
+                  </div>
+                </label>
+                <label>
+                  <input
+                    className="sr-only peer"
+                    name="size"
+                    type="radio"
+                    value="s"
+                  />
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                    S
+                  </div>
+                </label>
+                <label>
+                  <input
+                    className="sr-only peer"
+                    name="size"
+                    type="radio"
+                    value="m"
+                  />
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                    M
+                  </div>
+                </label>
+                <label>
+                  <input
+                    className="sr-only peer"
+                    name="size"
+                    type="radio"
+                    value="l"
+                  />
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                    L
+                  </div>
+                </label>
+                <label>
+                  <input
+                    className="sr-only peer"
+                    name="size"
+                    type="radio"
+                    value="xl"
+                  />
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                    XL
+                  </div>
+                </label>
               </div>
-              <div className="flex">
-                <div className="text-amazon_yellow text-sm items-center ">
-                  <StarIcon sx={{ fontSize: 15 }} />
-                  <StarIcon sx={{ fontSize: 15 }} />
-                  <StarIcon sx={{ fontSize: 15 }} />
-                  <StarIcon sx={{ fontSize: 15 }} />
-                  <StarIcon sx={{ fontSize: 15 }} />
+            </div> */}
+                {variantDetail &&
+                  variantDetail.optionTableDto.map((option) => (
+                    <>
+                      <div className="flex flex-start justify-start">
+                        <div className="text-black mr-2">{option.name} : </div>
+                        <div>SE - Pink Stripes</div>
+                      </div>
+                      <div className="flex justify-between items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
+                        <div className="space-x-4 flex text-xl">
+                          {option.optionValueDtoList.map((ele) => (
+                            <label>
+                              <input
+                                className="sr-only peer"
+                                name="style"
+                                type="radio"
+                                value=""
+                              />
+                              <div className="w-18 h-18 pl-4 pr-4 rounded-sm flex text-center justify-between text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                                {ele.value}
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  ))}
+                <div className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0">
+                  {variantDetail &&
+                    variantDetail.productAttributeDtoList.map((attr) => (
+                      <>
+                        <div className=" w-full h-full bg-white col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
+                          {attr.name}
+                        </div>
+                        <div className="w-full h-full bg-white col-span-3 text-left font-titleFont border-1">
+                          {attr.value}
+                        </div>
+                      </>
+                    ))}
                 </div>
-                <a className="text-bodyFont text-sm ml-4 font-medium hover:underline hover:text-amber-600">
-                  {" "}
-                  I wish that I had found these before I spent 1000's on doctors
-                  and Physical therapy
-                </a>
-              </div>
-              <div className="text-bodyFont text-xs text-gray-500">
-                Reviewed in the United States on September 25, 2023
-              </div>
-              <div className="text-bodyFont text-xs text-gray-500 mb-2">
-                Style: Men's Size 8-13 | Size: 1 Pair (Pack of 1)
-                <span className="text-amber-700 ml-2 font-bold">
-                  Verified Purchase
-                </span>
-              </div>
-              <div className="text-bodyFont text-xs text-black">
-                Seriously these are the best things I've found. They have helped
-                my plantar fasciitis better than the Shot the foot doctor gave,
-                and the many physical therapy appointments which cost me every
-                time I went. I wish I had found them before all that. Even after
-                all that I still had pain, it was better, but not 100%, these
-                inserts have helped me profoundly. Please note that they do not
-                work in all shoes, but so far I've only had one pair of my shoes
-                that they didn't work in. I'll be chucking those. They've worked
-                in dress shoes, and my Puma workout shoes along with my Keen
-                hiking shoes. So if they don't work for you, try them in a
-                different shoe. I bet they will work in any flat shoe with
-                little or no arch support. Give them a shot if you suffer as I
-                did.
-              </div>
-            </div>
-            <hr></hr>
-            <div className="m-4">
-              <div className="flex mb-2">
-                <img
-                  src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.6435-9/116429521_1655876004585921_941667011043408186_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=84a396&_nc_ohc=jX_SP-XeWGUAX8gd9Dl&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfB8K54ttI7F3njd8xLWtnInOErSx2FkaIhUXEuNjobBRw&oe=654A001A"
-                  className="rounded-full w-5 h-5"
-                />
-                <div className="ml-4 text-titleFont">Meomeocute</div>
-              </div>
-              <div className="flex">
-                <div className="text-amazon_yellow text-sm items-center ">
-                  <StarIcon sx={{ fontSize: 15 }} />
-                  <StarIcon sx={{ fontSize: 15 }} />
-                  <StarIcon sx={{ fontSize: 15 }} />
-                  <StarIcon sx={{ fontSize: 15 }} />
-                  <StarIcon sx={{ fontSize: 15 }} />
+                <hr></hr>
+                <div>
+                  <h2 className="font-bold mt-2">About this item </h2>
+                  <ul className="list-disc ml-4">
+                    {variantDetail &&
+                      variantDetail.productDTO.bulletDtoList.map((bullet) => (
+                        <li className="font-titleFont tracking-wide text-sm text-amazon_blue">
+                          {bullet.name}
+                        </li>
+                      ))}
+                  </ul>
                 </div>
-                <a className="text-bodyFont text-sm ml-4 font-medium hover:underline hover:text-amber-600">
-                  {" "}
-                  I wish that I had found these before I spent 1000's on doctors
-                  and Physical therapy
-                </a>
-              </div>
-              <div className="text-bodyFont text-xs text-gray-500">
-                Reviewed in the United States on September 25, 2023
-              </div>
-              <div className="text-bodyFont text-xs text-gray-500 mb-2">
-                Style: Men's Size 8-13 | Size: 1 Pair (Pack of 1)
-                <span className="text-amber-700 ml-2 font-bold">
-                  Verified Purchase
-                </span>
-              </div>
-              <div className="text-bodyFont text-xs text-black">
-                Seriously these are the best things I've found. They have helped
-                my plantar fasciitis better than the Shot the foot doctor gave,
-                and the many physical therapy appointments which cost me every
-                time I went. I wish I had found them before all that. Even after
-                all that I still had pain, it was better, but not 100%, these
-                inserts have helped me profoundly. Please note that they do not
-                work in all shoes, but so far I've only had one pair of my shoes
-                that they didn't work in. I'll be chucking those. They've worked
-                in dress shoes, and my Puma workout shoes along with my Keen
-                hiking shoes. So if they don't work for you, try them in a
-                different shoe. I bet they will work in any flat shoe with
-                little or no arch support. Give them a shot if you suffer as I
-                did.
               </div>
             </div>
-            <hr></hr>
-            {/* List Review Of Customer End */}
+            {/* Detail Product End */}
+            {/* Cart Start */}
+            <div className="w-full h-full bg-white col-span-1 border-yellow-300 border-2 rounded-3xl text-sm">
+              <div className="flex flex-col p-4">
+                <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
+                  <h2>
+                    <span className="">$</span>
+                    {variantDetail.variantDto.salePrice}
+                  </h2>
+                </div>
+                <div>
+                  <h5>
+                    Delivery{" "}
+                    <span className="font-bold">Monday, October 30</span>
+                  </h5>
+                </div>
+                <div className="flex flex-row">
+                  <FmdGoodIcon sx={{ fontSize: 20 }} />
+                  <Link to={`/deliver`}>
+                    <span className=" text-green-900 hover:text-stone-400 underline text-xs">
+                      Deliver To Nghia - Đà Nẵng
+                    </span>
+                  </Link>
+                  <div className="text-bodyFont text-xs text-black">
+                    Seriously these are the best things I've found. They have
+                    helped my plantar fasciitis better than the Shot the foot
+                    doctor gave, and the many physical therapy appointments
+                    which cost me every time I went. I wish I had found them
+                    before all that. Even after all that I still had pain, it
+                    was better, but not 100%, these inserts have helped me
+                    profoundly. Please note that they do not work in all shoes,
+                    but so far I've only had one pair of my shoes that they
+                    didn't work in. I'll be chucking those. They've worked in
+                    dress shoes, and my Puma workout shoes along with my Keen
+                    hiking shoes. So if they don't work for you, try them in a
+                    different shoe. I bet they will work in any flat shoe with
+                    little or no arch support. Give them a shot if you suffer as
+                    I did.
+                  </div>
+                </div>
+                <hr></hr>
+                <div className="m-4">
+                  <div className="flex mb-2">
+                    <img
+                      src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.6435-9/116429521_1655876004585921_941667011043408186_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=84a396&_nc_ohc=jX_SP-XeWGUAX8gd9Dl&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfB8K54ttI7F3njd8xLWtnInOErSx2FkaIhUXEuNjobBRw&oe=654A001A"
+                      className="rounded-full w-5 h-5"
+                    />
+                    <div className="ml-4 text-titleFont">Meomeocute</div>
+                  </div>
+                  <div className="flex">
+                    <div className="text-amazon_yellow text-sm items-center ">
+                      <StarIcon sx={{ fontSize: 15 }} />
+                      <StarIcon sx={{ fontSize: 15 }} />
+                      <StarIcon sx={{ fontSize: 15 }} />
+                      <StarIcon sx={{ fontSize: 15 }} />
+                      <StarIcon sx={{ fontSize: 15 }} />
+                    </div>
+                    <a className="text-bodyFont text-sm ml-4 font-medium hover:underline hover:text-amber-600">
+                      {" "}
+                      I wish that I had found these before I spent 1000's on
+                      doctors and Physical therapy
+                    </a>
+                  </div>
+                  <div className="text-bodyFont text-xs text-gray-500">
+                    Reviewed in the United States on September 25, 2023
+                  </div>
+                  <div className="text-bodyFont text-xs text-gray-500 mb-2">
+                    Style: Men's Size 8-13 | Size: 1 Pair (Pack of 1)
+                    <span className="text-amber-700 ml-2 font-bold">
+                      Verified Purchase
+                    </span>
+                  </div>
+                  <div className="text-bodyFont text-xs text-black">
+                    Seriously these are the best things I've found. They have
+                    helped my plantar fasciitis better than the Shot the foot
+                    doctor gave, and the many physical therapy appointments
+                    which cost me every time I went. I wish I had found them
+                    before all that. Even after all that I still had pain, it
+                    was better, but not 100%, these inserts have helped me
+                    profoundly. Please note that they do not work in all shoes,
+                    but so far I've only had one pair of my shoes that they
+                    didn't work in. I'll be chucking those. They've worked in
+                    dress shoes, and my Puma workout shoes along with my Keen
+                    hiking shoes. So if they don't work for you, try them in a
+                    different shoe. I bet they will work in any flat shoe with
+                    little or no arch support. Give them a shot if you suffer as
+                    I did.
+                  </div>
+                </div>
+                <hr></hr>
+                <div className="m-4">
+                  <div className="flex mb-2">
+                    <img
+                      src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.6435-9/116429521_1655876004585921_941667011043408186_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=84a396&_nc_ohc=jX_SP-XeWGUAX8gd9Dl&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfB8K54ttI7F3njd8xLWtnInOErSx2FkaIhUXEuNjobBRw&oe=654A001A"
+                      className="rounded-full w-5 h-5"
+                    />
+                    <div className="ml-4 text-titleFont">Meomeocute</div>
+                  </div>
+                  <div className="flex">
+                    <div className="text-amazon_yellow text-sm items-center ">
+                      <StarIcon sx={{ fontSize: 15 }} />
+                      <StarIcon sx={{ fontSize: 15 }} />
+                      <StarIcon sx={{ fontSize: 15 }} />
+                      <StarIcon sx={{ fontSize: 15 }} />
+                      <StarIcon sx={{ fontSize: 15 }} />
+                    </div>
+                    <a className="text-bodyFont text-sm ml-4 font-medium hover:underline hover:text-amber-600">
+                      {" "}
+                      I wish that I had found these before I spent 1000's on
+                      doctors and Physical therapy
+                    </a>
+                  </div>
+                  <div className="text-bodyFont text-xs text-gray-500">
+                    Reviewed in the United States on September 25, 2023
+                  </div>
+                  <div className="text-bodyFont text-xs text-gray-500 mb-2">
+                    Style: Men's Size 8-13 | Size: 1 Pair (Pack of 1)
+                    <span className="text-amber-700 ml-2 font-bold">
+                      Verified Purchase
+                    </span>
+                  </div>
+                  <div className="text-bodyFont text-xs text-black">
+                    Seriously these are the best things I've found. They have
+                    helped my plantar fasciitis better than the Shot the foot
+                    doctor gave, and the many physical therapy appointments
+                    which cost me every time I went. I wish I had found them
+                    before all that. Even after all that I still had pain, it
+                    was better, but not 100%, these inserts have helped me
+                    profoundly. Please note that they do not work in all shoes,
+                    but so far I've only had one pair of my shoes that they
+                    didn't work in. I'll be chucking those. They've worked in
+                    dress shoes, and my Puma workout shoes along with my Keen
+                    hiking shoes. So if they don't work for you, try them in a
+                    different shoe. I bet they will work in any flat shoe with
+                    little or no arch support. Give them a shot if you suffer as
+                    I did.
+                  </div>
+                </div>
+                <hr></hr>
+                {/* List Review Of Customer End */}
+              </div>
+            </div>
           </div>
         </div>
       </div>

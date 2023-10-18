@@ -19,11 +19,23 @@ import ProductDetail from "./components/main/variant/ProductDetail";
 import StoreHeader from "./components/main/store/StoreHeader";
 import StoreFooter from "./components/main/store/StoreFooter";
 import StoreBanner from "./components/main/store/StoreBanner";
+import SellingHeader from "./components/common/sellingheader/SellingHeader";
+import Selling from "./components/main/selling/Selling";
 
 const Layout = () => {
   return (
     <div>
       <Header />
+      <ScrollRestoration />
+      <Outlet />
+      <Footer />
+    </div>
+  );
+};
+const SellingLayout = () => {
+  return (
+    <div>
+      <SellingHeader />
       <ScrollRestoration />
       <Outlet />
       <Footer />
@@ -58,6 +70,9 @@ function App() {
           <Route path="/store" element={<StoreLayout />}>
             <Route index element={<HomeContent />} />
           </Route>
+        </Route>
+        <Route path="/selling" element={<SellingLayout />}>
+          <Route index element={<Selling />} />
         </Route>
       </Fragment>
     )
