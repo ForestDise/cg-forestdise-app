@@ -72,12 +72,6 @@ function ProductDetail() {
     shouldHideHintAfterFirstActivation: false,
   };
 
-  console.log(statusLoading);
-  console.log(statusSuccess);
-  console.log(statusError);
-  console.log(id);
-  console.log(variantDetail);
-
   return (
     variantDetail && (
       <div className="font-bodyFont w-full bg-gray-100 p-1">
@@ -175,7 +169,7 @@ function ProductDetail() {
                   <span className="">${variantDetail.variantDto.price}</span>
                 </h2>
                 <span className="text-yellow-500 text-xs ml-4 pb-0">
-                  {variantDetail.variantDto.stockQuantity} Đã bán
+                  {variantDetail.variantDto.stockQuantity} Sold
                 </span>
               </div>
               {/* status */}

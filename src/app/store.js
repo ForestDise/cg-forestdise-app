@@ -22,11 +22,12 @@ const persistConfig = {
 };
 
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
+const sellerStorePersistedReducer = persistReducer(persistConfig, sellerStoreReducer);
 
 export const store = configureStore({
   reducer: {
     cart: cartReducer,
-    sellerStore: sellerStoreReducer,
+    sellerStore: sellerStorePersistedReducer,
     variant: variantReducer,
     user: userPersistedReducer,
   },
