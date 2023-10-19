@@ -5,7 +5,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import ReactImageMagnify from 'react-image-magnify';
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,25 +15,53 @@ import {
   selectVariantDetail,
 } from "../../../features/variant/variantSlice";
 import { addToCart } from "../../../features/cart/cartSlice";
+import StarRating from "../../common/icon/StarRating";
 
 function ProductDetail() {
   const { id } = useParams();
-  const [variantId, setVariantId] = useState(id);
-  const [product, setProduct] = useState({});
+  const [variantId, setVariantId] = useState(null);
+  const [productId, setProductId] = useState(id);
   const [mainImage, setMainImage] = useState('');
   const [showRecommend, setShowRecommend] = useState(false);
   const dispatch = useDispatch();
+  // Tạo một đối tượng để lưu trạng thái của các cặp giá trị đã chọn
+  const [selectedOptions, setSelectedOptions] = useState({});
+  // Hàm được gọi khi một cặp giá trị tùy chọn thay đổi
+  const handleOptionChange = (optionName, optionValueId) => {
+    setSelectedOptions({
+      ...selectedOptions,
+      [optionName]: optionValueId,
+    });
+  };
+  useEffect(() => {
+    console.log('selectedOptions đã thay đổi:', selectedOptions);
+  }, [selectedOptions])
+  // Hàm set lại VariantId nếu cặp biến thể khớp
+  const findMatchingVariantId = (selectedOptions, variantListDto) => {
+    for (const variant of variantListDto) {
+      if (Object.keys(selectedOptions).every((optionName) => {
+        const selectedOptionValue = selectedOptions[optionName];
+        return variant.optionValueDtoList.some(
+          (option) => option.value === selectedOptionValue
+        );
+      })) {
+        return variant.id;
+      }
+    }
+    return null; // Trả về null nếu không tìm thấy biến thể khớp
+  };
+
 
   console.log(variantId);
 
-  const getVariantDetail = async () => {
+  const getProductDetail = async () => {
     if (id != null) {
       dispatch(getVariant(id));
     }
   };
 
   useEffect(() => {
-    getVariantDetail();
+    getProductDetail();
   }, [variantId]);
 
   const variantDetail = useSelector(selectVariantDetail);
@@ -45,6 +72,7 @@ function ProductDetail() {
   useEffect(() => {
     if (variantDetail && variantDetail.variantDto.img) {
       setMainImage(variantDetail.variantDto.img);
+      setVariantId(variantDetail.variantDto.id)
     }
   }, [variantDetail])
 
@@ -135,7 +163,7 @@ function ProductDetail() {
             </Link>
             <div className="font-titleFont flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
               <div className="flex text-center justify-center ">
-                <div>4.1</div>
+                <div>{variantDetail.productDTO.ratings}</div>
                 <div className="text-yellow-500 text-sm items-center ">
                   <StarIcon sx={{ fontSize: 15 }} />
                   <StarIcon sx={{ fontSize: 15 }} />
@@ -143,9 +171,10 @@ function ProductDetail() {
                   <StarIcon sx={{ fontSize: 15 }} />
                   <StarIcon sx={{ fontSize: 15 }} />
                 </div>
+                <StarRating rating={variantDetail.productDTO.ratings} fontSize={10} />
               </div>
               {/* 5 star */}
-              <div className="">69 rating</div>
+              <div className="">{variantDetail.productDTO.ratings} rating</div>
               <button
                 className="flex-none flex items-center justify-center w-9 h-9 rounded-md text-slate-300 border border-slate-200 "
                 type="button"
@@ -247,6 +276,26 @@ function ProductDetail() {
                 </label>
               </div>
             </div> */}
+            {variantDetail && variantDetail.optionTableDto.map((option) => (
+              <div key={option.id} className="flex flex-start justify-start">
+                <div className="text-black mr-2">{option.name} : </div>
+                <div className="flex space-x-4 justify-between">
+                  {option.optionValueDtoList.map((value) => (
+                    <button key={value.id}
+                      onClick={() => handleOptionChange(option.name, value.id)}
+                      className={
+                        selectedOptions[option.name] === value.id
+                          ? 'bg-yellow'
+                          : 'bg-white'}>
+                      {value.value}
+                    </button>
+                  ))}
+                </div>
+
+
+              </div>
+
+            ))}
             {variantDetail && variantDetail.optionTableDto.map((option) => (
               <>
                 <div className="flex flex-start justify-start">
@@ -399,8 +448,8 @@ function ProductDetail() {
           alt="ProductImg"
         ></img>
         <img
-          className="w-full px-48 my-4  object-contain"         
-          src={variantDetail.storeDto.interactiveImage} 
+          className="w-full px-48 my-4  object-contain"
+          src={variantDetail.storeDto.interactiveImage}
           alt="ProductImg"
         ></img>
       </div>
@@ -582,6 +631,7 @@ function ProductDetail() {
             <div className="text-bodyFont text-xs text-gray-500">Reviewed in the United States on September 25, 2023</div>
             <div className="text-bodyFont text-xs text-gray-500 mb-2">Style: Men's Size 8-13 | Size: 1 Pair (Pack of 1)<span className="text-amber-700 ml-2 font-bold">Verified Purchase</span></div>
             <div className="text-bodyFont text-xs text-black">Seriously these are the best things I've found. They have helped my plantar fasciitis better than the Shot the foot doctor gave, and the many physical therapy appointments which cost me every time I went. I wish I had found them before all that. Even after all that I still had pain, it was better, but not 100%, these inserts have helped me profoundly. Please note that they do not work in all shoes, but so far I've only had one pair of my shoes that they didn't work in. I'll be chucking those. They've worked in dress shoes, and my Puma workout shoes along with my Keen hiking shoes. So if they don't work for you, try them in a different shoe. I bet they will work in any flat shoe with little or no arch support. Give them a shot if you suffer as I did.</div>
+
           </div>
           <hr></hr>
           <div className="m-4">
