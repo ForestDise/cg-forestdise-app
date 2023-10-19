@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { logoBlack } from "../assets";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,17 +6,24 @@ import { Formik } from "formik";
 import { RotatingLines } from "react-loader-spinner";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserInfo } from "../features/user/userSlice";
 import jwt_decode from "jwt-decode";
-
+import {
+  addNewCartLine,
+  resetCart,
+  createSaveForLater,
+  resetSaveForLater
+} from "../features/cart/cartSlice";
 function Signin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [form, setForm] = useState({});
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [errorNotify, setErrorNotify] = useState("");
   const [successNotify, setSuccessNotify] = useState("");
+  const { userInfo } = useSelector((state) => state.user);
+  const { products, empties } = useSelector((state) => state.cart);
 
   const handleValidate = () => {
     let errors = {};
@@ -41,23 +48,54 @@ function Signin() {
   const handleSubmit = async () => {
     setLoading(true);
     await axios
-    .post("http://localhost:8080/api/login", form)
-    .then(
-      (res) => {
-      setErrorNotify("");
-      setLoading(false);
-      window.localStorage.setItem('token', res.data)
-      setSuccessNotify("Log in succesfully! Welcome back");
-      dispatch(setUserInfo(jwt_decode(res.data).sub));
-      setTimeout(() => {
-        navigate("/");
-      }, 2500);
-    })
-    .catch((err) => {
-      setLoading(false);
-      setErrorNotify("Invalid email or password");
-      throw err;
-    })
+      .post("http://localhost:8080/api/login", form)
+      .then((res) => {
+        setErrorNotify("");
+        setLoading(false);
+        window.localStorage.setItem("token", res.data);
+        setSuccessNotify("Log in succesfully! Welcome back");
+        dispatch(setUserInfo(jwt_decode(res.data).sub));
+        setTimeout(() => {
+          navigate("/");
+        }, 2500);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setErrorNotify("Invalid email or password");
+        throw err;
+      });
+  };
+
+  useEffect(()=>{
+    if(userInfo){
+        sendValuesInDatabase();
+    }
+  },[userInfo])
+
+  const sendValuesInDatabase = () => {
+    console.log("========signin==========");
+    console.log(userInfo);
+    products.map((item) =>
+      dispatch(
+        addNewCartLine({
+          id: '',
+          quantity: item.quantity,
+          cartId: userInfo.id,
+          variantId: item.variantDto.id,
+        })
+      )
+    );
+    empties.map((item) =>
+      dispatch(
+        createSaveForLater({
+          id: '',
+          quantity: item.quantity,
+          cartId: userInfo.id,
+          variantId: item.variantDto.id,
+        })
+      ));
+    dispatch(resetCart());
+    dispatch(resetSaveForLater());
   };
 
   return (

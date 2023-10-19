@@ -4,26 +4,32 @@ import StarIcon from "@mui/icons-material/Star";
 import ApiIcon from "@mui/icons-material/Api";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../../../features/cart/cartSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getCartLines } from "../../../features/cart/cartSlice";
+import { setStore } from "../../../features/sellerStore/sellerStoreSlice";
 
 function Products() {
-  
   const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.user);
   const [productData, setProductData] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     fetchData();
-  }, []);
+
+    if (userInfo) {
+      dispatch(getCartLines(userInfo.id));
+    }
+  }, [userInfo]);
 
   async function fetchData() {
     await axios
       .get("http://localhost:8080/api/products")
       .then((res) => {
-        console.log(res);
-        setProductData(res.data)})
+        setProductData(res.data);
+        console.log(res.data);
+      })
       .catch((err) => {
         throw err;
       });
@@ -60,30 +66,11 @@ function Products() {
                   <ApiIcon />
                 </span>
               </li>
-              <li
-                onClick={() =>
-                  dispatch(
-                    addToCart({
-                      id: product.id,
-                      title: product.title,
-                      description: product.description,
-                      price: product.price,
-                      category: product.category,
-                      image: product.image,
-                      quantity: 1,
-                    })
-                  )
-                }
-                className="productLi"
-              >
-                Add to Cart
-                <span>
-                  <ShoppingCartIcon />
-                </span>
-              </li>
               <Link to={`/product/${product.id}`} className="productLi">
-                View Details
-                <span>
+                <span onClick={() => {
+                  dispatch(setStore(product.store.id));
+                }}>
+                  View Details
                   <ArrowCircleRightIcon />
                 </span>
               </Link>
@@ -103,9 +90,6 @@ function Products() {
               >
                 {product.title.substring(0, 20)}
               </h2>
-              <p className="text-sm text-gray-600 font-semibold">
-                ${product.price}
-              </p>
             </div>
             <div>
               <div>
@@ -122,9 +106,10 @@ function Products() {
               </div>
             </div>
             <button
-              onClick={() =>
-                navigate(`/product/${product.id}`)
-              }
+              onClick={() => {
+                dispatch(setStore(product.store.id));
+                navigate(`/product/${product.id}`);
+            }}
               className="w-full font-titleFont font-medium text-base bg-gradient-to-tr
             from-yellow-400 to-yellow-200 border hover:from-yellow-300 hover:to-yellow-400
             border-yellow-500 hover:border-yellow-700 active:bg-gradient-to-bl

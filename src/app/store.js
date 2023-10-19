@@ -19,7 +19,7 @@ import productReducer from "../features/variant/productSide";
 import shopReducer from "../features/variant/shopSlide";
 import commentReducer from "../features/coment_review/commentSlide";
 import reviewReducer from "../features/coment_review/reviewSlide";
-
+import sellerStoreReducer from "../features/sellerStore/sellerStoreSlice";
 
 
 const persistConfig = {
@@ -28,13 +28,13 @@ const persistConfig = {
   storage,
 };
 
-
-const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
+const sellerStorePersistedReducer = persistReducer(persistConfig, sellerStoreReducer);
 
 export const store = configureStore({
   reducer: {
-    cart: cartPersistedReducer,
+    cart: cartReducer,
+    sellerStore: sellerStorePersistedReducer,
     variant: variantReducer,
     user: userPersistedReducer,
     bullet: bulletReducer,
@@ -43,7 +43,6 @@ export const store = configureStore({
     shop: shopReducer,
     comment: commentReducer,
     review: reviewReducer
-    
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
