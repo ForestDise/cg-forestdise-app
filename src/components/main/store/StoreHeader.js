@@ -2,25 +2,40 @@ import React from "react";
 import { Fragment } from "react";
 import { useState, useEffect, useRef } from "react";
 import MoreSideBar from "./MoreSideBar";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   changeCategory,
   changeSubCategory,
-  toggleMoreSideBar
+  toggleMoreSideBar,
+  setSelectedCategory,
+  setStore,
+  setCategory,
+  setStoreBanner
 } from "../../../features/sellerStore/sellerStoreSlice";
 import HeaderBreadcrumb from "./HeaderBreadcrumb";
+import { useParams } from "react-router-dom";
 
 export default function StoreHeader() {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
+  const categories = useSelector((state) => state.sellerStore.categories);
+  const selectedCategory = useSelector(
+    (state) => state.sellerStore.selectedCategory
+  );
   const dispatch = useDispatch();
+  const params = useParams();
 
-  let category = useRef("");
   const [showDropDown, setShowDropDown] = useState({
     deals: false,
-    category1: false,
-    category2: false,
+    one: false,
+    two: false,
   });
   const [follow, setFollow] = useState(false);
+
+  useEffect(() =>{
+    dispatch(setStore(params.id));
+    dispatch(setCategory(storeInfo.storeCategoryList));
+  },[params.id])
 
   const handleScroll = () => {
     const position = window.pageYOffset;
@@ -105,6 +120,7 @@ export default function StoreHeader() {
                     onClick={() => {
                       dispatch(changeCategory(""));
                       dispatch(changeSubCategory(""));
+                      dispatch(setStoreBanner(storeInfo.homeImage));
                     }}
                     href="#"
                     className="block text-lg py-2 px-1 text-gray-500 rounded md:bg-transparent hover:underline md:p-0"
@@ -117,8 +133,8 @@ export default function StoreHeader() {
                     setShowDropDown({
                       ...showDropDown,
                       deals: false,
-                      category1: false,
-                      category2: false,
+                      one: false,
+                      two: false,
                     });
                   }}
                 >
@@ -159,11 +175,12 @@ export default function StoreHeader() {
                           <a
                             name="Deals"
                             onMouseOver={(e) => {
-                              category.current = e.target.name;
+                              dispatch(setSelectedCategory(e.target.name));
                             }}
                             onClick={() => {
-                              dispatch(changeCategory(category.current));
+                              dispatch(changeCategory("Deals"));
                               dispatch(changeSubCategory(""));
+                              dispatch(setStoreBanner(storeInfo.dealsImage));
                             }}
                             href="#"
                             className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -171,257 +188,205 @@ export default function StoreHeader() {
                             Deals
                           </a>
                         </li>
-                        <li>
-                          <a
-                            name="Phones & Watches"
-                            onClick={(e) => {
-                              dispatch(changeCategory(category.current));
-                              dispatch(changeSubCategory(e.target.name));
-                            }}
-                            href="#"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            Phones & Watches
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            onClick={(e) => {
-                              dispatch(changeCategory(category.current));
-                              dispatch(changeSubCategory(e.target.name));
-                            }}
-                            name="TV & Audio"
-                            href="#"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            TV & Audio
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            onClick={(e) => {
-                              dispatch(changeCategory(category.current));
-                              dispatch(changeSubCategory(e.target.name));
-                            }}
-                            name="Computing"
-                            href="#"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            Computing
-                          </a>
-                        </li>
+                        {categories.map((category) =>
+                          category.parentStoreCategory === null ? (
+                            <li>
+                              <a
+                                name={category.name}
+                                onClick={(e) => {
+                                  dispatch(changeCategory("Deals"));
+                                  dispatch(changeSubCategory(e.target.name));
+                                  dispatch(
+                                    setStoreBanner(category.heroImage)
+                                  );
+                                }}
+                                href="#"
+                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                              >
+                                {category.name}
+                              </a>
+                            </li>
+                          ) : (
+                            ""
+                          )
+                        )}
                       </ul>
                     </div>
                   )}
                 </li>
-
-                <li
-                  onMouseLeave={() => {
-                    setShowDropDown({
-                      ...showDropDown,
-                      deals: false,
-                      category1: false,
-                      category2: false,
-                    });
-                  }}
-                >
-                  <button
-                    name="Phones & Watches"
-                    onClick={() => {
-                      setShowDropDown({
-                        ...showDropDown,
-                        category1: !showDropDown.category1,
-                      });
-                    }}
-                    className="flex items-center text-lg justify-between w-full py-2 pl-3 pr-4 text-gray-500 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:underline md:p-0 md:w-auto dark:text-white md:dark:hover:underline dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
-                  >
-                    PHONES & WATCHES{" "}
-                    <svg
-                      className="w-2.5 h-2.5 ml-2.5"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 10 6"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m1 1 4 4 4-4"
-                      />
-                    </svg>
-                  </button>
-                  {showDropDown.category1 && (
-                    <div className="font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                      <ul
-                        className="py-2 text-sm text-gray-700 dark:text-gray-400"
-                        aria-labelledby="dropdownLargeButton"
+                {categories
+                  .filter((category) => category.parentStoreCategory === null)
+                  .map((category, index) =>
+                    index <= 1 ? (
+                      <li
+                        onMouseLeave={() => {
+                          setShowDropDown({
+                            ...showDropDown,
+                            deals: false,
+                            one: false,
+                            two: false,
+                          });
+                        }}
                       >
-                        <li>
-                          <a
-                            onMouseOver={(e) => {
-                              category.current = e.target.name;
-                            }}
-                            onClick={() => {
-                              dispatch(changeCategory(category.current));
-                              dispatch(changeSubCategory(""));
-                            }}
-                            name="Phones & Watches"
-                            href="#"
-                            className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        <button
+                          name={category.name}
+                          onClick={(e) => {
+                            dispatch(setSelectedCategory(e.target.name));
+                            index === 0
+                              ? setShowDropDown({
+                                  ...showDropDown,
+                                  one: true,
+                                  two: false,
+                                })
+                              : setShowDropDown({
+                                  ...showDropDown,
+                                  one: false,
+                                  two: true,
+                                });
+                          }}
+                          className="flex items-center uppercase text-lg justify-between w-full py-2 pl-3 pr-4 text-gray-500 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:underline md:p-0 md:w-auto dark:text-white md:dark:hover:underline dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+                        >
+                          {category.name}{" "}
+                          <svg
+                            className="w-2.5 h-2.5 ml-2.5"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 10 6"
                           >
-                            Phones & Watches
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            onClick={(e) => {
-                              dispatch(changeCategory(category.current));
-
-                              dispatch(changeSubCategory(e.target.name));
-                            }}
-                            name="Galaxy Z Series"
-                            href="#"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            Galaxy Z Series
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            onClick={(e) => {
-                              dispatch(changeCategory(category.current));
-                              dispatch(changeSubCategory(e.target.name));
-                            }}
-                            href="#"
-                            name="Galaxy S Series"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            Galaxy S Series
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            onClick={(e) => {
-                              dispatch(changeCategory(category.current));
-                              dispatch(changeSubCategory(e.target.name));
-                            }}
-                            href="#"
-                            name="Galaxy A Series"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            Galaxy A Series
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="m1 1 4 4 4-4"
+                            />
+                          </svg>
+                        </button>
+                        {index === 0
+                          ? showDropDown.one && (
+                              <div className="font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                                <ul
+                                  className="py-2 text-sm text-gray-700 dark:text-gray-400"
+                                  aria-labelledby="dropdownLargeButton"
+                                >
+                                  <li>
+                                    <a
+                                      onMouseOver={(e) => {
+                                        dispatch(
+                                          setSelectedCategory(e.target.name)
+                                        );
+                                      }}
+                                      onClick={() => {
+                                        dispatch(setStoreBanner(category.heroImage));
+                                        dispatch(changeCategory(selectedCategory));
+                                        dispatch(changeSubCategory(""));
+                                      }}
+                                      name={category.name}
+                                      href="#"
+                                      className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                    >
+                                      {category.name}
+                                    </a>
+                                  </li>
+                                  {categories.map(
+                                    (category) =>
+                                      category.parentStoreCategory !== null &&
+                                      category.parentStoreCategory.name ===
+                                        selectedCategory && (
+                                        <li>
+                                          <a
+                                            onClick={(e) => {
+                                              dispatch(
+                                                setStoreBanner(
+                                                  category.heroImage
+                                                )
+                                              );
+                                              dispatch(
+                                                changeCategory(selectedCategory)
+                                              );
+                                              dispatch(
+                                                changeSubCategory(e.target.name)
+                                              );
+                                            }}
+                                            name={category.name}
+                                            href="#"
+                                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                          >
+                                            {category.name}
+                                          </a>
+                                        </li>
+                                      )
+                                  )}
+                                </ul>
+                              </div>
+                            )
+                          : showDropDown.two && (
+                              <div className="font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                                <ul
+                                  className="py-2 text-sm text-gray-700 dark:text-gray-400"
+                                  aria-labelledby="dropdownLargeButton"
+                                >
+                                  <li>
+                                    <a
+                                      onMouseOver={(e) => {
+                                        dispatch(
+                                          setSelectedCategory(e.target.name)
+                                        );
+                                      }}
+                                      onClick={() => {
+                                        dispatch(
+                                          setStoreBanner(category.heroImage)
+                                        );
+                                        dispatch(
+                                          changeCategory(selectedCategory)
+                                        );
+                                        dispatch(changeSubCategory(""));
+                                      }}
+                                      name={category.name}
+                                      href="#"
+                                      className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                    >
+                                      {category.name}
+                                    </a>
+                                  </li>
+                                  {categories.map(
+                                    (category) =>
+                                      category.parentStoreCategory !== null &&
+                                      category.parentStoreCategory.name ===
+                                        selectedCategory && (
+                                        <li>
+                                          <a
+                                            onClick={(e) => {
+                                              dispatch(
+                                                setStoreBanner(
+                                                  category.heroImage
+                                                )
+                                              );
+                                              dispatch(
+                                                changeCategory(selectedCategory)
+                                              );
+                                              dispatch(
+                                                changeSubCategory(e.target.name)
+                                              );
+                                            }}
+                                            name={category.name}
+                                            href="#"
+                                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                          >
+                                            {category.name}
+                                          </a>
+                                        </li>
+                                      )
+                                  )}
+                                </ul>
+                              </div>
+                            )}
+                      </li>
+                    ) : (
+                      ""
+                    )
                   )}
-                </li>
-                <li
-                  onMouseLeave={() => {
-                    setShowDropDown({
-                      ...showDropDown,
-                      deals: false,
-                      category1: false,
-                      category2: false,
-                    });
-                  }}
-                >
-                  <button
-                    name="TV & Audios"
-                    onClick={(e) => {
-                      setShowDropDown({
-                        ...showDropDown,
-                        deals: false,
-                        category1: false,
-                        category2: !showDropDown.category2,
-                      });
-                    }}
-                    className="flex items-center text-lg justify-between w-full py-2 pl-3 pr-4 text-gray-500 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:underline md:p-0 md:w-auto dark:text-white md:dark:hover:underline dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
-                  >
-                    TV & AUDIO{" "}
-                    <svg
-                      className="w-2.5 h-2.5 ml-2.5"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 10 6"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m1 1 4 4 4-4"
-                      />
-                    </svg>
-                  </button>
-                  {showDropDown.category2 && (
-                    <div className="font-shopFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                      <ul
-                        className="py-2 text-sm text-gray-700 dark:text-gray-400"
-                        aria-labelledby="dropdownLargeButton"
-                      >
-                        <li>
-                          <a
-                            onMouseOver={(e) => {
-                              category.current = e.target.name;
-                            }}
-                            onClick={() => {
-                              dispatch(changeCategory(category.current));
-                              dispatch(changeSubCategory(""));
-                            }}
-                            name="TV & Audio"
-                            href="#"
-                            className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            TV & Audio
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            onClick={(e) => {
-                              dispatch(changeCategory(category.current));
-                              dispatch(changeSubCategory(e.target.name));
-                            }}
-                            name="QLED"
-                            href="#"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            QLED
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            onClick={(e) => {
-                              dispatch(changeCategory(category.current));
-                              dispatch(changeSubCategory(e.target.name));
-                            }}
-                            name="Neo QLED"
-                            href="#"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            Neo QLED
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            onClick={(e) => {
-                              dispatch(changeCategory(category.current));
-                              dispatch(changeSubCategory(e.target.name));
-                            }}
-                            name="OLED"
-                            href="#"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            OLED
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-                </li>
 
                 <li>
                   <button

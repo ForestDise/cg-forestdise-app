@@ -28,7 +28,7 @@ export const store = configureStore({
     cart: cartReducer,
     sellerStore: sellerStoreReducer,
     variant: variantReducer,
-    user: userPersistedReducer
+    user: userPersistedReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

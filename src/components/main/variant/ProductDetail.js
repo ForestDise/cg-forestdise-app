@@ -15,25 +15,55 @@ import {
   selectVariantDetail,
 } from "../../../features/variant/variantSlice";
 import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";
+import StarRating from "../../common/icon/StarRating";
 
 function ProductDetail() {
+  const { userInfo } = useSelector((state) => state.user);
   const { id } = useParams();
-  const [variantId, setVariantId] = useState(id);
-  const [product, setProduct] = useState({});
+  const [variantId, setVariantId] = useState(null);
+  const [productId, setProductId] = useState(id);
   const [mainImage, setMainImage] = useState("");
   const [showRecommend, setShowRecommend] = useState(false);
   const dispatch = useDispatch();
+  // Tạo một đối tượng để lưu trạng thái của các cặp giá trị đã chọn
+  const [selectedOptions, setSelectedOptions] = useState({});
+  // Hàm được gọi khi một cặp giá trị tùy chọn thay đổi
+  const handleOptionChange = (optionName, optionValueId) => {
+    setSelectedOptions({
+      ...selectedOptions,
+      [optionName]: optionValueId,
+    });
+  };
+  useEffect(() => {
+    console.log("selectedOptions đã thay đổi:", selectedOptions);
+  }, [selectedOptions]);
+  // Hàm set lại VariantId nếu cặp biến thể khớp
+  const findMatchingVariantId = (selectedOptions, variantListDto) => {
+    for (const variant of variantListDto) {
+      if (
+        Object.keys(selectedOptions).every((optionName) => {
+          const selectedOptionValue = selectedOptions[optionName];
+          return variant.optionValueDtoList.some(
+            (option) => option.value === selectedOptionValue
+          );
+        })
+      ) {
+        return variant.id;
+      }
+    }
+    return null; // Trả về null nếu không tìm thấy biến thể khớp
+  };
 
-  const { userInfo } = useSelector((state) => state.user);
+  console.log(variantId);
 
-  const getVariantDetail = async () => {
+  const getProductDetail = async () => {
     if (id != null) {
       dispatch(getVariant(id));
     }
   };
 
   useEffect(() => {
-    getVariantDetail();
+    getProductDetail();
   }, [variantId]);
 
   const variantDetail = useSelector(selectVariantDetail);
@@ -44,6 +74,7 @@ function ProductDetail() {
   useEffect(() => {
     if (variantDetail && variantDetail.variantDto.img) {
       setMainImage(variantDetail.variantDto.img);
+      setVariantId(variantDetail.variantDto.id);
     }
   }, [variantDetail]);
 
@@ -79,7 +110,7 @@ function ProductDetail() {
   return (
     variantDetail && (
       <div className="font-bodyFont w-full bg-gray-100 p-1">
-        <div className="container mx-auto h-auto grid qqqgrid-cols-5 gap-2">
+        <div className="container mx-auto h-auto grid grid-cols-5 gap-2">
           {/* Thumnail start */}
           <div className="w-full h-full bg-white px-4 col-span-2 flex flex-col py-10 border-gray-300 border-2 rounded-3xl">
             <div className="w-full h-96 object-contain fluid__image-container ">
@@ -96,7 +127,7 @@ function ProductDetail() {
             <div>
               <div className="flex flex-wrap text-center justify-between object-contain hover:py-4 mx-21">
                 {variantDetail &&
-                  variantDetail.imageDtos.map((item) => (
+                  variantDetail.variantDto.imageDtoList?.map((item) => (
                     <img
                       className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
                       src={item.imgPath}
@@ -106,7 +137,7 @@ function ProductDetail() {
                   ))}
 
                 {variantDetail &&
-                  variantDetail.videoDtos.map((item) => (
+                  variantDetail.videoDtoList?.map((item) => (
                     <video
                       controls
                       className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300 px-4"
@@ -121,17 +152,17 @@ function ProductDetail() {
           {/* Detail Product Start */}
           <div className="w-full h-full bg-white px-4 col-span-2 border-gray-300 border-2 rounded-3xl">
             <div className="w-full h-full bg-white px-4 col-span-2 flex flex-col py-10">
-              <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
+              <div className="font-bodyFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
                 <h2>{variantDetail.variantDto.name}</h2>
               </div>
-              <Link to={`/store`}>
-                <div className="font-titleFont tracking-wide text-green-900 size text-sm sm:text-xs hover:text-green-700 underline">
-                  <span>Visit to the Samsung Store</span>
+              <Link to={`/shop`}>
+                <div className="font-titleFont tracking-wide text-green-900 size text-sm sm:text-xs hover:text-green-700 underline mb-6">
+                  <span>Visit to the {variantDetail.storeDto.name}</span>
                 </div>
               </Link>
               <div className="font-titleFont flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
                 <div className="flex text-center justify-center ">
-                  <div>4.1</div>
+                  <div>{variantDetail.productDTO.ratings}</div>
                   <div className="text-yellow-500 text-sm items-center ">
                     <StarIcon sx={{ fontSize: 15 }} />
                     <StarIcon sx={{ fontSize: 15 }} />
@@ -139,9 +170,15 @@ function ProductDetail() {
                     <StarIcon sx={{ fontSize: 15 }} />
                     <StarIcon sx={{ fontSize: 15 }} />
                   </div>
+                  <StarRating
+                    rating={variantDetail.productDTO.ratings}
+                    fontSize={10}
+                  />
                 </div>
                 {/* 5 star */}
-                <div className="">69 rating</div>
+                <div className="">
+                  {variantDetail.productDTO.ratings} rating
+                </div>
                 <button
                   className="flex-none flex items-center justify-center w-9 h-9 rounded-md text-slate-300 border border-slate-200 "
                   type="button"
@@ -160,203 +197,174 @@ function ProductDetail() {
                     />
                   </svg>
                 </button>
-                <Link to={`/review`} className="text-green-900">
+                <Link to={`/review/{productId}`} className="text-green-900">
                   {" "}
                   See all reviews
                 </Link>
               </div>
               <hr></hr>
-              <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl flex ">
-                <h2>
-                  <span className="">${variantDetail.variantDto.price}</span>
-                </h2>
-                <span className="text-yellow-500 text-xs ml-4 pb-0">
-                  {variantDetail.variantDto.stockQuantity} Đã bán
-                </span>
-              </div>
-              {/* status */}
-              <div className=" text-green-900 mt-6 flex flex-col mb-2">
-                <h1>Currently unavailable.</h1>
-                <span className="text-xs text-black">
-                  We don't know when or if this item will be back in stock.
-                </span>
-              </div>
-              <div className="flex text-start justify-start ">
-                <div className="text-gray mr-2">Color : </div>
-                <div> Red and Blue</div>
-              </div>
-              <div className="flex items-baseline mt-2 mb-6 pb-6 border-b border-slate-200">
-                <div className="space-x-2 flex text-sm">
-                  <label>
-                    <input
-                      className="sr-only peer"
-                      name="size"
-                      type="radio"
-                      value="xs"
-                      // checked
-                    />
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                      XS
-                    </div>
-                  </label>
-                  <label>
-                    <input
-                      className="sr-only peer"
-                      name="size"
-                      type="radio"
-                      value="s"
-                    />
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                      S
-                    </div>
-                  </label>
-                  <label>
-                    <input
-                      className="sr-only peer"
-                      name="size"
-                      type="radio"
-                      value="m"
-                    />
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                      M
-                    </div>
-                  </label>
-                  <label>
-                    <input
-                      className="sr-only peer"
-                      name="size"
-                      type="radio"
-                      value="l"
-                    />
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                      L
-                    </div>
-                  </label>
-                  <label>
-                    <input
-                      className="sr-only peer"
-                      name="size"
-                      type="radio"
-                      value="xl"
-                    />
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                      XL
-                    </div>
-                  </label>
+              {variantDetail.variantDto.stockQuantity > 0 ? (
+                <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl flex mb-6 mt-4 ">
+                  <h2 className="line-through mr-4 text-red-700">
+                    ${variantDetail.variantDto.price}
+                  </h2>
+                  <h2>
+                    <span className="">
+                      ${variantDetail.variantDto.salePrice}
+                    </span>
+                  </h2>
+                  <span className="text-yellow-500 text-xs ml-4 pb-0">
+                    {variantDetail.variantDto.stockQuantity} Đã bán
+                  </span>
                 </div>
-              </div>
-              <div className="flex flex-start justify-start">
-                <div className="text-black mr-2">Style : </div>
-                <div>SE - Pink Stripes</div>
-              </div>
-              <div className="flex items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
-                <div className="space-x-2 flex text-xs">
-                  <label>
-                    <input
-                      className="sr-only peer"
-                      name="style"
-                      type="radio"
-                      value="SE - Pink Stripes"
-                    />
-                    <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                      SE - Pink Stripes
-                    </div>
-                  </label>
-                  <label>
-                    <input
-                      className="sr-only peer"
-                      name="style"
-                      type="radio"
-                      value="PROMAX - Pink Stripes"
-                    />
-                    <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                      PROMAX - Pink Stripes
-                    </div>
-                  </label>
-                  <label>
-                    <input
-                      className="sr-only peer"
-                      name="style"
-                      type="radio"
-                      value="PLUS - Pink Stripes"
-                    />
-                    <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                      PLUS - Pink Stripes
-                    </div>
-                  </label>
-                  <label>
-                    <input
-                      className="sr-only peer"
-                      name="style"
-                      type="radio"
-                      value="l"
-                    />
-                    <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                      SE - BLACK Stripes
-                    </div>
-                  </label>
-                  <label>
-                    <input
-                      className="sr-only peer"
-                      name="style"
-                      type="radio"
-                      value="xl"
-                    />
-                    <div className="w-18 h-9 rounded-lg flex text-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                      PROMAX - Pink Stripes
-                    </div>
-                  </label>
+              ) : (
+                <div className=" text-green-900 mt-6 flex flex-col mb-6">
+                  <h1>Currently unavailable.</h1>
+                  <span className="text-xs text-black">
+                    We don't know when or if this item will be back in stock.
+                  </span>
                 </div>
+              )}
+              {/* <div className="flex text-start justify-start ">
+              <div className="text-gray mr-2">Color : </div>
+              <div> Red and Blue</div>
+            </div>
+            <div className="flex items-baseline mt-2 mb-6 pb-6 border-b border-slate-200">
+              <div className="space-x-2 flex text-sm">
+                <label>
+                  <input
+                    className="sr-only peer"
+                    name="size"
+                    type="radio"
+                    value="xs"
+                  // checked
+                  />
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                    XS
+                  </div>
+                </label>
+                <label>
+                  <input
+                    className="sr-only peer"
+                    name="size"
+                    type="radio"
+                    value="s"
+                  />
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                    S
+                  </div>
+                </label>
+                <label>
+                  <input
+                    className="sr-only peer"
+                    name="size"
+                    type="radio"
+                    value="m"
+                  />
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                    M
+                  </div>
+                </label>
+                <label>
+                  <input
+                    className="sr-only peer"
+                    name="size"
+                    type="radio"
+                    value="l"
+                  />
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                    L
+                  </div>
+                </label>
+                <label>
+                  <input
+                    className="sr-only peer"
+                    name="size"
+                    type="radio"
+                    value="xl"
+                  />
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                    XL
+                  </div>
+                </label>
               </div>
+            </div> */}
+              {variantDetail &&
+                variantDetail.optionTableDto.map((option) => (
+                  <div
+                    key={option.id}
+                    className="flex flex-start justify-start"
+                  >
+                    <div className="text-black mr-2">{option.name} : </div>
+                    <div className="flex space-x-4 justify-between">
+                      {option.optionValueDtoList.map((value) => (
+                        <button
+                          key={value.id}
+                          onClick={() =>
+                            handleOptionChange(option.name, value.id)
+                          }
+                          className={
+                            selectedOptions[option.name] === value.id
+                              ? "bg-yellow"
+                              : "bg-white"
+                          }
+                        >
+                          {value.value}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              {variantDetail &&
+                variantDetail.optionTableDto.map((option) => (
+                  <>
+                    <div className="flex flex-start justify-start">
+                      <div className="text-black mr-2">{option.name} : </div>
+                      <div>SE - Pink Stripes</div>
+                    </div>
+                    <div className="flex justify-between items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
+                      <div className="space-x-4 flex text-xl">
+                        {option.optionValueDtoList.map((ele) => (
+                          <label>
+                            <input
+                              className="sr-only peer"
+                              name="style"
+                              type="radio"
+                              value=""
+                            />
+                            <div className="w-18 h-18 pl-4 pr-4 rounded-sm flex text-center justify-between text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+                              {ele.value}
+                            </div>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                ))}
 
-              <div className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0 ">
-                <div className=" w-full h-full bg-white  col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
-                  Brand
-                </div>
-                <div className="w-full h-full bg-white col-span-3 border-1">
-                  X Rocker
-                </div>
-                <div className=" w-full h-full bg-white  col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
-                  Material
-                </div>
-                <div className="w-full h-full bg-white col-span-3 border-1">
-                  Wood
-                </div>
-                <div className=" w-full h-full bg-white  col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
-                  Color
-                </div>
-                <div className="w-full h-full bg-white col-span-3 border-1">
-                  Pink
-                </div>
-                <div className=" w-full h-full bg-white  col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
-                  Size
-                </div>
-                <div className="w-full h-full bg-white col-span-3 border-1">
-                  33.46" x 16.14" x 25.59"
-                </div>
+              <div className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0">
+                {variantDetail &&
+                  variantDetail.productAttributeDtoList.map((attr) => (
+                    <>
+                      <div className=" w-full h-full bg-white col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
+                        {attr.name}
+                      </div>
+                      <div className="w-full h-full bg-white col-span-3 text-left font-titleFont border-1">
+                        {attr.value}
+                      </div>
+                    </>
+                  ))}
               </div>
               <hr></hr>
               <div>
                 <h2 className="font-bold mt-2">About this item </h2>
-                <ul className="list-disc">
-                  <li className="font-titleFont tracking-wide text-xs text-amazon_blue">
-                    BUILT IN SPEAKERS & BASE I Features an integrated 2.0
-                    bluetooth audio system with headrest mounted speakers to
-                    make you feel like you are actually inside of the game
-                  </li>
-                  <li className="font-titleFont tracking-wide text-xs text-amazon_blue">
-                    BUILT IN audio system with headrest mounted speakers to make
-                    you feel like you are actually inside of the game
-                  </li>
-                  <li className="font-titleFont tracking-wide text-xs text-amazon_blue">
-                    WIRELESS I Live free from wires with Wireless Bluetooth
-                    Connectivity to all your compatible devices
-                  </li>
-                  <li className="font-titleFont tracking-wide text-xs text-amazon_blue">
-                    PREMIUM COMFORT I The rocking design moves and reclines to
-                    provide comfortable playing positions throughout the longest
-                    gaming sessions
-                  </li>
+                <ul className="list-disc ml-4">
+                  {variantDetail &&
+                    variantDetail.productDTO.bulletDtoList.map((bullet) => (
+                      <li className="font-titleFont tracking-wide text-sm text-amazon_blue">
+                        {bullet.name}
+                      </li>
+                    ))}
                 </ul>
               </div>
             </div>
@@ -368,7 +376,7 @@ function ProductDetail() {
               <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
                 <h2>
                   <span className="">$</span>
-                  {variantDetail.variantDto.price}
+                  {variantDetail.variantDto.salePrice}
                 </h2>
               </div>
               <div>
@@ -388,37 +396,38 @@ function ProductDetail() {
                 <h1 className="my-4 text-2xl text-green-900">In Stock</h1>
               </div>
               <button
-                onClick={() => {
-                  userInfo
-                    ? dispatch(
-                        addNewCartLine({
-                          id: "",
-                          quantity: 1,
-                          cartId: userInfo.id,
-                          variantId: variantDetail.variantDto.id,
-                        })
-                      )
-                    : dispatch(
-                        addToCart({
-                          id: "",
-                          quantity: 1,
-                          cartDto: {
+                onClick={() =>
+                  {
+                    userInfo
+                      ? dispatch(
+                          addNewCartLine({
                             id: "",
-                            userId: "",
-                          },
-                          variantDto: {
-                            id: variantDetail.variantDto.id,
-                            name: variantDetail.variantDto.name,
-                            skuCode: variantDetail.variantDto.skuCode,
-                            stockQuantity:
-                              variantDetail.variantDto.stockQuantity,
-                            weight: variantDetail.variantDto.weight,
-                            price: variantDetail.variantDto.price,
-                            img: variantDetail.variantDto.img,
-                          },
-                        })
-                      );
-                }}
+                            quantity: 1,
+                            cartId: userInfo.id,
+                            variantId: variantDetail.variantDto.id,
+                          })
+                        )
+                      : dispatch(
+                          addToCart({
+                            id: "",
+                            quantity: 1,
+                            cartDto: {
+                              id: "",
+                              userId: "",
+                            },
+                            variantDto: {
+                              id: variantDetail.variantDto.id,
+                              name: variantDetail.variantDto.name,
+                              skuCode: variantDetail.variantDto.skuCode,
+                              stockQuantity: variantDetail.variantDto.stockQuantity,
+                              weight: variantDetail.variantDto.weight,
+                              price: variantDetail.variantDto.price,
+                              img: variantDetail.variantDto.img,
+                            },
+                          })
+                        );
+                  }
+                }
                 className="rounded-lg bg-yellow-400 py-3 my-2 hover:bg-yellow-300 duration-100 cursor-pointer"
               >
                 Add To Cart
@@ -464,7 +473,7 @@ function ProductDetail() {
           <h1>FROM THE BRAND</h1>
           <img
             className="w-full object-contain"
-            src="https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/163985260/original/99b2303744d92a405c9d4ebb04da8040ecaae64e/design-high-quality-banner-for-amazon-ebay-and-you-tube.jpg"
+            src={variantDetail.storeDto.interactiveImage}
             alt="ProductImg"
           ></img>
         </div>
@@ -473,17 +482,17 @@ function ProductDetail() {
           <h1>From the manufacturer</h1>
           <img
             className="w-full px-48 my-4 object-contain"
-            src="https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/163985260/original/99b2303744d92a405c9d4ebb04da8040ecaae64e/design-high-quality-banner-for-amazon-ebay-and-you-tube.jpg"
+            src={variantDetail.storeDto.interactiveImage}
             alt="ProductImg"
           ></img>
           <img
             className="w-full px-48 my-4  object-contain"
-            src="https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/163985260/original/99b2303744d92a405c9d4ebb04da8040ecaae64e/design-high-quality-banner-for-amazon-ebay-and-you-tube.jpg"
+            src={variantDetail.storeDto.interactiveImage}
             alt="ProductImg"
           ></img>
           <img
             className="w-full px-48 my-4  object-contain"
-            src="https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs/163985260/original/99b2303744d92a405c9d4ebb04da8040ecaae64e/design-high-quality-banner-for-amazon-ebay-and-you-tube.jpg"
+            src={variantDetail.storeDto.interactiveImage}
             alt="ProductImg"
           ></img>
         </div>
@@ -708,289 +717,123 @@ function ProductDetail() {
               <div className="text-bodyFont text-xs text-gray-500 mb-2">
                 Style: Men's Size 8-13 | Size: 1 Pair (Pack of 1)
                 <span className="text-amber-700 ml-2 font-bold">
-                  Verified Purchase{" "}
+                  Verified Purchase
                 </span>
-                {variantDetail.variantDto.stockQuantity > 0 ? (
-                  <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl flex mb-6 mt-4 ">
-                    <h2 className="line-through mr-4 text-red-700">
-                      ${variantDetail.variantDto.price}
-                    </h2>
-                    <h2>
-                      <span className="">
-                        ${variantDetail.variantDto.salePrice}
-                      </span>
-                    </h2>
-                    <span className="text-yellow-500 text-xs ml-4 pb-0">
-                      {variantDetail.variantDto.stockQuantity} Đã bán
-                    </span>
-                  </div>
-                ) : (
-                  <div className=" text-green-900 mt-6 flex flex-col mb-6">
-                    <h1>Currently unavailable.</h1>
-                    <span className="text-xs text-black">
-                      We don't know when or if this item will be back in stock.
-                    </span>
-                  </div>
-                )}
-                {/* <div className="flex text-start justify-start ">
-              <div className="text-gray mr-2">Color : </div>
-              <div> Red and Blue</div>
-            </div>
-            <div className="flex items-baseline mt-2 mb-6 pb-6 border-b border-slate-200">
-              <div className="space-x-2 flex text-sm">
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="size"
-                    type="radio"
-                    value="xs"
-                  // checked
-                  />
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    XS
-                  </div>
-                </label>
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="size"
-                    type="radio"
-                    value="s"
-                  />
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    S
-                  </div>
-                </label>
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="size"
-                    type="radio"
-                    value="m"
-                  />
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    M
-                  </div>
-                </label>
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="size"
-                    type="radio"
-                    value="l"
-                  />
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    L
-                  </div>
-                </label>
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="size"
-                    type="radio"
-                    value="xl"
-                  />
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    XL
-                  </div>
-                </label>
               </div>
-            </div> */}
-                {variantDetail &&
-                  variantDetail.optionTableDto.map((option) => (
-                    <>
-                      <div className="flex flex-start justify-start">
-                        <div className="text-black mr-2">{option.name} : </div>
-                        <div>SE - Pink Stripes</div>
-                      </div>
-                      <div className="flex justify-between items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
-                        <div className="space-x-4 flex text-xl">
-                          {option.optionValueDtoList.map((ele) => (
-                            <label>
-                              <input
-                                className="sr-only peer"
-                                name="style"
-                                type="radio"
-                                value=""
-                              />
-                              <div className="w-18 h-18 pl-4 pr-4 rounded-sm flex text-center justify-between text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                                {ele.value}
-                              </div>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                    </>
-                  ))}
-                <div className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0">
-                  {variantDetail &&
-                    variantDetail.productAttributeDtoList.map((attr) => (
-                      <>
-                        <div className=" w-full h-full bg-white col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
-                          {attr.name}
-                        </div>
-                        <div className="w-full h-full bg-white col-span-3 text-left font-titleFont border-1">
-                          {attr.value}
-                        </div>
-                      </>
-                    ))}
-                </div>
-                <hr></hr>
-                <div>
-                  <h2 className="font-bold mt-2">About this item </h2>
-                  <ul className="list-disc ml-4">
-                    {variantDetail &&
-                      variantDetail.productDTO.bulletDtoList.map((bullet) => (
-                        <li className="font-titleFont tracking-wide text-sm text-amazon_blue">
-                          {bullet.name}
-                        </li>
-                      ))}
-                  </ul>
-                </div>
+              <div className="text-bodyFont text-xs text-black">
+                Seriously these are the best things I've found. They have helped
+                my plantar fasciitis better than the Shot the foot doctor gave,
+                and the many physical therapy appointments which cost me every
+                time I went. I wish I had found them before all that. Even after
+                all that I still had pain, it was better, but not 100%, these
+                inserts have helped me profoundly. Please note that they do not
+                work in all shoes, but so far I've only had one pair of my shoes
+                that they didn't work in. I'll be chucking those. They've worked
+                in dress shoes, and my Puma workout shoes along with my Keen
+                hiking shoes. So if they don't work for you, try them in a
+                different shoe. I bet they will work in any flat shoe with
+                little or no arch support. Give them a shot if you suffer as I
+                did.
               </div>
             </div>
-            {/* Detail Product End */}
-            {/* Cart Start */}
-            <div className="w-full h-full bg-white col-span-1 border-yellow-300 border-2 rounded-3xl text-sm">
-              <div className="flex flex-col p-4">
-                <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
-                  <h2>
-                    <span className="">$</span>
-                    {variantDetail.variantDto.salePrice}
-                  </h2>
+            <hr></hr>
+            <div className="m-4">
+              <div className="flex mb-2">
+                <img
+                  src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.6435-9/116429521_1655876004585921_941667011043408186_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=84a396&_nc_ohc=jX_SP-XeWGUAX8gd9Dl&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfB8K54ttI7F3njd8xLWtnInOErSx2FkaIhUXEuNjobBRw&oe=654A001A"
+                  className="rounded-full w-5 h-5"
+                />
+                <div className="ml-4 text-titleFont">Meomeocute</div>
+              </div>
+              <div className="flex">
+                <div className="text-amazon_yellow text-sm items-center ">
+                  <StarIcon sx={{ fontSize: 15 }} />
+                  <StarIcon sx={{ fontSize: 15 }} />
+                  <StarIcon sx={{ fontSize: 15 }} />
+                  <StarIcon sx={{ fontSize: 15 }} />
+                  <StarIcon sx={{ fontSize: 15 }} />
                 </div>
-                <div>
-                  <h5>
-                    Delivery{" "}
-                    <span className="font-bold">Monday, October 30</span>
-                  </h5>
-                </div>
-                <div className="flex flex-row">
-                  <FmdGoodIcon sx={{ fontSize: 20 }} />
-                  <Link to={`/deliver`}>
-                    <span className=" text-green-900 hover:text-stone-400 underline text-xs">
-                      Deliver To Nghia - Đà Nẵng
-                    </span>
-                  </Link>
-                  <div className="text-bodyFont text-xs text-black">
-                    Seriously these are the best things I've found. They have
-                    helped my plantar fasciitis better than the Shot the foot
-                    doctor gave, and the many physical therapy appointments
-                    which cost me every time I went. I wish I had found them
-                    before all that. Even after all that I still had pain, it
-                    was better, but not 100%, these inserts have helped me
-                    profoundly. Please note that they do not work in all shoes,
-                    but so far I've only had one pair of my shoes that they
-                    didn't work in. I'll be chucking those. They've worked in
-                    dress shoes, and my Puma workout shoes along with my Keen
-                    hiking shoes. So if they don't work for you, try them in a
-                    different shoe. I bet they will work in any flat shoe with
-                    little or no arch support. Give them a shot if you suffer as
-                    I did.
-                  </div>
-                </div>
-                <hr></hr>
-                <div className="m-4">
-                  <div className="flex mb-2">
-                    <img
-                      src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.6435-9/116429521_1655876004585921_941667011043408186_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=84a396&_nc_ohc=jX_SP-XeWGUAX8gd9Dl&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfB8K54ttI7F3njd8xLWtnInOErSx2FkaIhUXEuNjobBRw&oe=654A001A"
-                      className="rounded-full w-5 h-5"
-                    />
-                    <div className="ml-4 text-titleFont">Meomeocute</div>
-                  </div>
-                  <div className="flex">
-                    <div className="text-amazon_yellow text-sm items-center ">
-                      <StarIcon sx={{ fontSize: 15 }} />
-                      <StarIcon sx={{ fontSize: 15 }} />
-                      <StarIcon sx={{ fontSize: 15 }} />
-                      <StarIcon sx={{ fontSize: 15 }} />
-                      <StarIcon sx={{ fontSize: 15 }} />
-                    </div>
-                    <a className="text-bodyFont text-sm ml-4 font-medium hover:underline hover:text-amber-600">
-                      {" "}
-                      I wish that I had found these before I spent 1000's on
-                      doctors and Physical therapy
-                    </a>
-                  </div>
-                  <div className="text-bodyFont text-xs text-gray-500">
-                    Reviewed in the United States on September 25, 2023
-                  </div>
-                  <div className="text-bodyFont text-xs text-gray-500 mb-2">
-                    Style: Men's Size 8-13 | Size: 1 Pair (Pack of 1)
-                    <span className="text-amber-700 ml-2 font-bold">
-                      Verified Purchase
-                    </span>
-                  </div>
-                  <div className="text-bodyFont text-xs text-black">
-                    Seriously these are the best things I've found. They have
-                    helped my plantar fasciitis better than the Shot the foot
-                    doctor gave, and the many physical therapy appointments
-                    which cost me every time I went. I wish I had found them
-                    before all that. Even after all that I still had pain, it
-                    was better, but not 100%, these inserts have helped me
-                    profoundly. Please note that they do not work in all shoes,
-                    but so far I've only had one pair of my shoes that they
-                    didn't work in. I'll be chucking those. They've worked in
-                    dress shoes, and my Puma workout shoes along with my Keen
-                    hiking shoes. So if they don't work for you, try them in a
-                    different shoe. I bet they will work in any flat shoe with
-                    little or no arch support. Give them a shot if you suffer as
-                    I did.
-                  </div>
-                </div>
-                <hr></hr>
-                <div className="m-4">
-                  <div className="flex mb-2">
-                    <img
-                      src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.6435-9/116429521_1655876004585921_941667011043408186_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=84a396&_nc_ohc=jX_SP-XeWGUAX8gd9Dl&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfB8K54ttI7F3njd8xLWtnInOErSx2FkaIhUXEuNjobBRw&oe=654A001A"
-                      className="rounded-full w-5 h-5"
-                    />
-                    <div className="ml-4 text-titleFont">Meomeocute</div>
-                  </div>
-                  <div className="flex">
-                    <div className="text-amazon_yellow text-sm items-center ">
-                      <StarIcon sx={{ fontSize: 15 }} />
-                      <StarIcon sx={{ fontSize: 15 }} />
-                      <StarIcon sx={{ fontSize: 15 }} />
-                      <StarIcon sx={{ fontSize: 15 }} />
-                      <StarIcon sx={{ fontSize: 15 }} />
-                    </div>
-                    <a className="text-bodyFont text-sm ml-4 font-medium hover:underline hover:text-amber-600">
-                      {" "}
-                      I wish that I had found these before I spent 1000's on
-                      doctors and Physical therapy
-                    </a>
-                  </div>
-                  <div className="text-bodyFont text-xs text-gray-500">
-                    Reviewed in the United States on September 25, 2023
-                  </div>
-                  <div className="text-bodyFont text-xs text-gray-500 mb-2">
-                    Style: Men's Size 8-13 | Size: 1 Pair (Pack of 1)
-                    <span className="text-amber-700 ml-2 font-bold">
-                      Verified Purchase
-                    </span>
-                  </div>
-                  <div className="text-bodyFont text-xs text-black">
-                    Seriously these are the best things I've found. They have
-                    helped my plantar fasciitis better than the Shot the foot
-                    doctor gave, and the many physical therapy appointments
-                    which cost me every time I went. I wish I had found them
-                    before all that. Even after all that I still had pain, it
-                    was better, but not 100%, these inserts have helped me
-                    profoundly. Please note that they do not work in all shoes,
-                    but so far I've only had one pair of my shoes that they
-                    didn't work in. I'll be chucking those. They've worked in
-                    dress shoes, and my Puma workout shoes along with my Keen
-                    hiking shoes. So if they don't work for you, try them in a
-                    different shoe. I bet they will work in any flat shoe with
-                    little or no arch support. Give them a shot if you suffer as
-                    I did.
-                  </div>
-                </div>
-                <hr></hr>
-                {/* List Review Of Customer End */}
+                <a className="text-bodyFont text-sm ml-4 font-medium hover:underline hover:text-amber-600">
+                  {" "}
+                  I wish that I had found these before I spent 1000's on doctors
+                  and Physical therapy
+                </a>
+              </div>
+              <div className="text-bodyFont text-xs text-gray-500">
+                Reviewed in the United States on September 25, 2023
+              </div>
+              <div className="text-bodyFont text-xs text-gray-500 mb-2">
+                Style: Men's Size 8-13 | Size: 1 Pair (Pack of 1)
+                <span className="text-amber-700 ml-2 font-bold">
+                  Verified Purchase
+                </span>
+              </div>
+              <div className="text-bodyFont text-xs text-black">
+                Seriously these are the best things I've found. They have helped
+                my plantar fasciitis better than the Shot the foot doctor gave,
+                and the many physical therapy appointments which cost me every
+                time I went. I wish I had found them before all that. Even after
+                all that I still had pain, it was better, but not 100%, these
+                inserts have helped me profoundly. Please note that they do not
+                work in all shoes, but so far I've only had one pair of my shoes
+                that they didn't work in. I'll be chucking those. They've worked
+                in dress shoes, and my Puma workout shoes along with my Keen
+                hiking shoes. So if they don't work for you, try them in a
+                different shoe. I bet they will work in any flat shoe with
+                little or no arch support. Give them a shot if you suffer as I
+                did.
               </div>
             </div>
+            <hr></hr>
+            <div className="m-4">
+              <div className="flex mb-2">
+                <img
+                  src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.6435-9/116429521_1655876004585921_941667011043408186_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=84a396&_nc_ohc=jX_SP-XeWGUAX8gd9Dl&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfB8K54ttI7F3njd8xLWtnInOErSx2FkaIhUXEuNjobBRw&oe=654A001A"
+                  className="rounded-full w-5 h-5"
+                />
+                <div className="ml-4 text-titleFont">Meomeocute</div>
+              </div>
+              <div className="flex">
+                <div className="text-amazon_yellow text-sm items-center ">
+                  <StarIcon sx={{ fontSize: 15 }} />
+                  <StarIcon sx={{ fontSize: 15 }} />
+                  <StarIcon sx={{ fontSize: 15 }} />
+                  <StarIcon sx={{ fontSize: 15 }} />
+                  <StarIcon sx={{ fontSize: 15 }} />
+                </div>
+                <a className="text-bodyFont text-sm ml-4 font-medium hover:underline hover:text-amber-600">
+                  {" "}
+                  I wish that I had found these before I spent 1000's on doctors
+                  and Physical therapy
+                </a>
+              </div>
+              <div className="text-bodyFont text-xs text-gray-500">
+                Reviewed in the United States on September 25, 2023
+              </div>
+              <div className="text-bodyFont text-xs text-gray-500 mb-2">
+                Style: Men's Size 8-13 | Size: 1 Pair (Pack of 1)
+                <span className="text-amber-700 ml-2 font-bold">
+                  Verified Purchase
+                </span>
+              </div>
+              <div className="text-bodyFont text-xs text-black">
+                Seriously these are the best things I've found. They have helped
+                my plantar fasciitis better than the Shot the foot doctor gave,
+                and the many physical therapy appointments which cost me every
+                time I went. I wish I had found them before all that. Even after
+                all that I still had pain, it was better, but not 100%, these
+                inserts have helped me profoundly. Please note that they do not
+                work in all shoes, but so far I've only had one pair of my shoes
+                that they didn't work in. I'll be chucking those. They've worked
+                in dress shoes, and my Puma workout shoes along with my Keen
+                hiking shoes. So if they don't work for you, try them in a
+                different shoe. I bet they will work in any flat shoe with
+                little or no arch support. Give them a shot if you suffer as I
+                did.
+              </div>
+            </div>
+            <hr></hr>
+            {/* List Review Of Customer End */}
           </div>
         </div>
       </div>

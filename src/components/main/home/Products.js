@@ -7,6 +7,8 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartLines } from "../../../features/cart/cartSlice";
+import { setStore } from "../../../features/sellerStore/sellerStoreSlice";
+import { Login } from "@mui/icons-material";
 
 function Products() {
   const dispatch = useDispatch();
@@ -16,11 +18,10 @@ function Products() {
 
   useEffect(() => {
     fetchData();
-
     if (userInfo) {
       dispatch(getCartLines(userInfo.id));
-      console.log("====products=====");
     }
+    console.log("====products=====");
   }, [userInfo]);
 
   async function fetchData() {
@@ -28,6 +29,7 @@ function Products() {
       .get("http://localhost:8080/api/products")
       .then((res) => {
         setProductData(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         throw err;
@@ -66,8 +68,10 @@ function Products() {
                 </span>
               </li>
               <Link to={`/product/${product.id}`} className="productLi">
-                View Details
-                <span>
+                <span onClick={() => {
+                  dispatch(setStore(product.store.id));
+                }}>
+                  View Details
                   <ArrowCircleRightIcon />
                 </span>
               </Link>
@@ -103,7 +107,10 @@ function Products() {
               </div>
             </div>
             <button
-              onClick={() => navigate(`/product/${product.id}`)}
+              onClick={() => {
+                dispatch(setStore(product.store.id));
+                navigate(`/product/${product.id}`);
+            }}
               className="w-full font-titleFont font-medium text-base bg-gradient-to-tr
             from-yellow-400 to-yellow-200 border hover:from-yellow-300 hover:to-yellow-400
             border-yellow-500 hover:border-yellow-700 active:bg-gradient-to-bl
