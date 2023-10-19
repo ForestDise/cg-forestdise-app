@@ -4,7 +4,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 function SideNavContent({title, one, two, three}) {
   return (
-    <div className="z-100 py-3 border-b-[1px] border-b-gray-300">
+    <div className="py-3 border-b-[1px] border-b-gray-300">
       <h3 className="text-lg font-titleFont font-semibold mb-1 px-6">
         {title}
       </h3>

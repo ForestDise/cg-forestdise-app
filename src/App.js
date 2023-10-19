@@ -10,7 +10,7 @@ import {
 import Home from "./pages/Home";
 import Cart from "./components/main/cart/Cart";
 import Signin from "./pages/Signin";
-import StoreHome from "./components/main/store/StoreHome";
+import HomeContent from "./components/main/store/HomeContent";
 import Error from "./pages/Error";
 import Registration from "./pages/Registration";
 import Header from "./components/common/header/Header";
@@ -36,7 +36,6 @@ const StoreLayout = () => {
     <div>
       <StoreBanner />
       <StoreHeader />
-      <ScrollRestoration />
       <Outlet />
       <StoreFooter />
     </div>
@@ -55,8 +54,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/store" element={<StoreLayout />}>
-            <Route index element={<StoreHome />} />
+          <Route path="/store/:id" element={<StoreLayout />}>
+            <Route index element={<HomeContent />} />
           </Route>
         </Route>
       </Fragment>

@@ -1,7 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
+import { setStoreBanner } from "../../../features/sellerStore/sellerStoreSlice";
 
 function StoreBanner() {
+  const storeBanner = useSelector((state) => state.sellerStore.storeBanner);
+  const storeInfo = useSelector((state) => state.sellerStore.storeInfo)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setStoreBanner(storeInfo.homeImage));
+  }, [])
 
   const settings = {
     dots: false,
@@ -43,12 +52,7 @@ function StoreBanner() {
       <div className="w-full h-full relative">
         <Slider {...settings}>
           <div>
-            <img
-              src={
-                "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/1d955663-42a4-473e-9ff7-4fdde13253c1._CR0%2C0%2C3000%2C600_SX1920_.png"
-              }
-              alt="banner"
-            ></img>
+            <img src={storeBanner} alt="banner"></img>
           </div>
         </Slider>
       </div>
