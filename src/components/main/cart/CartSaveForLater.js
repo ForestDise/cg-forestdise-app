@@ -1,9 +1,23 @@
-import { addToCart, deleteEmpties } from "../../../features/cart/cartSlice";
+import { useEffect } from "react";
+import {
+  addNewCartLine,
+  addToCart,
+  deleteEmpties,
+  deleteSaveForLater,
+  getSaveForLater,
+} from "../../../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const CartSaveForLater = () => {
-     const dispatch = useDispatch();
-     const { empties } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  const { empties } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if(userInfo){
+      dispatch(getSaveForLater(userInfo.id));
+    }
+  }, [userInfo]);
 
   return (
     <>
@@ -21,19 +35,19 @@ const CartSaveForLater = () => {
           <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4  xl:gap-4 py-4">
             {empties.map((item) => (
               <div
-                  className="grid grid-cols-4 gap-1 bg-white border-[1px] border-gray-200 hover:border-transparent shadow-none hover:shadow-testShadow duration-200"
-                key={item.id}
+                class="grid grid-cols-4 gap-1 bg-white border-[1px] border-gray-200 hover:border-transparent shadow-none hover:shadow-testShadow duration-200"
+                key={item.variantDto.id}
               >
                 <div className=" col-span-4 px-3">
                   <div className="text-sm italic text-gray-500 text-right">
-                    {item.category}
+                    {item.variantDto.skuCode}
                   </div>
                 </div>
                 <div className=" col-span-4">
                   <div className="w-full h-auto flex items-center justify-center relative group">
                     <img
                       className="w-52 h-44 object-contain"
-                      src={item.image}
+                      src={item.variantDto.img}
                       alt="ProductImg"
                     />
                   </div>
@@ -44,27 +58,46 @@ const CartSaveForLater = () => {
                       className="font-titleFont tracking-wide text-md text-amazon_blue
                           font-medium alain-top"
                     >
-                      {item.title.substring(0, 45)}
-                      {item.title.length > 45 ? "..." : ""}
+                      {item.variantDto.name.substring(0, 45)}
+                      {item.variantDto.name.length > 45 ? "..." : ""}
                     </h2>
                   </div>
                 </div>
-                <div className=" col-span-4 px-4">
-                  <p className="text-md font-semibold">${item.price}</p>
+                <div class=" col-span-4 px-4">
+                  <p className="text-md font-semibold">
+                    ${item.variantDto.price}
+                  </p>
                   <button
-                    onClick={() =>
-                      dispatch(
-                        addToCart({
-                          id: item.id,
-                          title: item.title,
-                          description: item.description,
-                          price: item.price,
-                          category: item.category,
-                          image: item.image,
-                          quantity: 1,
-                        })
-                      ) && dispatch(deleteEmpties(item.id))
-                    }
+                    onClick={() => {
+                      userInfo
+                        ? dispatch(
+                            addNewCartLine({
+                              id: "",
+                              quantity: item.quantity,
+                              cartId: item.cartDto.id,
+                              variantId: item.variantDto.id,
+                            })
+                          ) && dispatch(deleteSaveForLater(item.id))
+                        : dispatch(
+                            addToCart({
+                              id: "",
+                              quantity: item.quantity,
+                              cartDto: {
+                                id: item.cartDto.id,
+                                userId: item.cartDto.userId,
+                              },
+                              variantDto: {
+                                id: item.variantDto.id,
+                                name: item.variantDto.name,
+                                skuCode: item.variantDto.skuCode,
+                                stockQuantity: item.variantDto.stockQuantity,
+                                weight: item.variantDto.weight,
+                                price: item.variantDto.price,
+                                img: item.variantDto.img,
+                              },
+                            })
+                          ) && dispatch(deleteEmpties(item.variantDto.id));
+                    }}
                     className="w-full font-titleFont  text-base 
                     border hover:bg-gray-100 shadow-md
                   border-gray-300 
@@ -73,7 +106,11 @@ const CartSaveForLater = () => {
                     Move to Cart
                   </button>
                   <button
-                    onClick={() => dispatch(deleteEmpties(item.id))}
+                    onClick={() => {
+                      userInfo
+                        ? dispatch(deleteSaveForLater(item.id))
+                        : dispatch(deleteEmpties(item.variantDto.id));
+                    }}
                     className="text-sm text-cyan-600 hover:underline mt-3"
                   >
                     Delete

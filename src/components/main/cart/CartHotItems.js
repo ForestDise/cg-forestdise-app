@@ -4,24 +4,23 @@ import CartPayment from "./CartPayment";
 import {addToCart} from "../../../features/cart/cartSlice";
 import {useEffect} from "react";
 import {useState} from "react";
-import {findFiveProducts} from "../../../api/cartAPI";
+import {findFiveProducts} from "../../../api/CartAPI";
 import Spinner from "./Spinner";
 import {useParams} from "react-router-dom";
 
 const CartSidebar = () => {
-    let {id} = useParams();
-    const dispatch = useDispatch();
-    const [list, setList] = useState([]);
-    const [isSuccess, setIsSuccess] = useState(false);
-
-    useEffect(() => {
-        findFiveProducts(id).then((item) => {
-            if (!isSuccess) {
-                setList(item.data);
-                setIsSuccess(true);
-            }
-        });
-    }, [isSuccess]);
+  const dispatch = useDispatch();
+  const [list, setList] = useState([]);
+  const [isSuccess, setIsSuccess] = useState(false);
+  
+  // useEffect(() => {
+  //   findFiveProducts().then((item) => { 
+  //     if (!isSuccess) {
+  //       setList(item.data);
+  //       setIsSuccess(true);
+  //     }
+  //   });
+  // }, [isSuccess]);
 
     return (
         <div>

@@ -5,7 +5,7 @@ import StarIcon from "@mui/icons-material/Star";
 import { Button } from "@mui/material";
 import "../../../assets/css/cart/shoppingTrend.css";
 import { useNavigate } from "react-router-dom";
-import { findProductsRecentlyViewed } from "../../../api/cartAPI";
+import { findProductsRecentlyViewed } from "../../../api/CartAPI";
 import Spinner from "./Spinner";
 import { useEffect } from "react";
 import { useState } from "react";

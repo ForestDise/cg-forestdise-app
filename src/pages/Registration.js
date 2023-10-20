@@ -45,7 +45,6 @@ function Registration() {
         } else if (!REGEX.email.test(form.email)) {
             errors.email = "Invalid email";
         }
-
         if (!form.password) {
             errors.password = "Required";
         } else if (!REGEX.password.test(form.password)) {
@@ -86,35 +85,37 @@ function Registration() {
             });
     };
 
-    return (
-        <div className="w-full font-bodyFont">
-            <div className="w-full bg-gray-100 pb-10">
-                <Formik
-                    initialValues={form}
-                    validate={handleValidate}
-                    onSubmit={handleSubmit}
-                >
-                    {({errors, handleSubmit}) => (
-                        <form
-                            onSubmit={handleSubmit}
-                            className="w-[350px] mx-auto flex flex-col items-center"
-                        >
-                            <Link to="/">
-                                <img className="w-36" src={logoBlack} alt="logo"/>
-                            </Link>
-                            <div className="w-full border border-zinc-200 bg-gray-100 rounded-md p-6">
-                                <h2 className="font-titleFont text-3xl font-medium mb-4">
-                                    Create Account
-                                </h2>
-                                <div className="flex flex-col gap-3">
-                                    <div className="flex flex-col gap-2">
-                                        <p className="text-sm font-medium">Your name</p>
-                                        <input
-                                            placeholder="First and last name"
-                                            onChange={handleChange}
-                                            name="clientName"
-                                            value={form.clientName || ""}
-                                            className="w-full placeholder:normal-case placeholder:text-sm normal-case py-1 bordder border-zinc-400
+  return (
+    <div className="w-full font-bodyFont">
+      <div className="w-full bg-gray-100 pb-10">
+        <Formik
+          initialValues={form}
+          validate={handleValidate}
+          onSubmit={handleSubmit}
+        >
+          {({ errors, handleSubmit }) => (
+            <form
+              onSubmit={handleSubmit}
+              className="w-[350px] mx-auto flex flex-col items-center"
+            >
+              <Link
+                to="/"
+              >
+                <img  className="w-36" src={logoBlack} alt="logo" />
+              </Link>
+              <div className="w-full border border-zinc-200 bg-gray-100 rounded-md p-6">
+                <h2 className="font-titleFont text-3xl font-medium mb-4">
+                  Create Account
+                </h2>
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-sm font-medium">Your name</p>
+                    <input
+                      placeholder="First and last name"
+                      onChange={handleChange}
+                      name="clientName"
+                      value={form.clientName || ""}
+                      className="w-full placeholder:normal-case placeholder:text-sm normal-case py-1 bordder border-zinc-400
                     px-2 text-base rounded-sm outline-none focus-within:border-[#e77600]
                     focus-within:shadow-amazonInput duration-100
                     "
