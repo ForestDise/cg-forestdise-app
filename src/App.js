@@ -16,6 +16,13 @@ import Registration from "./pages/Registration";
 import Header from "./components/common/header/Header";
 import Footer from "./components/common/footer/Footer";
 import ProductDetail from "./components/main/variant/ProductDetail";
+import SellingHeader from "./components/common/sellingheader/SellingHeader";
+import Selling from "./components/main/selling/Selling";
+import Market from "./components/main/selling/Market";
+import ListingProduct from "./components/main/selling/ListingProduct";
+import Inventory from "./components/main/selling/Inventory";
+import Orders from "./components/main/selling/Orders";
+import Info from "./components/main/selling/Info";
 import Payment from "./pages/Payment";
 import StoreHeader from "./components/main/store/StoreHeader";
 import StoreFooter from "./components/main/store/StoreFooter";
@@ -30,6 +37,16 @@ const Layout = () => {
             <Footer/>
         </div>
     );
+};
+const SellingLayout = () => {
+  return (
+    <div>
+      <SellingHeader />
+      <ScrollRestoration />
+      <Outlet />
+      <Footer />
+    </div>
+  );
 };
 
 const StoreLayout = () => {
@@ -59,6 +76,18 @@ function App() {
           <Route path="/store/:id" element={<StoreLayout />}>
             <Route index element={<HomeContent />} />
           </Route>
+        </Route>
+        <Route path="/selling" element={<SellingLayout />}>
+          <Route index element={<Selling />} />
+          <Route path="/selling/market" element={<Market />} />
+          <Route path="/selling/listing" element={<ListingProduct />} />
+          <Route path="/selling/inventory" element={<Inventory />} />
+          <Route path="/selling/order" element={<Orders />} />
+          <Route path="/selling/info" element={<Info />} />
+          <Route path="/selling/sellerInfo" element={<Info />} />
+          <Route path="/selling/inventory/vitals" element={<Inventory />} />
+
+
         </Route>
       </Fragment>
     )
