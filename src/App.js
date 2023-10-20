@@ -27,6 +27,8 @@ import Payment from "./pages/Payment";
 import StoreHeader from "./components/main/store/StoreHeader";
 import StoreFooter from "./components/main/store/StoreFooter";
 import StoreBanner from "./components/main/store/StoreBanner";
+import SellerRegistration from "./pages/SellerRegistration";
+import SellerSignin from "./pages/SellerSignin";
 
 const Layout = () => {
     return (
@@ -65,10 +67,14 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Fragment>
-        <Route path="/payment" element={<Payment/>}/>
-        <Route path="/signin" element={<Signin />} />
         <Route path="/error" element={<Error />} />
         <Route path="/register" element={<Registration />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route
+          path="/sellercentral/register"
+          element={<SellerRegistration />}
+        />
+        <Route path="/sellercentral/signin" element={<SellerSignin />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/cart" element={<Cart />} />
@@ -77,6 +83,7 @@ function App() {
             <Route index element={<HomeContent />} />
           </Route>
         </Route>
+        <Route path="/payment" element={<Payment />} />
         <Route path="/selling" element={<SellingLayout />}>
           <Route index element={<Selling />} />
           <Route path="/selling/market" element={<Market />} />
@@ -86,8 +93,6 @@ function App() {
           <Route path="/selling/info" element={<Info />} />
           <Route path="/selling/sellerInfo" element={<Info />} />
           <Route path="/selling/inventory/vitals" element={<Inventory />} />
-
-
         </Route>
       </Fragment>
     )
