@@ -4,15 +4,15 @@ import { findStore } from "../../api/storeAPI";
 const initialState = {
   storeBanner: "",
   storeInfo: {},
-  selectedCategory: null,
   categories: [],
   breadcrumb: {
     category: "",
     subCategory: "",
   },
+  selectedCategory: null,
   moreSideBar: false,
   moreCategoryToggle: {
-    deals: false
+    deals: false,
   },
   loading: false,
   error: null,
@@ -63,10 +63,25 @@ export const sellerStoreSlice = createSlice({
       };
     },
     toggleMoreCategory: (state, action) => {
-      const categoryName = action.payload;
+      const categoryId = action.payload;
       state.moreCategoryToggle = {
         ...state.moreCategoryToggle,
-        [categoryName]: !state.moreCategoryToggle[categoryName],
+        [categoryId]: !state.moreCategoryToggle[categoryId],
+      };
+    },
+    toggleOffMoreCategory: (state, action) => {
+      const categoryId = action.payload;
+      state.moreCategoryToggle = {
+        ...state.moreCategoryToggle,
+        deals: false,
+        [categoryId]: false,
+      };
+    },
+    toggleOffMoreCategoryForDeals: (state, action) => {
+      const categoryId = action.payload;
+      state.moreCategoryToggle = {
+        ...state.moreCategoryToggle,
+        [categoryId]: false,
       };
     },
   },
@@ -103,6 +118,8 @@ export const {
   toggleMoreSideBar,
   addMoreCategoryToggle,
   toggleMoreCategory,
+  toggleOffMoreCategory,
+  toggleOffMoreCategoryForDeals,
 } = sellerStoreSlice.actions;
 
 export const selectLoading = (state) => state.sellerStore.loading;

@@ -73,8 +73,6 @@ function Signin() {
   },[userInfo])
 
   const sendValuesInDatabase = () => {
-    console.log("========signin==========");
-    console.log(userInfo);
     products.map((item) =>
       dispatch(
         addNewCartLine({

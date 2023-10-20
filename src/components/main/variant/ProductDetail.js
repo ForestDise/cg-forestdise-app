@@ -94,6 +94,7 @@ function ProductDetail() {
                 {variantDetail &&
                   variantDetail.imageDtos.map((item) => (
                     <img
+                      key={item.id}
                       className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
                       src={item.imgPath}
                       alt="ProductImg"

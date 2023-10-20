@@ -2,17 +2,29 @@ import React, { Fragment } from "react";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
+import { useParams } from "react-router-dom";
 import {
   changeCategory,
   changeSubCategory,
   toggleMoreSideBar,
-  toggleMoreCategory
+  toggleMoreCategory,
+  setSelectedCategory,
+  addMoreCategoryToggle,
+  toggleOffMoreCategory,
+  setStoreBanner,
+  toggleOffMoreCategoryForDeals,
 } from "../../../features/sellerStore/sellerStoreSlice";
 
 function MoreSideBar() {
   const moreSideBar = useSelector((state) => state.sellerStore.moreSideBar);
+  const params = useParams();
   const moreCategoryToggle = useSelector(
     (state) => state.sellerStore.moreCategoryToggle
+  );
+  const categories = useSelector((state) => state.sellerStore.categories);
+  const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
+  const selectedCategory = useSelector(
+    (state) => state.sellerStore.selectedCategory
   );
   const motionMoreDivRef = useRef();
   const dispatch = useDispatch();
@@ -28,10 +40,20 @@ function MoreSideBar() {
       hideMoreSidebar(e);
     });
 
+    categories
+      .filter((category) => category.parentStoreCategory === null)
+      .map((category) => dispatch(addMoreCategoryToggle(category.id)));
+
     return document.body.removeEventListener("click", (e) => {
       hideMoreSidebar(e);
     });
-  }, []);
+  }, [params.id]);
+
+  const toggleOffOtherCategory = () => {
+    categories
+      .filter((category) => category.parentStoreCategory === null)
+      .map((category) => dispatch(toggleOffMoreCategoryForDeals(category.id)));
+  };
 
   return (
     <Fragment>
@@ -54,7 +76,7 @@ function MoreSideBar() {
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <svg
-                  class="w-6 h-6 text-gray-800 dark:text-white"
+                  className="w-6 h-6 text-gray-800 dark:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -75,6 +97,13 @@ function MoreSideBar() {
                 <ul className="space-y-2 font-medium">
                   <li>
                     <a
+                      onClick={() => {
+                        toggleOffOtherCategory();
+                        dispatch(toggleMoreSideBar(false));
+                        dispatch(changeCategory(""));
+                        dispatch(changeSubCategory(""));
+                        dispatch(setStoreBanner(storeInfo.homeImage));
+                      }}
                       href="#"
                       className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                     >
@@ -84,16 +113,17 @@ function MoreSideBar() {
                   <li>
                     <button
                       onClick={() => {
+                        toggleOffOtherCategory();
                         dispatch(toggleMoreCategory("deals"));
                       }}
                       type="button"
-                      class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                      className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                     >
-                      <span class="flex-1 ml-3 text-left whitespace-nowrap font-light">
+                      <span className="flex-1 ml-3 text-left whitespace-nowrap font-light">
                         Deals
                       </span>
                       <svg
-                        class="w-3 h-3"
+                        className="w-3 h-3"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -109,254 +139,136 @@ function MoreSideBar() {
                       </svg>
                     </button>
                     {moreCategoryToggle.deals && (
-                      <ul class="py-2 space-y-2">
+                      <ul className="py-2 space-y-2">
                         <li>
                           <a
+                            onClick={() => {
+                              dispatch(changeCategory("Deals"));
+                              dispatch(changeSubCategory(""));
+                              dispatch(setStoreBanner(storeInfo.dealsImage));
+                            }}
                             href="#"
-                            class="flex items-center font-medium w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                            className="flex items-center font-medium w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                           >
                             Deals
                           </a>
                         </li>
-                        <li>
-                          <a
-                            href="#"
-                            class="flex items-center font-light w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                          >
-                            Phones & Watches
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#"
-                            class="flex items-center font-light w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                          >
-                            TV & Audio
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#"
-                            class="flex items-center font-light w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                          >
-                            Computing
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#"
-                            class="flex items-center font-light w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                          >
-                            Home Appliances
-                          </a>
-                        </li>
+                        {categories
+                          .filter(
+                            (category) => category.parentStoreCategory === null
+                          )
+                          .map((category) => (
+                            <li key={category.id}>
+                              <a
+                                onClick={() => {
+                                  dispatch(changeCategory("Deals"));
+                                  dispatch(changeSubCategory(category.name));
+                                  dispatch(setStoreBanner(category.heroImage));
+                                }}
+                                href="#"
+                                className="flex items-center font-light w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                              >
+                                {category.name}
+                              </a>
+                            </li>
+                          ))}
                       </ul>
                     )}
                   </li>
-                  <li>
-                    <button
-                      type="button"
-                      class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                    >
-                      <span class="flex-1 ml-3 text-left whitespace-nowrap font-light">
-                        Phones & Watches
-                      </span>
-                      <svg
-                        class="w-3 h-3"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 10 6"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="m1 1 4 4 4-4"
-                        />
-                      </svg>
-                    </button>
-                    <ul class="hidden py-2 space-y-2">
-                      <li>
-                        <a
-                          href="#"
-                          class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+
+                  {categories
+                    .filter((category) => category.parentStoreCategory === null)
+                    .map((category) => (
+                      <li key={category.id}>
+                        <button
+                          name={category.name}
+                          type="button"
+                          onClick={() => {
+                            categories
+                              .filter(
+                                (category) =>
+                                  category.parentStoreCategory === null
+                              )
+                              .map((categoryCheck) =>
+                                categoryCheck.id !== category.id
+                                  ? dispatch(
+                                      toggleOffMoreCategory(categoryCheck.id)
+                                    )
+                                  : ""
+                              );
+                            dispatch(setSelectedCategory(category.name));
+                            dispatch(toggleMoreCategory(category.id));
+                          }}
+                          className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                         >
-                          Products
-                        </a>
+                          <span className="flex-1 ml-3 text-left whitespace-nowrap font-light">
+                            {category.name}
+                          </span>
+                          <svg
+                            className="w-3 h-3"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 10 6"
+                          >
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="m1 1 4 4 4-4"
+                            />
+                          </svg>
+                        </button>
+
+                        {moreCategoryToggle[category.id] && (
+                          <ul className="py-2 space-y-2">
+                            <li>
+                              <a
+                                onMouseOver={() => {
+                                  dispatch(setSelectedCategory(category.name));
+                                }}
+                                onClick={() => {
+                                  dispatch(setStoreBanner(category.heroImage));
+                                  dispatch(changeCategory(selectedCategory));
+                                  dispatch(changeSubCategory(""));
+                                }}
+                                href="#"
+                                className="flex items-center font-medium w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                              >
+                                {category.name}
+                              </a>
+                            </li>
+                            {categories.map(
+                              (category) =>
+                                category.parentStoreCategory !== null &&
+                                category.parentStoreCategory.name ===
+                                  selectedCategory && (
+                                  <li key={category.id}>
+                                    <a
+                                      onClick={(e) => {
+                                        dispatch(
+                                          setStoreBanner(category.heroImage)
+                                        );
+                                        dispatch(
+                                          changeCategory(selectedCategory)
+                                        );
+                                        dispatch(
+                                          changeSubCategory(category.name)
+                                        );
+                                      }}
+                                      href="#"
+                                      className="flex items-center font-light w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                                    >
+                                      {category.name}
+                                    </a>
+                                  </li>
+                                )
+                            )}
+                          </ul>
+                        )}
                       </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        >
-                          Billing
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        >
-                          Invoice
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                    >
-                      <span class="flex-1 ml-3 text-left whitespace-nowrap font-light">
-                        TV & Audio
-                      </span>
-                      <svg
-                        class="w-3 h-3"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 10 6"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="m1 1 4 4 4-4"
-                        />
-                      </svg>
-                    </button>
-                    <ul id="dropdown-example" class="hidden py-2 space-y-2">
-                      <li>
-                        <a
-                          href="#"
-                          class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        >
-                          Products
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        >
-                          Billing
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        >
-                          Invoice
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                    >
-                      <span class="flex-1 ml-3 text-left whitespace-nowrap font-light">
-                        Computing
-                      </span>
-                      <svg
-                        class="w-3 h-3"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 10 6"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="m1 1 4 4 4-4"
-                        />
-                      </svg>
-                    </button>
-                    <ul id="dropdown-example" class="hidden py-2 space-y-2">
-                      <li>
-                        <a
-                          href="#"
-                          class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        >
-                          Products
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        >
-                          Billing
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        >
-                          Invoice
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                    >
-                      <span class="flex-1 ml-3 text-left whitespace-nowrap font-light">
-                        Home Appliances
-                      </span>
-                      <svg
-                        class="w-3 h-3"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 10 6"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="m1 1 4 4 4-4"
-                        />
-                      </svg>
-                    </button>
-                    <ul id="dropdown-example" class="hidden py-2 space-y-2">
-                      <li>
-                        <a
-                          href="#"
-                          class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        >
-                          Products
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        >
-                          Billing
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                        >
-                          Invoice
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
+                    ))}
                 </ul>
               </div>
             </div>

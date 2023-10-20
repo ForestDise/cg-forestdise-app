@@ -1,6 +1,6 @@
 import React from "react";
 import { Fragment } from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import MoreSideBar from "./MoreSideBar";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -40,7 +40,6 @@ export default function StoreHeader() {
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollPosition(position);
-    console.log(scrollPosition);
   };
 
   useEffect(() => {
@@ -190,15 +189,13 @@ export default function StoreHeader() {
                         </li>
                         {categories.map((category) =>
                           category.parentStoreCategory === null ? (
-                            <li>
+                            <li key={category.id}>
                               <a
                                 name={category.name}
                                 onClick={(e) => {
                                   dispatch(changeCategory("Deals"));
                                   dispatch(changeSubCategory(e.target.name));
-                                  dispatch(
-                                    setStoreBanner(category.heroImage)
-                                  );
+                                  dispatch(setStoreBanner(category.heroImage));
                                 }}
                                 href="#"
                                 className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -219,6 +216,7 @@ export default function StoreHeader() {
                   .map((category, index) =>
                     index <= 1 ? (
                       <li
+                        key={category.id}
                         onMouseLeave={() => {
                           setShowDropDown({
                             ...showDropDown,
@@ -229,9 +227,8 @@ export default function StoreHeader() {
                         }}
                       >
                         <button
-                          name={category.name}
-                          onClick={(e) => {
-                            dispatch(setSelectedCategory(e.target.name));
+                          onClick={() => {
+                            dispatch(setSelectedCategory(category.name));
                             index === 0
                               ? setShowDropDown({
                                   ...showDropDown,
@@ -272,17 +269,20 @@ export default function StoreHeader() {
                                 >
                                   <li>
                                     <a
-                                      onMouseOver={(e) => {
+                                      onMouseOver={() => {
                                         dispatch(
-                                          setSelectedCategory(e.target.name)
+                                          setSelectedCategory(category.name)
                                         );
                                       }}
                                       onClick={() => {
-                                        dispatch(setStoreBanner(category.heroImage));
-                                        dispatch(changeCategory(selectedCategory));
+                                        dispatch(
+                                          setStoreBanner(category.heroImage)
+                                        );
+                                        dispatch(
+                                          changeCategory(selectedCategory)
+                                        );
                                         dispatch(changeSubCategory(""));
                                       }}
-                                      name={category.name}
                                       href="#"
                                       className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                     >
@@ -294,9 +294,9 @@ export default function StoreHeader() {
                                       category.parentStoreCategory !== null &&
                                       category.parentStoreCategory.name ===
                                         selectedCategory && (
-                                        <li>
+                                        <li key={category.id}>
                                           <a
-                                            onClick={(e) => {
+                                            onClick={() => {
                                               dispatch(
                                                 setStoreBanner(
                                                   category.heroImage
@@ -306,10 +306,9 @@ export default function StoreHeader() {
                                                 changeCategory(selectedCategory)
                                               );
                                               dispatch(
-                                                changeSubCategory(e.target.name)
+                                                changeSubCategory(category.name)
                                               );
                                             }}
-                                            name={category.name}
                                             href="#"
                                             className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                           >
