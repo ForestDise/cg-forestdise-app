@@ -21,7 +21,7 @@ const CartSaveForLater = () => {
 
   return (
     <>
-      <div class="bg-lime-400">
+      <div className="bg-lime-400">
         <div className="w-full h-full bg-white px-4 col-span-4 pb-1">
           <div className="font-titleFont flex items-center justify-between border-b-[1px] border-b-gray-400 py-3">
             <h2 className="text-3x1 font-medium">
@@ -38,12 +38,12 @@ const CartSaveForLater = () => {
                 class="grid grid-cols-4 gap-1 bg-white border-[1px] border-gray-200 hover:border-transparent shadow-none hover:shadow-testShadow duration-200"
                 key={item.variantDto.id}
               >
-                <div class=" col-span-4 px-3">
+                <div className=" col-span-4 px-3">
                   <div className="text-sm italic text-gray-500 text-right">
                     {item.variantDto.skuCode}
                   </div>
                 </div>
-                <div class=" col-span-4">
+                <div className=" col-span-4">
                   <div className="w-full h-auto flex items-center justify-center relative group">
                     <img
                       className="w-52 h-44 object-contain"
@@ -52,7 +52,7 @@ const CartSaveForLater = () => {
                     />
                   </div>
                 </div>
-                <div class=" col-span-4 px-4 h-12">
+                <div className=" col-span-4 px-4 h-12">
                   <div className="flex items-center justify-between  ">
                     <h2
                       className="font-titleFont tracking-wide text-md text-amazon_blue

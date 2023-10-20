@@ -29,7 +29,7 @@ const CartContent = () => {
 
   return (
     <>
-      <div class="bg-red-500">
+      <div className="bg-red-500">
         <div className="w-full h-full bg-white px-4 col-span-4 pb-3">
           {products.length > 0 ? (
             <div className="font-titleFont flex items-center justify-between border-b-[1px] border-b-gray-400 py-3">

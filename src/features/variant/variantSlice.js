@@ -8,8 +8,8 @@ const initialState = {
     success: false,
 }
 
-export const getVariant = createAsyncThunk("variant/detail", async(variantId) => {
-    const response = await findVariant(variantId);
+export const getVariant = createAsyncThunk("variant/detail", async (productId) => {
+  const response = await findVariant(productId);
     console.log(response.data);
     return response.data;
 })
