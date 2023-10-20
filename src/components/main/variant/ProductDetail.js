@@ -109,8 +109,9 @@ function ProductDetail() {
           </div>
           <div>
             <div className="flex flex-wrap text-center justify-between object-contain hover:py-4 mx-21">
-              {variantDetail && variantDetail.variantDto.imageDtoList?.map((item) => (
+              {variantDetail && variantDetail.variantDto.imageDtoList?.map((item, index) => (
                 <img
+                  key={index}
                   className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
                   src={item.imgPath}
                   alt="ProductImg"
@@ -118,8 +119,8 @@ function ProductDetail() {
                 ></img>
               ))}
 
-              {variantDetail && variantDetail.videoDtoList?.map((item) => (
-                <video controls className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300 px-4">
+              {variantDetail && variantDetail.videoDtoList?.map((item,i) => (
+                <video key={i} controls className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300 px-4">
                   <source src={item.videoPath} type="video/mp4" />
                 </video>
               ))}
