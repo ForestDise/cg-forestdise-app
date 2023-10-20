@@ -1,11 +1,11 @@
-import React, { Fragment } from "react";
+import React, {Fragment} from "react";
 import {
-  Outlet,
-  Route,
-  RouterProvider,
-  ScrollRestoration,
-  createBrowserRouter,
-  createRoutesFromElements,
+    Outlet,
+    Route,
+    RouterProvider,
+    ScrollRestoration,
+    createBrowserRouter,
+    createRoutesFromElements,
 } from "react-router-dom";
 import Home from "./pages/Home";
 import Cart from "./components/main/cart/Cart";
@@ -16,19 +16,20 @@ import Registration from "./pages/Registration";
 import Header from "./components/common/header/Header";
 import Footer from "./components/common/footer/Footer";
 import ProductDetail from "./components/main/variant/ProductDetail";
+import Payment from "./pages/Payment";
 import StoreHeader from "./components/main/store/StoreHeader";
 import StoreFooter from "./components/main/store/StoreFooter";
 import StoreBanner from "./components/main/store/StoreBanner";
 
 const Layout = () => {
-  return (
-    <div>
-      <Header />
-      <ScrollRestoration />
-      <Outlet />
-      <Footer />
-    </div>
-  );
+    return (
+        <div>
+            <Header/>
+            <ScrollRestoration/>
+            <Outlet/>
+            <Footer/>
+        </div>
+    );
 };
 
 const StoreLayout = () => {
@@ -47,6 +48,7 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Fragment>
+        <Route path="/payment" element={<Payment/>}/>
         <Route path="/signin" element={<Signin />} />
         <Route path="/error" element={<Error />} />
         <Route path="/register" element={<Registration />} />
