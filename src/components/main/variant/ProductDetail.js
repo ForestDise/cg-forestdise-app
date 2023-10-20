@@ -16,8 +16,7 @@ import {
 } from "../../../features/variant/variantSlice";
 import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";
 import { setCategory } from "../../../features/sellerStore/sellerStoreSlice";
-import StarRating from "../../common/icon/StarRating";
-
+import StarRating from "../../icon/StarRating";
 function ProductDetail() {
   const { id } = useParams();
   const [variantId, setVariantId] = useState(null);
@@ -93,7 +92,8 @@ function ProductDetail() {
 
 
   return (
-    variantDetail && <div className="font-bodyFont w-full bg-gray-100 p-1">
+    variantDetail &&
+    <div className="font-bodyFont w-full bg-gray-100 p-1">
       <div className="container mx-auto h-auto grid grid-cols-5 gap-2">
         {/* Thumnail start */}
         <div className="w-full h-full bg-white px-4 col-span-2 flex flex-col py-10 border-gray-300 border-2 rounded-3xl">
@@ -119,7 +119,7 @@ function ProductDetail() {
                 ></img>
               ))}
 
-              {variantDetail && variantDetail.videoDtoList?.map((item,i) => (
+              {variantDetail && variantDetail.videoDtoList?.map((item, i) => (
                 <video key={i} controls className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300 px-4">
                   <source src={item.videoPath} type="video/mp4" />
                 </video>
@@ -562,14 +562,10 @@ function ProductDetail() {
           </div>
           <hr></hr>
           {/* List Review Of Customer End */}
-
-
         </div>
-
-
       </div>
     </div>
-  );
-}
+  )
+};
 
 export default ProductDetail;
