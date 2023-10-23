@@ -20,7 +20,7 @@ import shopReducer from "../features/variant/shopSlide";
 import commentReducer from "../features/coment_review/commentSlide";
 import reviewReducer from "../features/coment_review/reviewSlide";
 import sellerStoreReducer from "../features/sellerStore/sellerStoreSlice";
-
+import homeReducer from "../features/home/homeSlice";
 
 const persistConfig = {
   key: "root",
@@ -30,10 +30,11 @@ const persistConfig = {
 
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
 const sellerStorePersistedReducer = persistReducer(persistConfig, sellerStoreReducer);
-
+const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
 export const store = configureStore({
   reducer: {
-    cart: cartReducer,
+    home: homeReducer,
+    cart: cartPersistedReducer,
     sellerStore: sellerStorePersistedReducer,
     variant: variantReducer,
     user: userPersistedReducer,
@@ -42,7 +43,7 @@ export const store = configureStore({
     product: productReducer,
     shop: shopReducer,
     comment: commentReducer,
-    review: reviewReducer
+    review: reviewReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
