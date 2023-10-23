@@ -1,20 +1,40 @@
 import React, { Fragment } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import {
+  changeCategory,
+  changeSubCategory,
+  toggleMoreSideBar,
+  setSelectedCategory,
+  setSelectedCurrent,
+  setStore,
+  setCategory,
+  setStoreBanner,
+} from "../../../features/sellerStore/sellerStoreSlice";
 
 function HeaderBreadcrumb() {
+  const dispatch = useDispatch();
   const breadcrumb = useSelector((state) => state.sellerStore.breadcrumb);
+  const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
+  const selectedCategory = useSelector((state) => state.sellerStore.selectedCategory);
 
   return (
     <Fragment>
       <nav className="flex w-full bg-white pl-6">
         <ol className="inline-flex items-center space-x-1 md:space-x-0 max-w-full">
           <li className="inline-flex items-center">
-            <a
-              href="#"
-              className="inline-flex items-center text-xs font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
-            >
-              Samsung
-            </a>
+            <Link to={`/store/${storeInfo.id}`}>
+              <a
+                onClick={() => {
+                  dispatch(changeCategory(""));
+                  dispatch(changeSubCategory(""));
+                  dispatch(setStoreBanner(storeInfo.homeImage));
+                }}
+                className="inline-flex items-center text-xs font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
+              >
+                Samsung
+              </a>
+            </Link>
           </li>
           {breadcrumb.category && (
             <li>
@@ -35,8 +55,13 @@ function HeaderBreadcrumb() {
                   />
                 </svg>
                 <a
-                  href="#"
-                  className="inline-flex items-center text-xs font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
+                  onClick={() => {
+                    dispatch(setSelectedCategory(breadcrumb.category));
+                    dispatch(setStoreBanner(breadcrumb.bannerImage));
+                    dispatch(changeCategory(selectedCategory));
+                    dispatch(changeSubCategory(""));
+                  }}
+                  className="inline-flex items-center cursor-pointer text-xs font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
                 >
                   {breadcrumb.category}
                 </a>
@@ -61,10 +86,7 @@ function HeaderBreadcrumb() {
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
-                <a
-                  href="#"
-                  className="inline-flex items-center text-xs font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
-                >
+                <a className="inline-flex items-center cursor-pointer text-xs font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white">
                   {breadcrumb.subCategory}
                 </a>
               </div>

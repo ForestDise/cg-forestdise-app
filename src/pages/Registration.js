@@ -63,12 +63,12 @@ function Registration() {
     setLoading(true);
     setRegisteredEmail(false);
     await axios
-      .post("http://localhost:8080/api/register", registerData)
+      .post("http://localhost:8080/api/register/seller", registerData)
       .then(() => {
         setLoading(false);
         setSuccessNotify("Account created successfully");
         setTimeout(() => {
-          navigate("/signin");
+          navigate("/sellercentral/signin");
         }, 2500);
       })
       .catch((err) => {
@@ -113,6 +113,7 @@ function Registration() {
                   <div className="flex flex-col gap-2">
                     <p className="text-sm font-medium">Your name</p>
                     <input
+                      maxLength="50"
                       placeholder="First and last name"
                       onChange={handleChange}
                       name="clientName"
@@ -176,7 +177,7 @@ function Registration() {
                       name="password"
                       onChange={handleChange}
                       value={form.password || ""}
-                      placeholder="At least 8 characters, one number and one letter"
+                      placeholder="8 characters, one number, one letter"
                       className="w-full placeholder:normal-case placeholder:text-sm normal-case py-1 bordder border-zinc-400
                     px-2 text-base rounded-sm outline-none focus-within:border-[#e77600]
                     focus-within:shadow-amazonInput duration-100

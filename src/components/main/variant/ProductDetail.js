@@ -17,6 +17,7 @@ import {
 import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";
 import { setCategory } from "../../../features/sellerStore/sellerStoreSlice";
 import StarRating from "../../icon/StarRating";
+
 function ProductDetail() {
   const { id } = useParams();
   const [variantId, setVariantId] = useState(null);

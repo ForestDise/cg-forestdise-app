@@ -5,6 +5,7 @@ import { Formik } from "formik";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { RotatingLines } from "react-loader-spinner";
+import { logoSeller } from "../assets";
 
 function SellerRegistration() {
   const [form, setForm] = useState({});
@@ -35,9 +36,10 @@ function SellerRegistration() {
 
   const handleValidate = () => {
     let errors = {};
-    if (!form.clientName) {
-      errors.clientName = "Required";
-    }
+  
+    if (!form.sellerName) {
+      errors.sellerName = "Required";
+    } 
 
     if (!form.email) {
       errors.email = "Required";
@@ -62,7 +64,7 @@ function SellerRegistration() {
     setLoading(true);
     setRegisteredEmail(false);
     await axios
-      .post("http://localhost:8080/api/register", registerData)
+      .post("http://localhost:8080/api/register/seller", registerData)
       .then(() => {
         setLoading(false);
         setSuccessNotify("Account created successfully");
@@ -92,8 +94,8 @@ function SellerRegistration() {
             >
               
                 <img
-                  className="w-36"
-                  src="https://m.media-amazon.com/images/G/01/rainier/nav/SellerCentral_Bliss._CB485924389_.png"
+                  className="w-[168px]"
+                  src={logoSeller}
                   alt="logo"
                 />
               
@@ -103,19 +105,21 @@ function SellerRegistration() {
                 </h2>
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-col gap-2">
-                    <p className="text-sm font-medium">Your name</p>
+                    <p className="text-sm font-medium">Your seller name</p>
                     <input
-                      placeholder="First and last name"
+                      id="sellerNameInput"
+                      maxLength="50"
+                      placeholder="Seller name"
                       onChange={handleChange}
-                      name="clientName"
-                      value={form.clientName || ""}
+                      name="sellerName"
+                      value={form.sellerName || ""}
                       className="w-full placeholder:normal-case placeholder:text-sm normal-case py-1 bordder border-zinc-400
                     px-2 text-base rounded-sm outline-none focus-within:border-[#e77600]
                     focus-within:shadow-amazonInput duration-100
                     "
                       type="text"
                     ></input>
-                    {errors.clientName && (
+                    {errors.sellerName && (
                       <p
                         className="text-red-600 text-xs font-semibold tracking-wide
                     flex items-center gap-2 -mt-1.5"
@@ -123,7 +127,7 @@ function SellerRegistration() {
                         <span className="italic font-titleFont font-extrabold text-base">
                           !
                         </span>
-                        {errors.clientName}
+                        {errors.sellerName}
                       </p>
                     )}
                   </div>
@@ -168,7 +172,7 @@ function SellerRegistration() {
                       name="password"
                       onChange={handleChange}
                       value={form.password || ""}
-                      placeholder="At least 8 characters, one number and one letter"
+                      placeholder="8 characters, one number, one letter"
                       className="w-full placeholder:normal-case placeholder:text-sm normal-case py-1 bordder border-zinc-400
                     px-2 text-base rounded-sm outline-none focus-within:border-[#e77600]
                     focus-within:shadow-amazonInput duration-100

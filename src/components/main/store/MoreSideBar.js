@@ -3,12 +3,14 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   changeCategory,
   changeSubCategory,
   toggleMoreSideBar,
   toggleMoreCategory,
   setSelectedCategory,
+  setSelectedCurrent,
   addMoreCategoryToggle,
   toggleOffMoreCategory,
   setStoreBanner,
@@ -96,19 +98,20 @@ function MoreSideBar() {
               <div className="py-4 overflow-y-auto">
                 <ul className="space-y-2 font-medium">
                   <li>
-                    <a
-                      onClick={() => {
-                        toggleOffOtherCategory();
-                        dispatch(toggleMoreSideBar(false));
-                        dispatch(changeCategory(""));
-                        dispatch(changeSubCategory(""));
-                        dispatch(setStoreBanner(storeInfo.homeImage));
-                      }}
-                      href="#"
-                      className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                    >
-                      <span className="ml-3 font-light">Home</span>
-                    </a>
+                    <Link to={`/store/${storeInfo.id}`}>
+                      <a
+                        onClick={() => {
+                          toggleOffOtherCategory();
+                          dispatch(toggleMoreSideBar(false));
+                          dispatch(changeCategory(""));
+                          dispatch(changeSubCategory(""));
+                          dispatch(setStoreBanner(storeInfo.homeImage));
+                        }}
+                        className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                      >
+                        <span className="ml-3 font-light">Home</span>
+                      </a>
+                    </Link>
                   </li>
                   <li>
                     <button
@@ -141,17 +144,18 @@ function MoreSideBar() {
                     {moreCategoryToggle.deals && (
                       <ul className="py-2 space-y-2">
                         <li>
-                          <a
-                            onClick={() => {
-                              dispatch(changeCategory("Deals"));
-                              dispatch(changeSubCategory(""));
-                              dispatch(setStoreBanner(storeInfo.dealsImage));
-                            }}
-                            href="#"
-                            className="flex items-center font-medium w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                          >
-                            Deals
-                          </a>
+                          <Link to={`/store/${storeInfo.id}/deals`}>
+                            <a
+                              onClick={() => {
+                                dispatch(changeCategory("Deals"));
+                                dispatch(changeSubCategory(""));
+                                dispatch(setStoreBanner(storeInfo.dealsImage));
+                              }}
+                              className="flex items-center font-medium w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                            >
+                              Deals
+                            </a>
+                          </Link>
                         </li>
                         {categories
                           .filter(
@@ -165,8 +169,7 @@ function MoreSideBar() {
                                   dispatch(changeSubCategory(category.name));
                                   dispatch(setStoreBanner(category.heroImage));
                                 }}
-                                href="#"
-                                className="flex items-center font-light w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                                className="flex cursor-pointer items-center font-light w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                               >
                                 {category.name}
                               </a>
@@ -224,20 +227,28 @@ function MoreSideBar() {
                         {moreCategoryToggle[category.id] && (
                           <ul className="py-2 space-y-2">
                             <li>
-                              <a
-                                onMouseOver={() => {
-                                  dispatch(setSelectedCategory(category.name));
-                                }}
-                                onClick={() => {
-                                  dispatch(setStoreBanner(category.heroImage));
-                                  dispatch(changeCategory(selectedCategory));
-                                  dispatch(changeSubCategory(""));
-                                }}
-                                href="#"
-                                className="flex items-center font-medium w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                              <Link
+                                to={`/store/${storeInfo.id}/${selectedCategory}`}
                               >
-                                {category.name}
-                              </a>
+                                <a
+                                  onMouseOver={() => {
+                                    dispatch(
+                                      setSelectedCategory(category.name)
+                                    );
+                                  }}
+                                  onClick={() => {
+                                    dispatch(setSelectedCurrent(category.name));
+                                    dispatch(
+                                      setStoreBanner(category.heroImage)
+                                    );
+                                    dispatch(changeCategory(selectedCategory));
+                                    dispatch(changeSubCategory(""));
+                                  }}
+                                  className="flex items-center font-medium w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                                >
+                                  {category.name}
+                                </a>
+                              </Link>
                             </li>
                             {categories.map(
                               (category) =>
@@ -257,8 +268,7 @@ function MoreSideBar() {
                                           changeSubCategory(category.name)
                                         );
                                       }}
-                                      href="#"
-                                      className="flex items-center font-light w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                                      className="flex items-center cursor-pointer font-light w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                                     >
                                       {category.name}
                                     </a>

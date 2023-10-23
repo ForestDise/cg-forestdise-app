@@ -118,7 +118,7 @@ function Signin() {
                 </h2>
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-col gap-2">
-                    <p className="text-sm font-medium">Email or username</p>
+                    <p className="text-sm font-medium">Email</p>
                     <input
                       onChange={handleChange}
                       name="email"

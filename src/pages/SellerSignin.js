@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserInfo } from "../features/user/userSlice";
 import jwt_decode from "jwt-decode";
+import { logoSeller } from "../assets";
 
 function SellerSignin() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ function SellerSignin() {
   const handleSubmit = async () => {
     setLoading(true);
     await axios
-      .post("http://localhost:8080/api/login", form)
+      .post("http://localhost:8080/api/login/seller", form)
       .then((res) => {
         setErrorNotify("");
         setLoading(false);
@@ -72,20 +73,15 @@ function SellerSignin() {
               onSubmit={handleSubmit}
               className="w-[350px] mx-auto flex flex-col items-center"
             >
-              
-                <img
-                  className="w-36"
-                  src="https://m.media-amazon.com/images/G/01/rainier/nav/SellerCentral_Bliss._CB485924389_.png"
-                  alt="logo"
-                />
-              
+              <img className="w-[168px]" src={logoSeller} alt="logo" />
+
               <div className="w-full bg-gray-100 border border-zinc-300 rounded-md p-6">
                 <h2 className="font-titleFont text-3xl font-medium mb-4">
                   Get started selling on ForestDise
                 </h2>
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-col gap-2">
-                    <p className="text-sm font-medium">Email or username</p>
+                    <p className="text-sm font-medium">Email</p>
                     <input
                       onChange={handleChange}
                       name="email"
@@ -197,7 +193,7 @@ function SellerSignin() {
               rounded-sm bg-gradient-to-t from-slate-200 to-slate-100 hover:bg-gradient-to-b border
               border-zinc-400 active:border-yellow-800 active:shadow-amazonInput"
                 >
-                  Create your ForestDise account
+                  Create your ForestDise Seller account
                 </button>
               </Link>
             </form>

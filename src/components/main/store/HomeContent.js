@@ -9,13 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 function HomeContent() {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.user);
   const [productData, setProductData] = useState([]);
+  const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
+  const categories = useSelector((state) => state.sellerStore.categories);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
-  }, [userInfo]);
+  }, []);
 
   async function fetchData() {
     await axios
@@ -30,7 +31,9 @@ function HomeContent() {
 
   return (
     <div className="font-shopFont">
-      <div className="w-full h-full text-center pt-4 text-3xl font-light text-gray-600">Featured Products</div>
+      <div className="w-full h-full text-center pt-4 text-3xl font-light text-gray-600">
+        Featured Products
+      </div>
       <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-10 px-4 pt-10 z-0 pb-4">
         {productData.map((product) => (
           <div
@@ -118,74 +121,21 @@ function HomeContent() {
             className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
              shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
           >
-            <img
-              className="mx-auto"
-              src="https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/b54208fd-28ef-4d09-87e0-e7fb7a2a63c1._CR0%2C0%2C1500%2C1500_SX375_SY375_.jpg"
-            ></img>
+            <img className="mx-auto" src={storeInfo.dealsSquareImage}></img>
           </div>
-          <div
-            className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
+          {categories
+            .filter((category) => category.parentStoreCategory === null)
+            .map(
+              (category, index) =>
+                index <= 7 && (
+                  <div
+                    className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
              shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
-          >
-            <img
-              className="mx-auto"
-              src="https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/687e7525-4400-4d42-aa1e-ea174f6d32d4._CR0%2C0%2C1500%2C1500_SX1500_SY1500_.jpg"
-            ></img>
-          </div>
-          <div
-            className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
-             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
-          >
-            <img
-              className="mx-auto"
-              src="https://m.media-amazon.com/images/S/stores-image-uploads-na-prod/f/AmazonStores/ATVPDKIKX0DER/3b2b33ffdc628bc3c3568fb198e2e30b.w1500.h1500._CR0%2C0%2C1500%2C1500_SX375_SY375_.jpg"
-            ></img>
-          </div>
-          <div
-            className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
-             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
-          >
-            <img
-              className="mx-auto"
-              src="https://m.media-amazon.com/images/S/stores-image-uploads-na-prod/4/AmazonStores/ATVPDKIKX0DER/029085509c265d6ce545f67666a41f28.w1500.h1500._CR0%2C0%2C1500%2C1500_SX375_SY375_.jpg"
-            ></img>
-          </div>
-          <div
-            className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
-             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
-          >
-            <img
-              className="mx-auto"
-              src="https://m.media-amazon.com/images/S/stores-image-uploads-na-prod/d/AmazonStores/ATVPDKIKX0DER/e9f378f9ad718fba6a6c9c459bf73964.w1500.h1500._CR0%2C0%2C1500%2C1500_SX375_SY375_.jpg"
-            ></img>
-          </div>
-          <div
-            className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
-             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
-          >
-            <img
-              className="mx-auto"
-              src="https://m.media-amazon.com/images/S/stores-image-uploads-na-prod/a/AmazonStores/ATVPDKIKX0DER/7ae8ca6dde9d195d9dba6bd01eb0ad3c.w1500.h1500._CR0%2C0%2C1500%2C1500_SX375_SY375_.jpg"
-            ></img>
-          </div>
-          <div
-            className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
-             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
-          >
-            <img
-              className="mx-auto"
-              src="https://m.media-amazon.com/images/S/stores-image-uploads-na-prod/b/AmazonStores/ATVPDKIKX0DER/74a6a93ddabd92dc5d873420c8b70de0.w1500.h1500._CR0%2C0%2C1500%2C1500_SX375_SY375_.jpg"
-            ></img>
-          </div>
-          <div
-            className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
-             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
-          >
-            <img
-              className="mx-auto"
-              src="https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/129509f0-4878-4ed7-ae2b-b0918fc7b9e8._CR0%2C0%2C1500%2C1500_SX375_SY375_.jpg"
-            ></img>
-          </div>
+                  >
+                    <img className="mx-auto" src={category.squareImage}></img>
+                  </div>
+                )
+            )}
         </div>
       </div>
     </div>

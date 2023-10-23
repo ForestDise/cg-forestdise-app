@@ -8,8 +8,10 @@ const initialState = {
   breadcrumb: {
     category: "",
     subCategory: "",
+    bannerImage: ""
   },
   selectedCategory: null,
+  selectedCurrent: null,
   moreSideBar: false,
   moreCategoryToggle: {
     deals: false,
@@ -47,11 +49,17 @@ export const sellerStoreSlice = createSlice({
     setSelectedCategory: (state, action) => {
       state.selectedCategory = action.payload;
     },
+    setSelectedCurrent: (state, action) => {
+      state.selectedCurrent = action.payload;
+    },
     changeCategory: (state, action) => {
       state.breadcrumb.category = action.payload;
     },
     changeSubCategory: (state, action) => {
       state.breadcrumb.subCategory = action.payload;
+    },
+    changeBannerImage: (state, action) => {
+      state.breadcrumb.bannerImage = action.payload;
     },
     toggleMoreSideBar: (state, action) => {
       state.moreSideBar = action.payload;
@@ -113,6 +121,7 @@ export const {
   setCategory,
   setStoreBanner,
   setSelectedCategory,
+  setSelectedCurrent,
   changeCategory,
   changeSubCategory,
   toggleMoreSideBar,
@@ -120,6 +129,7 @@ export const {
   toggleMoreCategory,
   toggleOffMoreCategory,
   toggleOffMoreCategoryForDeals,
+  changeBannerImage,
 } = sellerStoreSlice.actions;
 
 export const selectLoading = (state) => state.sellerStore.loading;
