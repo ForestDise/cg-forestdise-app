@@ -6,22 +6,25 @@ import {useNavigate} from "react-router-dom";
 function Header() {
     const navigate = useNavigate();
     return (
-        <div>
-            <div className="w-full bg-gray-100 text-black flex items-center gap-4 bg-gray-200">
-                <div className="container mx-auto h-auto grid grid-cols-9 gap-2 ml-24 mr-24">
-                    <div onClick={() => navigate("/cart")} className="headerHover col-span-3">
-                        <img className="w-[7rem] mt-0" alt="logoBlack" src={logoBlack}/>
-                    </div>
-                    <div className="text-center text-xl col-span-3 font-titleFont py-3">
-                        Checkout
-                    </div>
-                    <div className="headerHover col-span-3 justify-center py-3">
-                        <LockIcon/>
-                    </div>
-                </div>
+      <div className="w-ful flex items-center p-2 border border-gray-300  bg-gradient-to-t from-gray-200 to-white">
+        <div className="container mx-auto grid grid-cols-3">
+          <div
+            onClick={() => navigate("/cart")}
+            className="col-span-1 flex justify-center"
+          >
+            <img class="h-10 w-35 mt-1" alt="logoBlack" src={logoBlack} />
+          </div>
+          <div className="col-span-1">
+            <div class="font-mono mt-1 text-center align-middle text-3xl">
+              Checkout(<span class="text-teal-600">1 item</span>)
             </div>
+          </div>
+          <div className="col-span-1 flex justify-center mt-2">
+            <LockIcon />
+          </div>
         </div>
-    )
+      </div>
+    );
 }
 
 export default Header;

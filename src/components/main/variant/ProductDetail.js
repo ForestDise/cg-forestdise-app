@@ -3,8 +3,8 @@ import StarIcon from "@mui/icons-material/Star";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,18 +16,17 @@ import {
 } from "../../../features/variant/variantSlice";
 import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";
 import { setCategory } from "../../../features/sellerStore/sellerStoreSlice";
-import StarRating from "../../icon/StarRating";
+import StarRating from "../../common/icon/StarRating";
 
 function ProductDetail() {
   const { id } = useParams();
   const [variantId, setVariantId] = useState(null);
   const [productId, setProductId] = useState(id);
-  const [mainImage, setMainImage] = useState('');
+  const [mainImage, setMainImage] = useState("");
   const [showRecommend, setShowRecommend] = useState(false);
   const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.user);
-
 
   const getVariantDetail = async () => {
     if (id != null) {
@@ -39,7 +38,6 @@ function ProductDetail() {
     getVariantDetail();
   }, [variantId]);
 
-
   const variantDetail = useSelector(selectVariantDetail);
   const statusLoading = useSelector(selectLoading);
   const statusSuccess = useSelector(selectSuccess);
@@ -48,14 +46,13 @@ function ProductDetail() {
   useEffect(() => {
     if (variantDetail && variantDetail.variantDto.img) {
       setMainImage(variantDetail.variantDto.img);
-      setVariantId(variantDetail.variantDto.id)
+      setVariantId(variantDetail.variantDto.id);
     }
-  }, [variantDetail])
+  }, [variantDetail]);
 
   const handleThumbnailClick = (imageUrl) => {
     setMainImage(imageUrl);
-
-  }
+  };
 
   // Tạo một đối tượng để lưu trạng thái của các cặp giá trị đã chọn
   const [selectedOptions, setSelectedOptions] = useState({});
@@ -67,17 +64,19 @@ function ProductDetail() {
     });
   };
   useEffect(() => {
-    console.log('selectedOptions đã thay đổi:', selectedOptions);
-  }, [selectedOptions])
+    console.log("selectedOptions đã thay đổi:", selectedOptions);
+  }, [selectedOptions]);
   // Hàm set lại VariantId nếu cặp biến thể khớp
   const findMatchingVariantId = (selectedOptions, variantListDto) => {
     for (const variant of variantListDto) {
-      if (Object.keys(selectedOptions).every((optionName) => {
-        const selectedOptionValue = selectedOptions[optionName];
-        return variant.optionValueDtoList.some(
-          (option) => option.value === selectedOptionValue
-        );
-      })) {
+      if (
+        Object.keys(selectedOptions).every((optionName) => {
+          const selectedOptionValue = selectedOptions[optionName];
+          return variant.optionValueDtoList.some(
+            (option) => option.value === selectedOptionValue
+          );
+        })
+      ) {
         return variant.id;
       }
     }
@@ -89,8 +88,6 @@ function ProductDetail() {
   console.log(statusError);
   console.log(id);
   console.log(variantDetail);
-
-
 
   return (
     variantDetail && (
@@ -114,6 +111,7 @@ function ProductDetail() {
                   variantDetail.variantDto.imageDtoList?.map((item, index) => (
                     <img
                       key={index}
+
                       className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
                       src={item.imgPath}
                       alt="ProductImg"
@@ -228,6 +226,7 @@ function ProductDetail() {
               <div className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0">
                 {variantDetail &&
                   variantDetail.productAttributeDTOList.map((attr) => (
+
                     <>
                       <div className=" w-full h-full bg-white col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
                         {attr.name}
@@ -244,6 +243,7 @@ function ProductDetail() {
                 <ul className="list-disc ml-4">
                   {variantDetail &&
                     variantDetail.productDTO.bulletDTOList.map((bullet) => (
+
                       <li className="font-titleFont tracking-wide text-sm text-amazon_blue">
                         {bullet.name}
                       </li>
@@ -728,6 +728,7 @@ function ProductDetail() {
       </div>
     )
   );
-};
+
+}
 
 export default ProductDetail;
