@@ -5,7 +5,7 @@ import StarIcon from "@mui/icons-material/Star";
 import { Button } from "@mui/material";
 import "../../../assets/css/cart/shoppingTrend.css";
 import { useNavigate } from "react-router-dom";
-import { findProductsRecentlyViewed } from "../../../api/cartAPI";
+import { findProductsRecentlyViewed } from "../../../api/CartAPI";
 import Spinner from "./Spinner";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -53,37 +53,37 @@ const RecentlyViewed = () => {
 
   return (
     <>
-      <div class="">
+      <div className="">
         {!isSuccess ? (
           <Spinner />
         ) : (
-          <div class="px-8">
-            <div class="grid grid-flow-row auto-rows-max ">
-              <div class=" sm:text-xs md:text-sm lg:text-md py-3 font-medium">
+          <div className="px-8">
+            <div className="grid grid-flow-row auto-rows-max ">
+              <div className=" sm:text-xs md:text-sm lg:text-md py-3 font-medium">
                 Customers who viewed items in your browsing history also viewed
               </div>
             </div>
             <Slider {...settings}>
               {list.map((item) => (
-                <div class="sm:p-0 md:p-1 lg:p-3 pt-4" key={item.id}>
-                  <div class="bg-cover bg-center">
+                <div className="sm:p-0 md:p-1 lg:p-3 pt-4" key={item.id}>
+                  <div className="bg-cover bg-center">
                     <img
-                      class="sm:w-16 sm:h-20 md:w-32 md:h-32 lg:w-36 lg:h-36"
+                        className="sm:w-16 sm:h-20 md:w-32 md:h-32 lg:w-36 lg:h-36"
                       src={item.image}
                       alt="Modern building architecture"
                     />
                   </div>
                   <button
-                    class="text-left sm:text-xs md:text-sm lg:text-md hover:text-teal-600"
+                      className="text-left sm:text-xs md:text-sm lg:text-md hover:text-teal-600"
                     onClick={() => navigate(`/product/${item.id}`)}
                   >
                     {item.title.substring(0, 60)}
                     {item.title.length > 60 ? "..." : ""}
                   </button>
-                  <div class="sm:text-xs md:text-sm lg:text-md text-amazon_blue">
+                  <div className="sm:text-xs md:text-sm lg:text-md text-amazon_blue">
                     ${item.price.toFixed(2)}
                   </div>
-                  <div class="text-yellow-500">
+                  <div className="text-yellow-500">
                     <StarIcon fontSize="small" />
                     <StarIcon fontSize="small" />
                     <StarIcon fontSize="small" />

@@ -15,16 +15,45 @@ import {
   selectVariantDetail,
 } from "../../../features/variant/variantSlice";
 import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";
+import { setCategory } from "../../../features/sellerStore/sellerStoreSlice";
 import StarRating from "../../common/icon/StarRating";
 
 function ProductDetail() {
-  const { userInfo } = useSelector((state) => state.user);
   const { id } = useParams();
   const [variantId, setVariantId] = useState(null);
   const [productId, setProductId] = useState(id);
   const [mainImage, setMainImage] = useState("");
   const [showRecommend, setShowRecommend] = useState(false);
+  const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
   const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.user);
+
+  const getVariantDetail = async () => {
+    if (id != null) {
+      dispatch(getVariant(id));
+    }
+  };
+
+  useEffect(() => {
+    getVariantDetail();
+  }, [variantId]);
+
+  const variantDetail = useSelector(selectVariantDetail);
+  const statusLoading = useSelector(selectLoading);
+  const statusSuccess = useSelector(selectSuccess);
+  const statusError = useSelector(selectError);
+
+  useEffect(() => {
+    if (variantDetail && variantDetail.variantDto.img) {
+      setMainImage(variantDetail.variantDto.img);
+      setVariantId(variantDetail.variantDto.id);
+    }
+  }, [variantDetail]);
+
+  const handleThumbnailClick = (imageUrl) => {
+    setMainImage(imageUrl);
+  };
+
   // Tạo một đối tượng để lưu trạng thái của các cặp giá trị đã chọn
   const [selectedOptions, setSelectedOptions] = useState({});
   // Hàm được gọi khi một cặp giá trị tùy chọn thay đổi
@@ -54,53 +83,6 @@ function ProductDetail() {
     return null; // Trả về null nếu không tìm thấy biến thể khớp
   };
 
-  console.log(variantId);
-
-  const getProductDetail = async () => {
-    if (id != null) {
-      dispatch(getVariant(id));
-    }
-  };
-
-  useEffect(() => {
-    getProductDetail();
-  }, [variantId]);
-
-  const variantDetail = useSelector(selectVariantDetail);
-  const statusLoading = useSelector(selectLoading);
-  const statusSuccess = useSelector(selectSuccess);
-  const statusError = useSelector(selectError);
-
-  useEffect(() => {
-    if (variantDetail && variantDetail.variantDto.img) {
-      setMainImage(variantDetail.variantDto.img);
-      setVariantId(variantDetail.variantDto.id);
-    }
-  }, [variantDetail]);
-
-  const handleThumbnailClick = (imageUrl) => {
-    setMainImage(imageUrl);
-  };
-
-  const imageProps = {
-    smallImage: {
-      alt: "Main Image Of This Product",
-      isFluidWidth: true,
-      src: mainImage,
-      width: 300,
-      height: 450,
-    },
-    largeImage: {
-      src: mainImage,
-      width: 1200,
-      height: 1800,
-    },
-    enlargedImageContainerStyle: { background: "#fff", zIndex: 9 },
-    lensStyle: { borderColor: "rgba(0,0,0,.6)" },
-    isHintEnabled: true,
-    shouldHideHintAfterFirstActivation: false,
-  };
-
   console.log(statusLoading);
   console.log(statusSuccess);
   console.log(statusError);
@@ -119,7 +101,6 @@ function ProductDetail() {
                 src={mainImage}
                 alt="ProductImg"
               ></img>
-              {/* <ReactImageMagnify className="w-full h-96 object-contain " {...imageProps} /> */}
             </div>
             <div className="font-titleFont px-8 mx-8 my-4 hover:border-spacing-x-5 text-center justify-center tracking-wide text-green-900 size text-sm ">
               <span>Roll over the image to zoom in</span>
@@ -155,9 +136,15 @@ function ProductDetail() {
               <div className="font-bodyFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
                 <h2>{variantDetail.variantDto.name}</h2>
               </div>
-              <Link to={`/shop`}>
-                <div className="font-titleFont tracking-wide text-green-900 size text-sm sm:text-xs hover:text-green-700 underline mb-6">
-                  <span>Visit to the {variantDetail.storeDto.name}</span>
+              <Link to={`/store/${storeInfo.id}`}>
+                <div className="font-titleFont tracking-wide text-green-900 size text-sm sm:text-xs hover:text-green-700 underline">
+                  <span
+                    onClick={() => {
+                      dispatch(setCategory(storeInfo.storeCategoryList));
+                    }}
+                  >
+                    Vist the {storeInfo.name}
+                  </span>
                 </div>
               </Link>
               <div className="font-titleFont flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
@@ -172,31 +159,13 @@ function ProductDetail() {
                   </div>
                   <StarRating
                     rating={variantDetail.productDTO.ratings}
-                    fontSize={10}
+                    fontSize={15}
                   />
                 </div>
                 {/* 5 star */}
                 <div className="">
                   {variantDetail.productDTO.ratings} rating
                 </div>
-                <button
-                  className="flex-none flex items-center justify-center w-9 h-9 rounded-md text-slate-300 border border-slate-200 "
-                  type="button"
-                  aria-label="Like"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                    />
-                  </svg>
-                </button>
                 <Link to={`/review/{productId}`} className="text-green-900">
                   {" "}
                   See all reviews
@@ -214,7 +183,7 @@ function ProductDetail() {
                     </span>
                   </h2>
                   <span className="text-yellow-500 text-xs ml-4 pb-0">
-                    {variantDetail.variantDto.stockQuantity} Đã bán
+                    {variantDetail.variantDto.stockQuantity} Sold
                   </span>
                 </div>
               ) : (
@@ -225,96 +194,6 @@ function ProductDetail() {
                   </span>
                 </div>
               )}
-              {/* <div className="flex text-start justify-start ">
-              <div className="text-gray mr-2">Color : </div>
-              <div> Red and Blue</div>
-            </div>
-            <div className="flex items-baseline mt-2 mb-6 pb-6 border-b border-slate-200">
-              <div className="space-x-2 flex text-sm">
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="size"
-                    type="radio"
-                    value="xs"
-                  // checked
-                  />
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    XS
-                  </div>
-                </label>
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="size"
-                    type="radio"
-                    value="s"
-                  />
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    S
-                  </div>
-                </label>
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="size"
-                    type="radio"
-                    value="m"
-                  />
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    M
-                  </div>
-                </label>
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="size"
-                    type="radio"
-                    value="l"
-                  />
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    L
-                  </div>
-                </label>
-                <label>
-                  <input
-                    className="sr-only peer"
-                    name="size"
-                    type="radio"
-                    value="xl"
-                  />
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                    XL
-                  </div>
-                </label>
-              </div>
-            </div> */}
-              {variantDetail &&
-                variantDetail.optionTableDto.map((option) => (
-                  <div
-                    key={option.id}
-                    className="flex flex-start justify-start"
-                  >
-                    <div className="text-black mr-2">{option.name} : </div>
-                    <div className="flex space-x-4 justify-between">
-                      {option.optionValueDtoList.map((value) => (
-                        <button
-                          key={value.id}
-                          onClick={() =>
-                            handleOptionChange(option.name, value.id)
-                          }
-                          className={
-                            selectedOptions[option.name] === value.id
-                              ? "bg-yellow"
-                              : "bg-white"
-                          }
-                        >
-                          {value.value}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
               {variantDetail &&
                 variantDetail.optionTableDto.map((option) => (
                   <>
@@ -396,38 +275,44 @@ function ProductDetail() {
                 <h1 className="my-4 text-2xl text-green-900">In Stock</h1>
               </div>
               <button
-                onClick={() =>
-                  {
-                    userInfo
-                      ? dispatch(
-                          addNewCartLine({
+                onClick={() => {
+                  userInfo
+                    ? dispatch(
+                        addNewCartLine({
+                          id: "",
+                          quantity: 1,
+                          cartId: userInfo.id,
+                          variantId: variantDetail.variantDto.id,
+                        })
+                      )
+                    : dispatch(
+                        addToCart({
+                          id: "",
+                          quantity: 1,
+                          cartDto: {
                             id: "",
-                            quantity: 1,
-                            cartId: userInfo.id,
-                            variantId: variantDetail.variantDto.id,
-                          })
-                        )
-                      : dispatch(
-                          addToCart({
-                            id: "",
-                            quantity: 1,
-                            cartDto: {
-                              id: "",
-                              userId: "",
-                            },
-                            variantDto: {
-                              id: variantDetail.variantDto.id,
-                              name: variantDetail.variantDto.name,
-                              skuCode: variantDetail.variantDto.skuCode,
-                              stockQuantity: variantDetail.variantDto.stockQuantity,
-                              weight: variantDetail.variantDto.weight,
-                              price: variantDetail.variantDto.price,
-                              img: variantDetail.variantDto.img,
-                            },
-                          })
-                        );
-                  }
-                }
+                            userId: "",
+                          },
+                          variantDto: {
+                            id: variantDetail.variantDto.id,
+                            name: variantDetail.variantDto.name,
+                            skuCode: variantDetail.variantDto.skuCode,
+                            stockQuantity:
+                              variantDetail.variantDto.stockQuantity,
+                            weight: variantDetail.variantDto.weight,
+                            price: variantDetail.variantDto.price,
+                            img: variantDetail.variantDto.img,
+                            salePrice: variantDetail.variantDto.salePrice,
+                            optionValueDtoList:
+                              variantDetail.variantDto.optionValueDtoList,
+                            imageDtoList: variantDetail.variantDto.mageDtoList,
+                            videoDtoList: variantDetail.variantDto.videoDtoList,
+                            reviewDtoList:
+                              variantDetail.variantDto.reviewDtoList,
+                          },
+                        })
+                      );
+                }}
                 className="rounded-lg bg-yellow-400 py-3 my-2 hover:bg-yellow-300 duration-100 cursor-pointer"
               >
                 Add To Cart

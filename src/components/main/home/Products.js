@@ -9,36 +9,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCartLines } from "../../../features/cart/cartSlice";
 import { setStore } from "../../../features/sellerStore/sellerStoreSlice";
 import { Login } from "@mui/icons-material";
+import { getProducts } from "../../../features/home/homeSlice";
 
 function Products() {
   const dispatch = useDispatch();
+  const {products } = useSelector((state)=>state.home);
   const { userInfo } = useSelector((state) => state.user);
-  const [productData, setProductData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData();
+    if(products.length < 1){
+      dispatch(getProducts());
+      console.log("====home====");
+    }
     if (userInfo) {
       dispatch(getCartLines(userInfo.id));
+      console.log("====userInfo=====");
     }
     console.log("====products=====");
   }, [userInfo]);
 
-  async function fetchData() {
-    await axios
-      .get("http://localhost:8080/api/products")
-      .then((res) => {
-        setProductData(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        throw err;
-      });
-  }
-
   return (
     <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-10 px-4">
-      {productData.map((product) => (
+      {products.map((product) => (
         <div
           key={product.id}
           className="bg-white h-auto border-[1px] border-gray-200 py-8 z-30

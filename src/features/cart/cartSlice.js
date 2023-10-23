@@ -8,7 +8,7 @@ import {
   findSaveForLater,
   addSaveForLater,
   removeSaveForLater
-} from "../../api/cartAPI";
+} from "../../api/CartAPI";
 
 export const getCartLines = createAsyncThunk(
   "cartLine/list",

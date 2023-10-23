@@ -12,3 +12,21 @@ export const findVariant = async (productId) => {
   }
   return result;
 };
+export const updateVariant = async (Variant) => {
+  let result = null;
+  try {
+    result = await axios.put(`${VARIANT_MANAGEMENT_API}/${Variant.id}`, Variant);
+  } catch (e) {
+    console.log("Update variant API error: " + e);
+  }
+  return result;
+};
+export const createVariant = async (variant) => {
+  let result = null;
+  try {
+    result = await axios.post(`${VARIANT_MANAGEMENT_API}`, variant);
+  } catch (e) {
+    console.log("create variant API error: " + e);
+  }
+  return result;
+};
