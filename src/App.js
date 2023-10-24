@@ -13,6 +13,7 @@ import Signin from "./pages/Signin";
 import HomeContent from "./components/main/store/HomeContent";
 import DealsContent from "./components/main/store/DealsContent";
 import CategoryContent from "./components/main/store/CategoryContent";
+import SearchContent from "./components/main/store/SearchContent";
 import Error from "./pages/Error";
 import Registration from "./pages/Registration";
 import Header from "./components/common/header/Header";
@@ -84,14 +85,15 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/store/:id" element={<StoreLayout />}>
-              <Route index element={<HomeContent />} />
-              <Route path="/store/:id/deals" element={<DealsContent />}></Route>
-              <Route
-                path="/store/:id/:categoryName"
-                element={<CategoryContent />}
-              ></Route>
-            </Route>
+          <Route path="/store/:id" element={<StoreLayout />}>
+            <Route index element={<HomeContent />} />
+            <Route path="/store/:id/deals" element={<DealsContent />}></Route>
+            <Route path="/store/:id/search" element={<SearchContent />}></Route>
+            <Route
+              path="/store/:id/:categoryName"
+              element={<CategoryContent />}
+            ></Route>
+          </Route>
         </Route>
         <Route path="/payment" element={<Payment />} />
         <Route path="/selling" element={<SellingLayout />}>

@@ -8,7 +8,7 @@ const initialState = {
   breadcrumb: {
     category: "",
     subCategory: "",
-    bannerImage: ""
+    bannerImage: "",
   },
   selectedCategory: null,
   selectedCurrent: null,
@@ -16,6 +16,9 @@ const initialState = {
   moreCategoryToggle: {
     deals: false,
   },
+  searchProducts: [],
+  searchParams: "",
+  searchParamsResult: "",
   loading: false,
   error: null,
   success: false,
@@ -39,6 +42,15 @@ export const sellerStoreSlice = createSlice({
     },
     setSuccess: (state, action) => {
       state.success = action.payload;
+    },
+    setSearchParams: (state, action) => {
+      state.searchParams = action.payload;
+    },
+    setSearchParamsResult: (state, action) => {
+      state.searchParamsResult = action.payload;
+    },
+    setSearchProducts: (state, action) => {
+      state.searchProducts = action.payload;
     },
     setCategory: (state, action) => {
       state.categories = action.payload;
@@ -119,6 +131,9 @@ export const {
   setError,
   setSuccess,
   setCategory,
+  setSearchProducts,
+  setSearchParams,
+  setSearchParamsResult,
   setStoreBanner,
   setSelectedCategory,
   setSelectedCurrent,

@@ -23,17 +23,16 @@ function HeaderBreadcrumb() {
       <nav className="flex w-full bg-white pl-6">
         <ol className="inline-flex items-center space-x-1 md:space-x-0 max-w-full">
           <li className="inline-flex items-center">
-            <Link to={`/store/${storeInfo.id}`}>
-              <a
-                onClick={() => {
-                  dispatch(changeCategory(""));
-                  dispatch(changeSubCategory(""));
-                  dispatch(setStoreBanner(storeInfo.homeImage));
-                }}
-                className="inline-flex items-center text-xs font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
-              >
-                Samsung
-              </a>
+            <Link
+              onClick={() => {
+                dispatch(changeCategory(""));
+                dispatch(changeSubCategory(""));
+                dispatch(setStoreBanner(storeInfo.homeImage));
+              }}
+              className="inline-flex items-center text-xs font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
+              to={`/store/${storeInfo.id}`}
+            >
+              Samsung
             </Link>
           </li>
           {breadcrumb.category && (

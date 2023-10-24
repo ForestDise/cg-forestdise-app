@@ -123,6 +123,7 @@ function DealsContent() {
               (category, index) =>
                 index <= 7 && (
                   <div
+                    key={category.id}
                     className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
              shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
                   >
