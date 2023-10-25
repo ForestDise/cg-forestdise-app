@@ -23,10 +23,10 @@ export const findProduct = async (productId) => {
     return result;
 };
 
-export const createProduct = async (product) => {
+export const createProduct = async (product, storeId, categoryId, storeCategoryId) => {
     let result = null;
     try {
-        result = await axios.post(`${PRODUCT_MANAGEMENT_API}`, product);
+        result = await axios.post(`http://localhost:8080/api/product-detail/${storeId}/${categoryId}/${storeCategoryId}`, product);
     } catch (e) {
         console.log("create book API error: " + e);
     }

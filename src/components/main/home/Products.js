@@ -22,6 +22,7 @@ function Products() {
       dispatch(getCartLines(userInfo.id));
     }
   }, [userInfo]);
+  console.log(userInfo);
 
   async function fetchData() {
     await axios

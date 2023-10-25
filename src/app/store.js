@@ -20,6 +20,8 @@ import shopReducer from "../features/variant/shopSlide";
 import commentReducer from "../features/coment_review/commentSlide";
 import reviewReducer from "../features/coment_review/reviewSlide";
 import sellerStoreReducer from "../features/sellerStore/sellerStoreSlice";
+import sellerReducer from "../features/seller/sellerSlide";
+import categoryReducer from "../features/variant/categorySlide";
 
 
 const persistConfig = {
@@ -42,7 +44,9 @@ export const store = configureStore({
     product: productReducer,
     shop: shopReducer,
     comment: commentReducer,
-    review: reviewReducer
+    review: reviewReducer,
+    seller: sellerReducer,
+    category: categoryReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

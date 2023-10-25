@@ -24,8 +24,8 @@ export const getProduct = createAsyncThunk("product/detail", async (productId) =
     return response.data;
 });
 
-export const addProduct = createAsyncThunk("product/create", async (product) => {
-    const response = await createProduct(product);
+export const addProduct = createAsyncThunk("product/create", async (product,storeId,categoryId, storeCategoryId) => {
+    const response = await createProduct(product, storeId, categoryId, storeCategoryId);
     return response.data;
 });
 
