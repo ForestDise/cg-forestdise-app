@@ -71,7 +71,7 @@ export default function StoreHeader() {
     
     await axios
       .get(
-        `http://localhost:8080/api/stores/${storeInfo.id}/search?name=${searchParams}`
+        `http://localhost:8080/api/stores/${storeInfo.id}/product?name=${searchParams}`
       )
       .then((res) => {
         dispatch(setSearchProducts(res.data))
@@ -176,6 +176,7 @@ export default function StoreHeader() {
                     });
                   }}
                 >
+                  {/* Deals start */}
                   <button
                     name="Deals"
                     onClick={() => {
@@ -250,6 +251,8 @@ export default function StoreHeader() {
                     </div>
                   )}
                 </li>
+                {/* Deals end */}
+
                 {categories
                   .filter((category) => category.parentStoreCategory === null)
                   .map((category, index) =>

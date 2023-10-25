@@ -108,7 +108,7 @@ function ProductDetail() {
             <div>
               <div className="flex flex-wrap text-center justify-between object-contain hover:py-4 mx-21">
                 {variantDetail &&
-                  variantDetail.variantDto.imageDtoList?.map((item, index) => (
+                  variantDetail.variantDto.imageDTOList?.map((item, index) => (
                     <img
                       key={index}
 
@@ -119,7 +119,7 @@ function ProductDetail() {
                     ></img>
                   ))}
                 {variantDetail &&
-                  variantDetail.videoDtoList?.map((item, i) => (
+                  variantDetail.videoDTOList?.map((item, i) => (
                     <video
                       key={i}
                       controls

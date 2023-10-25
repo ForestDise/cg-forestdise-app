@@ -48,7 +48,6 @@ const SellingLayout = () => {
   return (
     <div>
       <SellingHeader />
-      <ScrollRestoration />
       <Outlet />
       <Footer />
     </div>
