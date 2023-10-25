@@ -4,16 +4,21 @@ import { findStore } from "../../api/storeAPI";
 const initialState = {
   storeBanner: "",
   storeInfo: {},
-  selectedCategory: null,
   categories: [],
   breadcrumb: {
     category: "",
     subCategory: "",
+    bannerImage: "",
   },
+  selectedCategory: null,
+  selectedCurrent: null,
   moreSideBar: false,
   moreCategoryToggle: {
-    deals: false
+    deals: false,
   },
+  searchProducts: [],
+  searchParams: "",
+  searchParamsResult: "",
   loading: false,
   error: null,
   success: false,
@@ -38,6 +43,15 @@ export const sellerStoreSlice = createSlice({
     setSuccess: (state, action) => {
       state.success = action.payload;
     },
+    setSearchParams: (state, action) => {
+      state.searchParams = action.payload;
+    },
+    setSearchParamsResult: (state, action) => {
+      state.searchParamsResult = action.payload;
+    },
+    setSearchProducts: (state, action) => {
+      state.searchProducts = action.payload;
+    },
     setCategory: (state, action) => {
       state.categories = action.payload;
     },
@@ -47,11 +61,17 @@ export const sellerStoreSlice = createSlice({
     setSelectedCategory: (state, action) => {
       state.selectedCategory = action.payload;
     },
+    setSelectedCurrent: (state, action) => {
+      state.selectedCurrent = action.payload;
+    },
     changeCategory: (state, action) => {
       state.breadcrumb.category = action.payload;
     },
     changeSubCategory: (state, action) => {
       state.breadcrumb.subCategory = action.payload;
+    },
+    changeBannerImage: (state, action) => {
+      state.breadcrumb.bannerImage = action.payload;
     },
     toggleMoreSideBar: (state, action) => {
       state.moreSideBar = action.payload;
@@ -63,10 +83,25 @@ export const sellerStoreSlice = createSlice({
       };
     },
     toggleMoreCategory: (state, action) => {
-      const categoryName = action.payload;
+      const categoryId = action.payload;
       state.moreCategoryToggle = {
         ...state.moreCategoryToggle,
-        [categoryName]: !state.moreCategoryToggle[categoryName],
+        [categoryId]: !state.moreCategoryToggle[categoryId],
+      };
+    },
+    toggleOffMoreCategory: (state, action) => {
+      const categoryId = action.payload;
+      state.moreCategoryToggle = {
+        ...state.moreCategoryToggle,
+        deals: false,
+        [categoryId]: false,
+      };
+    },
+    toggleOffMoreCategoryForDeals: (state, action) => {
+      const categoryId = action.payload;
+      state.moreCategoryToggle = {
+        ...state.moreCategoryToggle,
+        [categoryId]: false,
       };
     },
   },
@@ -96,13 +131,20 @@ export const {
   setError,
   setSuccess,
   setCategory,
+  setSearchProducts,
+  setSearchParams,
+  setSearchParamsResult,
   setStoreBanner,
   setSelectedCategory,
+  setSelectedCurrent,
   changeCategory,
   changeSubCategory,
   toggleMoreSideBar,
   addMoreCategoryToggle,
   toggleMoreCategory,
+  toggleOffMoreCategory,
+  toggleOffMoreCategoryForDeals,
+  changeBannerImage,
 } = sellerStoreSlice.actions;
 
 export const selectLoading = (state) => state.sellerStore.loading;

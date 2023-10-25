@@ -108,18 +108,20 @@ function ProductDetail() {
             <div>
               <div className="flex flex-wrap text-center justify-between object-contain hover:py-4 mx-21">
                 {variantDetail &&
-                  variantDetail.variantDto.imageDtoList?.map((item) => (
+                  variantDetail.variantDto.imageDtoList?.map((item, index) => (
                     <img
+                      key={index}
+
                       className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
                       src={item.imgPath}
                       alt="ProductImg"
                       onClick={() => handleThumbnailClick(item.imgPath)}
                     ></img>
                   ))}
-
                 {variantDetail &&
-                  variantDetail.videoDtoList?.map((item) => (
+                  variantDetail.videoDtoList?.map((item, i) => (
                     <video
+                      key={i}
                       controls
                       className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300 px-4"
                     >
@@ -203,7 +205,7 @@ function ProductDetail() {
                     </div>
                     <div className="flex justify-between items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
                       <div className="space-x-4 flex text-xl">
-                        {option.optionValueDtoList.map((ele) => (
+                        {option.optionValueDTOList.map((ele) => (
                           <label>
                             <input
                               className="sr-only peer"
@@ -223,7 +225,8 @@ function ProductDetail() {
 
               <div className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0">
                 {variantDetail &&
-                  variantDetail.productAttributeDtoList.map((attr) => (
+                  variantDetail.productAttributeDTOList.map((attr) => (
+
                     <>
                       <div className=" w-full h-full bg-white col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
                         {attr.name}
@@ -239,7 +242,8 @@ function ProductDetail() {
                 <h2 className="font-bold mt-2">About this item </h2>
                 <ul className="list-disc ml-4">
                   {variantDetail &&
-                    variantDetail.productDTO.bulletDtoList.map((bullet) => (
+                    variantDetail.productDTO.bulletDTOList.map((bullet) => (
+
                       <li className="font-titleFont tracking-wide text-sm text-amazon_blue">
                         {bullet.name}
                       </li>
@@ -724,6 +728,7 @@ function ProductDetail() {
       </div>
     )
   );
+
 }
 
 export default ProductDetail;

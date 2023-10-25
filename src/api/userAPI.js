@@ -1,13 +1,16 @@
 import axios from "axios";
 const USER_MANAGEMENT_API = "http://localhost:8080/api/users";
 
-export const findUser = async (userId) => {
+export const findUser = async (userId, token) => {
   let result = null;
   try {
-    result = await axios.get(`${USER_MANAGEMENT_API}/${userId}`);
-    console.log(result);
+    result = await axios.get(`${USER_MANAGEMENT_API}/${userId}`, {
+      headers: { Authorization: "Bearer " + token }
+    });
+    
   } catch (e) {
     console.log("Find user API error: " + e);
+    
   }
   return result;
 };

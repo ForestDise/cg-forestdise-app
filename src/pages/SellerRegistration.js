@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { logoBlack } from "../assets";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { RotatingLines } from "react-loader-spinner";
+import { logoSeller } from "../assets";
 
-function Registration() {
+function SellerRegistration() {
   const [form, setForm] = useState({});
   const [registerData, setRegisterData] = useState({});
   const [registeredEmail, setRegisteredEmail] = useState(false);
@@ -36,9 +36,10 @@ function Registration() {
 
   const handleValidate = () => {
     let errors = {};
-    if (!form.clientName) {
-      errors.clientName = "Required";
-    }
+  
+    if (!form.sellerName) {
+      errors.sellerName = "Required";
+    } 
 
     if (!form.email) {
       errors.email = "Required";
@@ -76,15 +77,6 @@ function Registration() {
         setLoading(false);
         throw err;
       });
-
-    await axios
-      .post("http://localhost:8080/api/cart", registerData)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        throw err;
-      });
   };
 
   return (
@@ -100,31 +92,34 @@ function Registration() {
               onSubmit={handleSubmit}
               className="w-[350px] mx-auto flex flex-col items-center"
             >
-              <Link
-                to="/"
-              >
-                <img  className="w-36" src={logoBlack} alt="logo" />
-              </Link>
+              
+                <img
+                  className="w-[168px]"
+                  src={logoSeller}
+                  alt="logo"
+                />
+              
               <div className="w-full border border-zinc-200 bg-gray-100 rounded-md p-6">
                 <h2 className="font-titleFont text-3xl font-medium mb-4">
-                  Create Account
+                  Create account
                 </h2>
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-col gap-2">
-                    <p className="text-sm font-medium">Your name</p>
+                    <p className="text-sm font-medium">Your seller name</p>
                     <input
+                      id="sellerNameInput"
                       maxLength="50"
-                      placeholder="First and last name"
+                      placeholder="Seller name"
                       onChange={handleChange}
-                      name="clientName"
-                      value={form.clientName || ""}
+                      name="sellerName"
+                      value={form.sellerName || ""}
                       className="w-full placeholder:normal-case placeholder:text-sm normal-case py-1 bordder border-zinc-400
                     px-2 text-base rounded-sm outline-none focus-within:border-[#e77600]
                     focus-within:shadow-amazonInput duration-100
                     "
                       type="text"
                     ></input>
-                    {errors.clientName && (
+                    {errors.sellerName && (
                       <p
                         className="text-red-600 text-xs font-semibold tracking-wide
                     flex items-center gap-2 -mt-1.5"
@@ -132,7 +127,7 @@ function Registration() {
                         <span className="italic font-titleFont font-extrabold text-base">
                           !
                         </span>
-                        {errors.clientName}
+                        {errors.sellerName}
                       </p>
                     )}
                   </div>
@@ -261,7 +256,7 @@ function Registration() {
                 <div>
                   <p className="text-xs text-black">
                     Already have an account?{" "}
-                    <Link to="/signin">
+                    <Link to="/sellercentral/signin">
                       <span
                         className="text-xs text-blue-600 hover:text-orange-600
             hover:underline underline-offset-1 cursor-pointer duration-100"
@@ -280,17 +275,6 @@ function Registration() {
         </Formik>
       </div>
       <div className="w-full bg-gradient-to-t from-white via-white to-zinc-200 flex flex-col gap-4 justify-center items-center py-10">
-        <div className="flex items-center gap-6">
-          <p className="text-xs text-blue-600 hover:text-orange-600 hover:underline underline-offset-1 cursor-pointer duration-100">
-            Conditions of Use
-          </p>
-          <p className="text-xs text-blue-600 hover:text-orange-600 hover:underline underline-offset-1 cursor-pointer duration-100">
-            Privacy Notice
-          </p>
-          <p className="text-xs text-blue-600 hover:text-orange-600 hover:underline underline-offset-1 cursor-pointer duration-100">
-            Help
-          </p>
-        </div>
         <p className="text-xs text-gray-600">
           © 2023-2023 ForestDise.com, Inc. or its affiliates
         </p>
@@ -299,4 +283,4 @@ function Registration() {
   );
 }
 
-export default Registration;
+export default SellerRegistration;

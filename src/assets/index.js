@@ -9,6 +9,7 @@ import emptyCart from "./emptyCart.png";
 import error from "./error.png"
 import forest from "./forest.jpg"
 import logoBlack from "./logoBlack.png"
+import logoSeller from './logoseller.png'
 
 export {
   logo,
@@ -21,5 +22,6 @@ export {
   vnFlag,
   emptyCart,
   error,
-  forest
+  forest,
+  logoSeller
 };

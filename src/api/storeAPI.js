@@ -5,7 +5,6 @@ export const findStore = async (storeId) => {
   let result = null;
   try {
     result = await axios.get(`${STORE_MANAGEMENT_API}/${storeId}`);
-    console.log(result);
   } catch (e) {
     console.log("Find store API error: " + e);
   }

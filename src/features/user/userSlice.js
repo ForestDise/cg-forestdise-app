@@ -11,8 +11,9 @@ const initialState = {
 export const setUserInfo = createAsyncThunk(
   "user/info",
   async (userID) => {
-    const response = await findUser(userID);
-    console.log(response.data);
+    const token = window.localStorage.getItem("token");
+    console.log(userID);
+    const response = await findUser(userID, token);
     return response.data;
   }
 );

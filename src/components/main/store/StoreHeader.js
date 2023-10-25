@@ -1,28 +1,37 @@
 import React from "react";
 import { Fragment } from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import MoreSideBar from "./MoreSideBar";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeCategory,
   changeSubCategory,
+  changeBannerImage,
   toggleMoreSideBar,
   setSelectedCategory,
+  setSelectedCurrent,
   setStore,
   setCategory,
-  setStoreBanner
+  setStoreBanner,
+  setSearchProducts,
+  setSearchParams,
+  setSearchParamsResult,
 } from "../../../features/sellerStore/sellerStoreSlice";
 import HeaderBreadcrumb from "./HeaderBreadcrumb";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function StoreHeader() {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const searchParams = useSelector((state) => state.sellerStore.searchParams);
   const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
   const categories = useSelector((state) => state.sellerStore.categories);
   const selectedCategory = useSelector(
     (state) => state.sellerStore.selectedCategory
   );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const params = useParams();
 
   const [showDropDown, setShowDropDown] = useState({
@@ -32,16 +41,10 @@ export default function StoreHeader() {
   });
   const [follow, setFollow] = useState(false);
 
-  useEffect(() =>{
+  useEffect(() => {
     dispatch(setStore(params.id));
     dispatch(setCategory(storeInfo.storeCategoryList));
-  },[params.id])
-
-  const handleScroll = () => {
-    const position = window.pageYOffset;
-    setScrollPosition(position);
-    console.log(scrollPosition);
-  };
+  }, [params.id]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -50,6 +53,35 @@ export default function StoreHeader() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [scrollPosition]);
+
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    setScrollPosition(position);
+  };
+
+  const handleChange = (e) =>{
+    dispatch(setSearchParams(e.target.value))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    navigate(`/store/${storeInfo.id}/search`)
+    dispatch(setSearchParamsResult(searchParams));
+    window.history.pushState(null, null, `?search_name=${searchParams}`);
+    
+    await axios
+      .get(
+        `http://localhost:8080/api/stores/${storeInfo.id}/search?name=${searchParams}`
+      )
+      .then((res) => {
+        dispatch(setSearchProducts(res.data))
+        console.log(res.data);
+      })
+      .catch((err) => {
+        throw err;
+      });
+      
+  };
 
   return (
     <Fragment>
@@ -102,10 +134,16 @@ export default function StoreHeader() {
                   </svg>
                   <span className="sr-only">Search icon</span>
                 </div>
-                <input
-                  className="block p-2 pl-10 rounded-lg text-sm border w-[240px] border-gray-300"
-                  placeholder="Search..."
-                ></input>
+                <form onSubmit={handleSubmit}>
+                  <input
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    name="search_name"
+                    className="block p-2 pl-10 rounded-lg text-sm border w-[240px] border-gray-300"
+                    placeholder="Search..."
+                  ></input>
+                </form>
               </div>
             </div>
             {/* Search end */}
@@ -116,17 +154,17 @@ export default function StoreHeader() {
             >
               <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 gap-8">
                 <li name="Home">
-                  <a
+                  <Link
                     onClick={() => {
                       dispatch(changeCategory(""));
                       dispatch(changeSubCategory(""));
                       dispatch(setStoreBanner(storeInfo.homeImage));
                     }}
-                    href="#"
                     className="block text-lg py-2 px-1 text-gray-500 rounded md:bg-transparent hover:underline md:p-0"
+                    to={`/store/${storeInfo.id}`}
                   >
                     HOME
-                  </a>
+                  </Link>
                 </li>
                 <li
                   onMouseLeave={() => {
@@ -172,36 +210,34 @@ export default function StoreHeader() {
                         aria-labelledby="dropdownLargeButton"
                       >
                         <li>
-                          <a
+                          <Link
                             name="Deals"
+                            to={`/store/${storeInfo.id}/deals`}
                             onMouseOver={(e) => {
                               dispatch(setSelectedCategory(e.target.name));
+                              dispatch(changeBannerImage(storeInfo.dealsImage));
                             }}
                             onClick={() => {
                               dispatch(changeCategory("Deals"));
                               dispatch(changeSubCategory(""));
                               dispatch(setStoreBanner(storeInfo.dealsImage));
                             }}
-                            href="#"
                             className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                           >
                             Deals
-                          </a>
+                          </Link>
                         </li>
                         {categories.map((category) =>
                           category.parentStoreCategory === null ? (
-                            <li>
+                            <li key={category.id}>
                               <a
                                 name={category.name}
                                 onClick={(e) => {
                                   dispatch(changeCategory("Deals"));
                                   dispatch(changeSubCategory(e.target.name));
-                                  dispatch(
-                                    setStoreBanner(category.heroImage)
-                                  );
+                                  dispatch(setStoreBanner(category.heroImage));
                                 }}
-                                href="#"
-                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                               >
                                 {category.name}
                               </a>
@@ -219,6 +255,7 @@ export default function StoreHeader() {
                   .map((category, index) =>
                     index <= 1 ? (
                       <li
+                        key={category.id}
                         onMouseLeave={() => {
                           setShowDropDown({
                             ...showDropDown,
@@ -229,9 +266,8 @@ export default function StoreHeader() {
                         }}
                       >
                         <button
-                          name={category.name}
-                          onClick={(e) => {
-                            dispatch(setSelectedCategory(e.target.name));
+                          onClick={() => {
+                            dispatch(setSelectedCategory(category.name));
                             index === 0
                               ? setShowDropDown({
                                   ...showDropDown,
@@ -271,32 +307,38 @@ export default function StoreHeader() {
                                   aria-labelledby="dropdownLargeButton"
                                 >
                                   <li>
-                                    <a
-                                      onMouseOver={(e) => {
+                                    <Link
+                                      onMouseOver={() => {
                                         dispatch(
-                                          setSelectedCategory(e.target.name)
+                                          changeBannerImage(category.heroImage)
                                         );
                                       }}
                                       onClick={() => {
-                                        dispatch(setStoreBanner(category.heroImage));
-                                        dispatch(changeCategory(selectedCategory));
+                                        dispatch(
+                                          setSelectedCurrent(category.name)
+                                        );
+                                        dispatch(
+                                          setStoreBanner(category.heroImage)
+                                        );
+                                        dispatch(
+                                          changeCategory(selectedCategory)
+                                        );
                                         dispatch(changeSubCategory(""));
                                       }}
-                                      name={category.name}
-                                      href="#"
                                       className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                      to={`/store/${storeInfo.id}/${selectedCategory}`}
                                     >
                                       {category.name}
-                                    </a>
+                                    </Link>
                                   </li>
                                   {categories.map(
                                     (category) =>
                                       category.parentStoreCategory !== null &&
                                       category.parentStoreCategory.name ===
                                         selectedCategory && (
-                                        <li>
+                                        <li key={category.id}>
                                           <a
-                                            onClick={(e) => {
+                                            onClick={() => {
                                               dispatch(
                                                 setStoreBanner(
                                                   category.heroImage
@@ -306,12 +348,10 @@ export default function StoreHeader() {
                                                 changeCategory(selectedCategory)
                                               );
                                               dispatch(
-                                                changeSubCategory(e.target.name)
+                                                changeSubCategory(category.name)
                                               );
                                             }}
-                                            name={category.name}
-                                            href="#"
-                                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                           >
                                             {category.name}
                                           </a>
@@ -329,12 +369,15 @@ export default function StoreHeader() {
                                 >
                                   <li>
                                     <a
-                                      onMouseOver={(e) => {
+                                      onMouseOver={() => {
                                         dispatch(
-                                          setSelectedCategory(e.target.name)
+                                          changeBannerImage(category.heroImage)
                                         );
                                       }}
                                       onClick={() => {
+                                        dispatch(
+                                          setSelectedCurrent(category.name)
+                                        );
                                         dispatch(
                                           setStoreBanner(category.heroImage)
                                         );
@@ -342,10 +385,12 @@ export default function StoreHeader() {
                                           changeCategory(selectedCategory)
                                         );
                                         dispatch(changeSubCategory(""));
+                                        dispatch(
+                                          changeBannerImage(category.heroImage)
+                                        );
                                       }}
                                       name={category.name}
-                                      href="#"
-                                      className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                      className="font-semibold cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                     >
                                       {category.name}
                                     </a>
@@ -371,8 +416,7 @@ export default function StoreHeader() {
                                               );
                                             }}
                                             name={category.name}
-                                            href="#"
-                                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                           >
                                             {category.name}
                                           </a>

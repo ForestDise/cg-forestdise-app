@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import StarIcon from "@mui/icons-material/Star";
 import ApiIcon from "@mui/icons-material/Api";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -8,7 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartLines } from "../../../features/cart/cartSlice";
 import { setStore } from "../../../features/sellerStore/sellerStoreSlice";
-import { Login } from "@mui/icons-material";
 import { getProducts } from "../../../features/home/homeSlice";
 
 function Products() {
