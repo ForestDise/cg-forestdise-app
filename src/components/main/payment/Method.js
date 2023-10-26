@@ -35,44 +35,6 @@ function Method() {
       });
   }, []);
 
-  // const addAddress = async (newAddress) => {
-  //     try {
-  //         const response = await axios.post(`${API_URL}/addresses`, newAddress);
-  //         return response.data;
-  //     } catch (error) {
-  //         throw error;
-  //     }
-  // };
-
-  // const addNewAddress = (values) => {
-  //     addAddress(values)
-  //         .then(() => {
-  //             setIsModalOpen(false); // Đóng modal sau khi thêm địa chỉ
-  //             return findAddress();
-  //         })
-  //         .then((response) => {
-  //             setUserAddress(response.data); // Cập nhật danh sách địa chỉ sau khi thêm
-  //         })
-  //         .catch((error) => {
-  //             console.error('Error adding address:', error);
-  //         });
-  // };
-
-  // const handleSubmitAddress = async () => {
-  //     await axios
-  //         .post("", formAddress)
-  //         .then(() => {
-  //             setSuccessNotify("Address created successfully");
-  //             setTimeout(() => {
-  //                 navigate("/payment");
-  //             }, 1000);
-  //         })
-  //         .catch((err) => {
-  //             throw err;
-  //             setSuccessNotify("Failed to create address");
-  //         });
-  // }
-
   return (
     <div class="px-20 py-3">
       <div>
