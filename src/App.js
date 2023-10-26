@@ -32,6 +32,7 @@ import StoreFooter from "./components/main/store/StoreFooter";
 import StoreBanner from "./components/main/store/StoreBanner";
 import SellerRegistration from "./pages/SellerRegistration";
 import SellerSignin from "./pages/SellerSignin";
+import SubCategoryContent from "./components/main/store/SubCategoryContent";
 
 
 const Layout = () => {
@@ -91,6 +92,10 @@ function App() {
             <Route
               path="/store/:id/:categoryName"
               element={<CategoryContent />}
+            ></Route>
+            <Route
+              path="/store/:id/:categoryName/:subCategoryName"
+              element={<SubCategoryContent />}
             ></Route>
           </Route>
         </Route>

@@ -16,6 +16,7 @@ import {
   setSearchProducts,
   setSearchParams,
   setSearchParamsResult,
+  setSelectedSubCategory,
 } from "../../../features/sellerStore/sellerStoreSlice";
 import HeaderBreadcrumb from "./HeaderBreadcrumb";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -29,6 +30,9 @@ export default function StoreHeader() {
   const categories = useSelector((state) => state.sellerStore.categories);
   const selectedCategory = useSelector(
     (state) => state.sellerStore.selectedCategory
+  );
+  const selectedSubCategory = useSelector(
+    (state) => state.sellerStore.selectedSubCategory
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -59,28 +63,27 @@ export default function StoreHeader() {
     setScrollPosition(position);
   };
 
-  const handleChange = (e) =>{
-    dispatch(setSearchParams(e.target.value))
-  }
+  const handleChange = (e) => {
+    dispatch(setSearchParams(e.target.value));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate(`/store/${storeInfo.id}/search`)
+    navigate(`/store/${storeInfo.id}/search`);
     dispatch(setSearchParamsResult(searchParams));
     window.history.pushState(null, null, `?search_name=${searchParams}`);
-    
+
     await axios
       .get(
         `http://localhost:8080/api/stores/${storeInfo.id}/product?name=${searchParams}`
       )
       .then((res) => {
-        dispatch(setSearchProducts(res.data))
+        dispatch(setSearchProducts(res.data));
         console.log(res.data);
       })
       .catch((err) => {
         throw err;
       });
-      
   };
 
   return (
@@ -340,8 +343,26 @@ export default function StoreHeader() {
                                       category.parentStoreCategory.name ===
                                         selectedCategory && (
                                         <li key={category.id}>
-                                          <a
-                                            onClick={() => {
+                                          <Link
+                                            name={category.name}
+                                            onMouseOver={() => {
+                                              dispatch(
+                                                changeBannerImage(
+                                                  category.heroImage
+                                                )
+                                              );
+                                              dispatch(
+                                                setSelectedSubCategory(
+                                                  category.name
+                                                )
+                                              );
+                                            }}
+                                            onClick={(e) => {
+                                              dispatch(
+                                                setSelectedCurrent(
+                                                  category.name
+                                                )
+                                              );
                                               dispatch(
                                                 setStoreBanner(
                                                   category.heroImage
@@ -351,13 +372,14 @@ export default function StoreHeader() {
                                                 changeCategory(selectedCategory)
                                               );
                                               dispatch(
-                                                changeSubCategory(category.name)
+                                                changeSubCategory(e.target.name)
                                               );
                                             }}
-                                            className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            className="font-light block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            to={`/store/${storeInfo.id}/${selectedCategory}/${selectedSubCategory}`}
                                           >
                                             {category.name}
-                                          </a>
+                                          </Link>
                                         </li>
                                       )
                                   )}
@@ -371,7 +393,7 @@ export default function StoreHeader() {
                                   aria-labelledby="dropdownLargeButton"
                                 >
                                   <li>
-                                    <a
+                                    <Link
                                       onMouseOver={() => {
                                         dispatch(
                                           changeBannerImage(category.heroImage)
@@ -388,15 +410,12 @@ export default function StoreHeader() {
                                           changeCategory(selectedCategory)
                                         );
                                         dispatch(changeSubCategory(""));
-                                        dispatch(
-                                          changeBannerImage(category.heroImage)
-                                        );
                                       }}
-                                      name={category.name}
-                                      className="font-semibold cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                      className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                      to={`/store/${storeInfo.id}/${selectedCategory}`}
                                     >
                                       {category.name}
-                                    </a>
+                                    </Link>
                                   </li>
                                   {categories.map(
                                     (category) =>
@@ -404,8 +423,26 @@ export default function StoreHeader() {
                                       category.parentStoreCategory.name ===
                                         selectedCategory && (
                                         <li>
-                                          <a
+                                          <Link
+                                            name={category.name}
+                                            onMouseOver={() => {
+                                              dispatch(
+                                                changeBannerImage(
+                                                  category.heroImage
+                                                )
+                                              );
+                                              dispatch(
+                                                setSelectedSubCategory(
+                                                  category.name
+                                                )
+                                              );
+                                            }}
                                             onClick={(e) => {
+                                              dispatch(
+                                                setSelectedCurrent(
+                                                  category.name
+                                                )
+                                              );
                                               dispatch(
                                                 setStoreBanner(
                                                   category.heroImage
@@ -418,11 +455,11 @@ export default function StoreHeader() {
                                                 changeSubCategory(e.target.name)
                                               );
                                             }}
-                                            name={category.name}
-                                            className="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            className="font-light block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            to={`/store/${storeInfo.id}/${selectedCategory}/${selectedSubCategory}`}
                                           >
                                             {category.name}
-                                          </a>
+                                          </Link>
                                         </li>
                                       )
                                   )}
