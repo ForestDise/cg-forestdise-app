@@ -61,7 +61,6 @@ const SellingLayout = () => {
   return (
     <div>
       <SellingHeader />
-      <ScrollRestoration />
       <Selling>
         <Outlet />
       </Selling>
@@ -73,7 +72,6 @@ const DashboardLayout = () => {
   return (
     <div>
       <DashBoardHeader />
-      <ScrollRestoration />
       <Dashboard>
         <Outlet/>
       </Dashboard>
