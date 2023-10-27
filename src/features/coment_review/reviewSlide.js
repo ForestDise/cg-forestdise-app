@@ -6,15 +6,15 @@ import {
 } from "../../api/reviewAPI";
 
 const initialState = {
-    reviews: null,
-    review: null,
+    reviews: [],
+    review: {},
     loading: false,
     error: null,
     success: false,
 };
 
-export const getReviewsByVariantId = createAsyncThunk("getreview", async (variantId, customer) => {
-    const response = await findReview(variantId, customer);
+export const getReviewsByVariantId = createAsyncThunk("getreview", async (variantId) => {
+    const response = await findReview(variantId);
     return response.data;
 });
 

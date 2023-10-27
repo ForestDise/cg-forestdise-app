@@ -77,7 +77,7 @@ export const deleteSaveForLater = createAsyncThunk(
 const initialState = {
   products: [],
   empties: [],
-  cussess: false,
+  success: false,
   loading: false,
   error: false,
 };

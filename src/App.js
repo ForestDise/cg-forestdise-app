@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+
+import React, {Fragment} from "react";
 import {
   Outlet,
   Route,
@@ -11,6 +12,9 @@ import Home from "./pages/Home";
 import Cart from "./components/main/cart/Cart";
 import Signin from "./pages/Signin";
 import HomeContent from "./components/main/store/HomeContent";
+import DealsContent from "./components/main/store/DealsContent";
+import CategoryContent from "./components/main/store/CategoryContent";
+import SearchContent from "./components/main/store/SearchContent";
 import Error from "./pages/Error";
 import Registration from "./pages/Registration";
 import Header from "./components/common/header/Header";
@@ -31,7 +35,6 @@ import Variants from "./components/main/selling/main/Variants";
 import Product from "./components/main/selling/main/Product";
 import Offers from "./components/main/selling/main/Offers";
 import Dashboard from "./components/main/dashboard/Dashboard";
-import SideBar from "./components/main/dashboard/SideBar";
 import DashBoardHeader from "./components/main/dashboard/DashBoardHeader";
 import Categories from "./components/main/dashboard/element/Categories";
 import HomeDasboard from "./components/main/dashboard/element/HomeDasboard";
@@ -40,8 +43,8 @@ import Products from "./components/main/dashboard/element/Products";
 import Profile from "./components/main/dashboard/element/Profile";
 import Images from "./components/main/selling/main/Images";
 import HomeSelling from "./components/main/selling/main/HomeSelling";
-
-
+import SellerRegistration from "./pages/SellerRegistration";
+import SellerSignin from "./pages/SellerSignin";
 
 
 const Layout = () => {
@@ -94,18 +97,29 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Fragment>
-        <Route path="/payment" element={<Payment />} />
-        <Route path="/signin" element={<Signin />} />
         <Route path="/error" element={<Error />} />
         <Route path="/register" element={<Registration />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route
+          path="/sellercentral/register"
+          element={<SellerRegistration />}
+        />
+        <Route path="/sellercentral/signin" element={<SellerSignin />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/store/:id" element={<StoreLayout />}>
             <Route index element={<HomeContent />} />
+            <Route path="/store/:id/deals" element={<DealsContent />}></Route>
+            <Route path="/store/:id/search" element={<SearchContent />}></Route>
+            <Route
+              path="/store/:id/:categoryName"
+              element={<CategoryContent />}
+            ></Route>
           </Route>
         </Route>
+        <Route path="/payment" element={<Payment />} />
         <Route path="/selling" element={<SellingLayout />}>
           <Route index element={<HomeSelling />} />
           <Route path="/selling/shop" element={<ShopCreat />} />
@@ -114,7 +128,6 @@ function App() {
           <Route path="/selling/attributes" element={<Offers />} />
           <Route path="/selling/variant" element={<Variants />} />
           <Route path="/selling/images" element={<Images />} />
-
         </Route>
         <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<HomeDasboard />} />
@@ -122,7 +135,6 @@ function App() {
             <Route path="/dashboard/products" element={<Products />} />
             <Route path="/dashboard/orders" element={<OrdersDashboard />} />
             <Route path="/dashboard/profile" element={<Profile />} />
-
         </Route>
       </Fragment>
     )

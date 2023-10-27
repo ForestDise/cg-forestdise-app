@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { findSellerInfo, selectSellerDetail } from '../../../../features/seller/sellerSlide'
+import { setSellerInfo, selectSellerDetail } from "../../../../features/seller/sellerSlice"
 import { Link } from 'react-router-dom';
 
 function HomeSelling() {
     const dispatch = useDispatch();
-    const sellerInfo = useSelector(selectSellerDetail);
+    const sellerInfo = useSelector((state) => state.seller.sellerInfo);
 
 
-    useEffect(() => {
-        dispatch(findSellerInfo(1));
-    }, [])
-    console.log(sellerInfo);
+
+    // useEffect(() => {
+    //     dispatch(setSellerInfo(1));
+    // }, [])
+    // console.log(sellerInfo);
 
     return (
         <div className="font-bodyFont bg-gray-100">
@@ -23,7 +24,7 @@ function HomeSelling() {
                         </span>
                         <span className='font-titleFont text-xl pl-20'>The fastest-growing and preferred <br></br> acquisition channel for over half our <br></br> multichannel sellers.1</span>
                         {sellerInfo ? <Link to="/selling/shop"><div className='pl-20 mt-6'><button className=" pt-4 pb-4 pl-4 pr-4 text-4xl bg-amber-500 font-bodyFont font-bold hover hover:border-1 rounded-full">Start</button></div></Link>
-                            : <div className='pl-20 mt-6'><button className=" pt-4 pb-4 pl-4 pr-4 text-4xl bg-amber-500 font-bodyFont font-bold hover hover:border-1 rounded-full">Sign up</button></div>
+                            : <Link to="/sellercentral/register"><div className='pl-20 mt-6'><button className=" pt-4 pb-4 pl-4 pr-4 text-4xl bg-amber-500 font-bodyFont font-bold hover hover:border-1 rounded-full">Sign up</button></div></Link>
                         }                      
                         <span className='pl-20 mt-4 font-titleFont text-xs'>$39.99 a month + selling fees</span>
                     </div>

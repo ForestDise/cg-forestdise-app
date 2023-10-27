@@ -1,24 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { findSeller }  from "../../api/sellerAPI";
-
+import {
+    createOptions
+} from "../../api/optionAPI";
 const initialState = {
-    sellerInfo: {},
+    options: [],
+    option: {},
     loading: false,
+    error: null,
     success: false,
-    error: false,
 };
 
-export const findSellerInfo = createAsyncThunk(
-    "seller/info",
-    async (sellerId) => {
-        const response = await findSeller(sellerId);
-        console.log(response.data);
-        return response.data;
-    }
-);
-
-export const sellerSlice = createSlice({
-    name: "seller",
+export const createOptionList = createAsyncThunk("option/create", async (optionList, productId) => {
+    const response = await createOptions(optionList, productId);
+    console.log(response.data);
+    return response.data.optionTableDtoList;
+});
+export const optionSlide = createSlice({
+    name: "option",
     initialState,
     reducers: {
         setLoading: (state, action) => {
@@ -30,44 +28,41 @@ export const sellerSlice = createSlice({
         setSuccess: (state, action) => {
             state.success = action.payload;
         },
-        logOutSeller: (state) => {
-            state.sellerInfo = null;
-        }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(findSellerInfo.pending, (state) => {
+            .addCase(createOptionList.pending, (state) => {
                 state.success = false;
                 state.loading = true;
                 state.error = false;
             })
-            .addCase(findSellerInfo.rejected, (state, action) => {
+            .addCase(createOptionList.rejected, (state, action) => {
                 state.success = false;
                 state.loading = false;
                 state.error = action.error;
             })
-            .addCase(findSellerInfo.fulfilled, (state, action) => {
+            .addCase(createOptionList.fulfilled, (state, action) => {
                 state.success = true;
                 state.loading = false;
-                state.sellerInfo = action.payload;
+                state.options = action.payload;
                 state.error = false;
             })
-    }
-})
-
+    },
+});
 export const {
     setLoading,
     setError,
     setSuccess,
-    logOutSeller
-} = sellerSlice.actions;
+} = optionSlide.actions;
+export const selectLoading = (state) => state.option.loading;
+export const selectError = (state) => state.option.error;
+export const selectSuccess = (state) => state.option.success;
+export const selectOptionsList = (state) => state.option.options;
+export const selectOptions = (state) => state.option.option;
 
-export const selectLoading = (state) => state.seller.loading;
-export const selectError = (state) => state.seller.error;
-export const selectSuccess = (state) => state.seller.success;
-export const selectSellerDetail = (state) => state.seller.sellerInfo;
 
 
+//Enhancement feature of book slice
 export const setLoadingTrueIfCalled = (isCalled) => (dispatch, getState) => {
     const currentValue = selectLoading(getState());
     if (currentValue === isCalled) {
@@ -75,4 +70,4 @@ export const setLoadingTrueIfCalled = (isCalled) => (dispatch, getState) => {
     }
 };
 
-export default sellerSlice.reducer;
+export default optionSlide.reducer;

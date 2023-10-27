@@ -4,7 +4,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import { useDispatch, useSelector } from 'react-redux';
 import { addStore, selectLoading, selectError, selectSuccess, selectStoreDetail, selectStoreAdded } from '../../../../features/variant/shopSlide';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { selectSellerDetail } from '../../../../features/seller/sellerSlide'
+import { selectSellerDetail } from '../../../../features/seller/sellerSlice'
 
 
 
@@ -50,7 +50,7 @@ function ShopCreate() {
                     <form className='p-8' onSubmit={handleSubmit(onSubmit)} >
                         <div className='w-full text-2xl font-titleFont flex flex-col h-full'>
                             <label>Enter Name</label>
-                            <input className='border-2 rounded-xl' name="name" type="text" {...register('name')} />
+                            <input className='border-2 rounded-xl pl-5' name="name" type="text" {...register('name')} />
                         </div>
                         <div className='flex justify-between mt-4'>
                             <button type="submit" className='bg-gray-300 h-full text-3xl rounded-sm border-2 hover:bg-gray-200'>Create</button>

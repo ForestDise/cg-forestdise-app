@@ -3,10 +3,10 @@ import axios from "axios";
 const REVIEW_MANAGEMENT_API =
     "http://localhost:8080/api/reviews";
 
-export const findReview = async (variantId, customer) => {
+export const findReview = async (variantId) => {
     let result = null;
     try {
-        result = await axios.get(`${REVIEW_MANAGEMENT_API}/{variantId}`, customer);
+        result = await axios.get(`${REVIEW_MANAGEMENT_API}/${variantId}`);
     } catch (e) {
         console.log("Find books API error: " + e);
     }

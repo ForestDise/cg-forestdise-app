@@ -7,38 +7,108 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-function CategoryContent() {
+function SearchContent() {
   const dispatch = useDispatch();
   const [productData, setProductData] = useState([]);
+  const [searchCount, setSearchCount] = useState(0);
+  const [showSort, setShowSort] = useState(false);
   const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
   const categories = useSelector((state) => state.sellerStore.categories);
-  const selectedCategory = useSelector(
-    (state) => state.sellerStore.selectedCategory
-  );
-  const selectedCurrent = useSelector(
-    (state) => state.sellerStore.selectedCurrent
-  );
+  const searchProducts = useSelector((state) => state.sellerStore.searchProducts);
+  const searchParamsResult = useSelector((state) => state.sellerStore.searchParamsResult);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    setProductData(searchProducts);
+    setSearchCount(searchProducts.length)
+  }, [searchProducts]);
 
-  async function fetchData() {
-    await axios
-      .get("http://localhost:8080/api/products")
-      .then((res) => {
-        setProductData(res.data);
-      })
-      .catch((err) => {
-        throw err;
-      });
-  }
+  
 
   return (
     <div className="font-shopFont">
-      <div className="w-full h-full capitalize text-center pt-4 text-3xl font-light text-gray-600">
-        Featured {selectedCurrent}
+      <div className="w-full h-full grid grid-cols-3 pt-4 text-base font-light text-gray-600">
+        <div className="pl-4">
+          Top {searchCount} results for "{searchParamsResult}" in "all {storeInfo.name}"
+        </div>
+        <div></div>
+        <div
+          className="text-right pr-2"
+          onMouseLeave={() => {
+            setShowSort(false);
+          }}
+        >
+          <button
+            onClick={() => {
+              setShowSort(!showSort);
+            }}
+            id="dropdownDefaultButton"
+            className="text-black bg-white outline-black hover:bg-gray-300 hover:ring-1 hover:outline-none hover:ring-black font-light rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+            type="button"
+          >
+            Sort by{" "}
+            <svg
+              className="w-2.5 h-2.5 ml-2.5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 10 6"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m1 1 4 4 4-4"
+              />
+            </svg>
+          </button>
+
+          {showSort && (
+            <div
+              id="dropdown"
+              className="right-[8px] z-10 absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+            >
+              <ul
+                className="py-2 text-left text-sm text-gray-700 dark:text-gray-200"
+                aria-labelledby="dropdownDefaultButton"
+              >
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Price: Low to high
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Price: High to low
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Newest Arrivals
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Best Sellers
+                  </a>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
       <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-10 px-4 pt-10 z-0 pb-4">
         {productData.map((product) => (
@@ -121,29 +191,8 @@ function CategoryContent() {
         ))}
       </div>
 
-      <div className="bg-white w-full h-[732px]">
-        <div className="grid grid-cols-4 gap-2 relative px-4 py-4">
-          {categories
-            .filter(
-              (category) =>
-                category.parentStoreCategory !== null
-            )
-            .map(
-              (category, index) =>
-                category.parentStoreCategory.name === selectedCurrent && (
-                  <div
-                  key={category.id}
-                    className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
-             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
-                  >
-                    <img className="mx-auto" src={category.squareImage}></img>
-                  </div>
-                )
-            )}
-        </div>
-      </div>
     </div>
   );
 }
 
-export default CategoryContent;
+export default SearchContent;

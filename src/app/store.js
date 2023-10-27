@@ -15,14 +15,17 @@ import variantReducer from "../features/variant/variantSlice";
 import userReducer from "../features/user/userSlice";
 import bulletReducer from "../features/variant/bulletSlide";
 import hashtagReducer from "../features/variant/hashtagSlide";
-import productReducer from "../features/variant/productSide";
+import productReducer from "../features/variant/productSlide";
 import shopReducer from "../features/variant/shopSlide";
 import commentReducer from "../features/coment_review/commentSlide";
 import reviewReducer from "../features/coment_review/reviewSlide";
 import sellerStoreReducer from "../features/sellerStore/sellerStoreSlice";
-import sellerReducer from "../features/seller/sellerSlide";
+import sellerReducer from "../features/seller/sellerSlice";
 import categoryReducer from "../features/variant/categorySlide";
-
+import homeReducer from "../features/home/homeSlice";
+import storeCategoryReducer from "../features/variant/storeCategorySlide"
+import optionReducer from "../features/variant/optionSlide"
+import optionValueReducer from "../features/variant/optionValueSlide"
 
 const persistConfig = {
   key: "root",
@@ -32,10 +35,11 @@ const persistConfig = {
 
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
 const sellerStorePersistedReducer = persistReducer(persistConfig, sellerStoreReducer);
-
+const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
 export const store = configureStore({
   reducer: {
-    cart: cartReducer,
+    home: homeReducer,
+    cart: cartPersistedReducer,
     sellerStore: sellerStorePersistedReducer,
     variant: variantReducer,
     user: userPersistedReducer,
@@ -46,7 +50,10 @@ export const store = configureStore({
     comment: commentReducer,
     review: reviewReducer,
     seller: sellerReducer,
-    category: categoryReducer
+    category: categoryReducer,
+    storeCategory: storeCategoryReducer,
+    option: optionReducer,
+    optionValue: optionValueReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

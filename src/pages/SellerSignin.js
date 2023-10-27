@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { logoBlack } from "../assets";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
@@ -7,23 +6,18 @@ import { RotatingLines } from "react-loader-spinner";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserInfo } from "../features/user/userSlice";
+import { setSellerInfo } from "../features/seller/sellerSlice";
 import jwt_decode from "jwt-decode";
-import {
-  addNewCartLine,
-  resetCart,
-  createSaveForLater,
-  resetSaveForLater
-} from "../features/cart/cartSlice";
-function Signin() {
+import { logoSeller } from "../assets";
+
+function SellerSignin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [form, setForm] = useState({});
   const [loading, setLoading] = useState(false);
   const [errorNotify, setErrorNotify] = useState("");
   const [successNotify, setSuccessNotify] = useState("");
-  const { userInfo } = useSelector((state) => state.user);
-  const { products, empties } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.seller);
 
   const handleValidate = () => {
     let errors = {};
@@ -48,15 +42,15 @@ function Signin() {
   const handleSubmit = async () => {
     setLoading(true);
     await axios
-      .post("http://localhost:8080/api/login", form)
+      .post("http://localhost:8080/api/login/seller", form)
       .then((res) => {
         setErrorNotify("");
         setLoading(false);
-        window.localStorage.setItem("token", res.data);
+        window.localStorage.setItem("seller_token", res.data);
         setSuccessNotify("Log in succesfully! Welcome back");
-        dispatch(setUserInfo(jwt_decode(res.data).sub));
+        dispatch(setSellerInfo(jwt_decode(res.data).sub));
         setTimeout(() => {
-          navigate("/");
+          navigate("/selling");
         }, 2500);
       })
       .catch((err) => {
@@ -64,36 +58,6 @@ function Signin() {
         setErrorNotify("Invalid email or password");
         throw err;
       });
-  };
-
-  useEffect(()=>{
-    if(userInfo){
-        sendValuesInDatabase();
-    }
-  },[userInfo])
-
-  const sendValuesInDatabase = () => {
-    products.map((item) =>
-      dispatch(
-        addNewCartLine({
-          id: '',
-          quantity: item.quantity,
-          cartId: userInfo.id,
-          variantId: item.variantDto.id,
-        })
-      )
-    );
-    empties.map((item) =>
-      dispatch(
-        createSaveForLater({
-          id: '',
-          quantity: item.quantity,
-          cartId: userInfo.id,
-          variantId: item.variantDto.id,
-        })
-      ));
-    dispatch(resetCart());
-    dispatch(resetSaveForLater());
   };
 
   return (
@@ -109,12 +73,11 @@ function Signin() {
               onSubmit={handleSubmit}
               className="w-[350px] mx-auto flex flex-col items-center"
             >
-              <Link to="/">
-                <img className="w-36" src={logoBlack} alt="logo" />
-              </Link>
+              <img className="w-[168px]" src={logoSeller} alt="logo" />
+
               <div className="w-full bg-gray-100 border border-zinc-300 rounded-md p-6">
                 <h2 className="font-titleFont text-3xl font-medium mb-4">
-                  Sign in
+                  Get started selling on ForestDise
                 </h2>
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-col gap-2">
@@ -224,13 +187,13 @@ function Signin() {
                 <span className="w-1/3 text-center">New to ForestDise?</span>
                 <span className="w-1/3 h-[1px] bg-zinc-400 inline-flex"></span>
               </div>
-              <Link className="w-full" to="/register">
+              <Link className="w-full" to="/sellercentral/register">
                 <button
                   className="w-full py-1.5 px-2 mt-4 text-sm font-normal
               rounded-sm bg-gradient-to-t from-slate-200 to-slate-100 hover:bg-gradient-to-b border
               border-zinc-400 active:border-yellow-800 active:shadow-amazonInput"
                 >
-                  Create your ForestDise account
+                  Create your ForestDise Seller account
                 </button>
               </Link>
             </form>
@@ -238,17 +201,6 @@ function Signin() {
         </Formik>
       </div>
       <div className="w-full bg-gradient-to-t from-white via-white to-zinc-200 flex flex-col gap-4 justify-center items-center py-10">
-        <div className="flex items-center gap-6">
-          <p className="text-xs text-blue-600 hover:text-orange-600 hover:underline underline-offset-1 cursor-pointer duration-100">
-            Conditions of Use
-          </p>
-          <p className="text-xs text-blue-600 hover:text-orange-600 hover:underline underline-offset-1 cursor-pointer duration-100">
-            Privacy Notice
-          </p>
-          <p className="text-xs text-blue-600 hover:text-orange-600 hover:underline underline-offset-1 cursor-pointer duration-100">
-            Help
-          </p>
-        </div>
         <p className="text-xs text-gray-600">
           © 2023-2023 ForestDise.com, Inc. or its affiliates
         </p>
@@ -257,4 +209,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default SellerSignin;

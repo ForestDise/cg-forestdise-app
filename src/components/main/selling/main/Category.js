@@ -12,7 +12,7 @@ function Category() {
     const categoryList = useSelector((state) => state.category.categories);
     const category = useSelector((state) => state.category.category);
     const store = useSelector((state) => state.shop.store);
-    const {storeCategoryList} = useSelector((state) => state.storeCategory);
+    const storeCategoryList = useSelector((state) => state.storeCategory);
 
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -120,9 +120,10 @@ function Category() {
                                 <button className=" text-gray-600 hover:text-white hover:bg-gray-600 hover:font-bold rounded-sm" onClick={() => handleSelectCategory(ele.id)}>SELECT</button>
                             </div>
                         )) : <div className=' p-6 text-xs text-bodyFont hover:bg-slate-300 rounded-xl'>Not Found Category.Please enter again!!!</div>}
-                        <Link to={`/selling/product/${category.id}`}>
+                        {category ?<Link to={`/selling/product/${category.id}`}>
                             <span className='items-right text-titleFont font-bold hover:border-4 hover:bg-black hover:text-white text-xl text-right'>NEXT</span>
                         </Link>
+                        :<></>}
 
                     </div>
                     <div className='col-span-1 flex flex-col m-auto p-auto text-titleFont py-4 rounded-xl border border-5 border-gray-300 h-auto'>
@@ -165,16 +166,6 @@ function Category() {
                         <p className='text-xl font-bold'>Store Category is selected: {optionList.join('-')}</p>
                         <Link to="/selling/product"><button className='h-10 bg-teal-600 rounded-xl text-titleFont' onClick={() => { dispatch(createStoreCategoryList({ categoryList: optionList, storeId: store.id })) }}>Choose</button></Link>
 
-                        {/* {listResult.length > 0 ? listResult.map((ele, index) => (
-                            <div key={index} className='flex justify-between p-6 text-xs text-bodyFont hover:bg-slate-300 rounded-xl'>
-                                <span key={index}>{ele.attribute}</span>
-                                <button className=" text-gray-600 hover:text-white hover:bg-gray-600 hover:font-bold rounded-sm" onClick={handleSelectCategory(ele.id)}>SELECT</button>
-                            </div>
-                        )) : <div className=' p-6 text-xs text-bodyFont hover:bg-slate-300 rounded-xl'>Not Found Category.Please enter again!!!</div>}
-                        <Link to={`/selling/product/${category.id}`}>
-                            <span className='items-right text-titleFont font-bold hover:border-4 hover:bg-black hover:text-white text-3xl text-right'>NEXT</span>
-                        </Link> */}
-
                     </div>
                     <div className='col-span-1 flex flex-col m-auto p-auto text-titleFont py-4 rounded-xl border border-5 border-gray-300 h-auto'>
                         <span className="font-bold text-2xl underline items-center">Inventory</span>
@@ -182,14 +173,6 @@ function Category() {
                         <button className='bg-teal-600 h-5  rounded-sm w-40 text-white'>Inactive Listing (10)</button>
                     </div>
                 </div>
-                {/* {storeCategoryList ? storeCategoryList.map((storeCate, index)=> (
-                    <div key={index} className='flex w-30 h-30'>
-                        <div>{storeCate.id}</div>
-                        <div>{storeCate.name}</div>
-                        <img style="w-50 h-20" src={storeCate.heroImage} alt="hero"/>
-                        <img style="w-20 h-20" src={storeCate.squareImage} alt="hero" />
-                    </div>
-                )) : <div>Nothing is created</div>} */}
 
             </div>
         </div>

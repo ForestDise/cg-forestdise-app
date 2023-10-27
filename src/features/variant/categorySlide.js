@@ -4,7 +4,7 @@ import {
 } from "../../api/categoryAPI";
 const initialState = {
     categories: [],
-    category: {},
+    category: null,
     loading: false,
     error: null,
     success: false,

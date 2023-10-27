@@ -14,9 +14,9 @@ export const addCategory = createAsyncThunk("catestore/list", async (searchParam
     console.log(response);
     return response.data.categoryDtoList;
 });
-export const createStoreCategoryList = createAsyncThunk("catestore/detail", async (categoryNameList,storeId) => {
-    const response = await createCategoryList(categoryNameList,storeId);
-    console.log(response);
+export const createStoreCategoryList = createAsyncThunk("catestore/detail", async (categoryList,storeId) => {
+    const response = await createCategoryList(categoryList,storeId);
+    console.log(response.data);
     return response.data;
 });
 export const storeCategorySlide = createSlice({
