@@ -46,7 +46,7 @@ export const sellerSlice = createSlice({
       .addCase(setSellerInfo.fulfilled, (state, action) => {
         state.success = true;
         state.loading = false;
-        state.userInfo = action.payload;
+        state.sellerInfo = action.payload;
         state.error = false;
       });
   },

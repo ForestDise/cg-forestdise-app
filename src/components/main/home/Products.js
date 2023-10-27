@@ -26,6 +26,7 @@ function Products() {
     }
     console.log("====products=====");
   }, [userInfo]);
+  console.log(userInfo);
 
   return (
     <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-10 px-4">

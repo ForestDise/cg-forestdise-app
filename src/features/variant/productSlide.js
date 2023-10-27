@@ -7,8 +7,8 @@ import {
 } from "../../api/productAPI";
 
 const initialState = {
-    products: null,
-    product: null,
+    products: [],
+    product: {},
     loading: false,
     error: null,
     success: false,
@@ -24,8 +24,8 @@ export const getProduct = createAsyncThunk("product/detail", async (productId) =
     return response.data;
 });
 
-export const addProduct = createAsyncThunk("product/create", async (product) => {
-    const response = await createProduct(product);
+export const addProduct = createAsyncThunk("product/create", async (product,storeId,categoryId, storeCategoryId) => {
+    const response = await createProduct(product, storeId, categoryId, storeCategoryId);
     return response.data;
 });
 
@@ -134,10 +134,10 @@ export const {
 export const selectLoading = (state) => state.product.loading;
 export const selectError = (state) => state.product.error;
 export const selectSuccess = (state) => state.product.success;
-export const selectProductByShopId = (state) => state.product.values;
-export const selectProductDetail = (state) => state.product.value;
-export const selectProductAdded = (state) => state.product.value;
-export const selectProductEdited = (state) => state.product.value;
+export const selectProductByShopId = (state) => state.product.products;
+export const selectProductDetail = (state) => state.product.product;
+export const selectProductAdded = (state) => state.product.product;
+export const selectProductEdited = (state) => state.product.product;
 
 //Enhancement feature of book slice
 export const setLoadingTrueIfCalled = (isCalled) => (dispatch, getState) => {

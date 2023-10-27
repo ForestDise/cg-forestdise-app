@@ -6,7 +6,7 @@ import { RotatingLines } from "react-loader-spinner";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserInfo } from "../features/user/userSlice";
+import { setSellerInfo } from "../features/seller/sellerSlice";
 import jwt_decode from "jwt-decode";
 import { logoSeller } from "../assets";
 
@@ -17,7 +17,7 @@ function SellerSignin() {
   const [loading, setLoading] = useState(false);
   const [errorNotify, setErrorNotify] = useState("");
   const [successNotify, setSuccessNotify] = useState("");
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo } = useSelector((state) => state.seller);
 
   const handleValidate = () => {
     let errors = {};
@@ -48,9 +48,9 @@ function SellerSignin() {
         setLoading(false);
         window.localStorage.setItem("seller_token", res.data);
         setSuccessNotify("Log in succesfully! Welcome back");
-        dispatch(setUserInfo(jwt_decode(res.data).sub));
+        dispatch(setSellerInfo(jwt_decode(res.data).sub));
         setTimeout(() => {
-          navigate("/");
+          navigate("/selling");
         }, 2500);
       })
       .catch((err) => {

@@ -17,6 +17,7 @@ import {
 import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";
 import { setCategory } from "../../../features/sellerStore/sellerStoreSlice";
 import StarRating from "../../common/icon/StarRating";
+import { getReviewsByVariantId } from "../../../features/coment_review/reviewSlide"
 
 function ProductDetail() {
   const { id } = useParams();
@@ -38,10 +39,23 @@ function ProductDetail() {
     getVariantDetail();
   }, [variantId]);
 
+  const getReviewListByVariantId = async () => {
+    if (variantId != null) {
+      dispatch(getReviewsByVariantId(variantId));
+    }
+  };
+
+  useEffect(() => {
+    getReviewListByVariantId(variantId);
+  }, [variantId]);
+
   const variantDetail = useSelector(selectVariantDetail);
   const statusLoading = useSelector(selectLoading);
   const statusSuccess = useSelector(selectSuccess);
   const statusError = useSelector(selectError);
+  const reviewVariantList = useSelector((state)=> state.review.reviews);
+  console.log(reviewVariantList);
+
 
   useEffect(() => {
     if (variantDetail && variantDetail.variantDto.img) {
@@ -108,7 +122,7 @@ function ProductDetail() {
             <div>
               <div className="flex flex-wrap text-center justify-between object-contain hover:py-4 mx-21">
                 {variantDetail &&
-                  variantDetail.variantDto.imageDtoList?.map((item, index) => (
+                  variantDetail.variantDto.imageDTOList?.map((item, index) => (
                     <img
                       key={index}
 
@@ -145,22 +159,15 @@ function ProductDetail() {
                       dispatch(setCategory(storeInfo.storeCategoryList));
                     }}
                   >
-                    Vist the {storeInfo.name}
+                    Visit the {storeInfo.name}
                   </span>
                 </div>
               </Link>
               <div className="font-titleFont flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
                 <div className="flex text-center justify-center ">
                   <div>{variantDetail.productDTO.ratings}</div>
-                  <div className="text-yellow-500 text-sm items-center ">
-                    <StarIcon sx={{ fontSize: 15 }} />
-                    <StarIcon sx={{ fontSize: 15 }} />
-                    <StarIcon sx={{ fontSize: 15 }} />
-                    <StarIcon sx={{ fontSize: 15 }} />
-                    <StarIcon sx={{ fontSize: 15 }} />
-                  </div>
                   <StarRating
-                    rating={variantDetail.productDTO.ratings}
+                    rating={3.5}
                     fontSize={15}
                   />
                 </div>
@@ -185,7 +192,7 @@ function ProductDetail() {
                     </span>
                   </h2>
                   <span className="text-yellow-500 text-xs ml-4 pb-0">
-                    {variantDetail.variantDto.stockQuantity} Sold
+                    {variantDetail.variantDto.stockQuantity} Available
                   </span>
                 </div>
               ) : (
@@ -205,8 +212,8 @@ function ProductDetail() {
                     </div>
                     <div className="flex justify-between items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
                       <div className="space-x-4 flex text-xl">
-                        {option.optionValueDTOList.map((ele) => (
-                          <label>
+                        {option.optionValueDTOList.map((ele, index) => (
+                          <label key={index}>
                             <input
                               className="sr-only peer"
                               name="style"
@@ -371,12 +378,18 @@ function ProductDetail() {
           <h1>From the manufacturer</h1>
           <img
             className="w-full px-48 my-4 object-contain"
-            src={variantDetail.storeDto.interactiveImage}
+            src={variantDetail.storeDto.dealsImage}
             alt="ProductImg"
           ></img>
           <img
             className="w-full px-48 my-4  object-contain"
-            src={variantDetail.storeDto.interactiveImage}
+            src={variantDetail.storeDto.dealsSquareImage}
+            alt="ProductImg"
+          ></img>
+          <h1>{variantDetail.storeDto.name}</h1>
+          <img
+            className="w-full px-48 my-4  object-contain"
+            src={variantDetail.storeDto.homeImage}
             alt="ProductImg"
           ></img>
           <img
@@ -577,54 +590,48 @@ function ProductDetail() {
             <h1 className="text-2xl font-bold mb-6">
               Top reviews from the United States
             </h1>
-
-            <div className="m-4">
-              <div className="flex mb-2">
-                <img
-                  src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.6435-9/116429521_1655876004585921_941667011043408186_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=84a396&_nc_ohc=jX_SP-XeWGUAX8gd9Dl&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfB8K54ttI7F3njd8xLWtnInOErSx2FkaIhUXEuNjobBRw&oe=654A001A"
-                  className="rounded-full w-5 h-5"
-                />
-                <div className="ml-4 text-titleFont">Gaugaucute</div>
-              </div>
-              <div className="flex">
-                <div className="text-amazon_yellow text-sm items-center ">
-                  <StarIcon sx={{ fontSize: 15 }} />
-                  <StarIcon sx={{ fontSize: 15 }} />
-                  <StarIcon sx={{ fontSize: 15 }} />
-                  <StarIcon sx={{ fontSize: 15 }} />
-                  <StarIcon sx={{ fontSize: 15 }} />
+            {variantDetail &&
+              variantDetail.variantDTOList[0].reviewDTOList?.map((item, index) => (
+                <div className="m-4">
+                  <div className="flex mb-2">
+                    <img
+                      src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.6435-9/116429521_1655876004585921_941667011043408186_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=84a396&_nc_ohc=jX_SP-XeWGUAX8gd9Dl&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfB8K54ttI7F3njd8xLWtnInOErSx2FkaIhUXEuNjobBRw&oe=654A001A"
+                      className="rounded-full w-5 h-5"
+                    />
+                    <div className="ml-4 text-titleFont">{item.userDto.clientName}</div>
+                  </div>
+                  <div className="flex">
+                    <div className="text-amazon_yellow text-sm items-center ">
+                      <StarRating
+                        rating={item.star}
+                        fontSize={15}
+                      />
+                    </div>
+                    <a className="text-bodyFont text-sm ml-4 font-medium hover:underline hover:text-amber-600">
+                      {" "}
+                      {item.title}
+                    </a>
+                  </div>
+                  <div className="text-bodyFont text-xs text-gray-500">
+                    Reviewed in the United States on {item.update_at}
+                  </div>
+                  <div className="text-bodyFont text-xs text-gray-500 mb-2">
+                  Variant:
+                    {variantDetail.variantDTOList[0].optionValueDTOList.map((option,index)=> (
+                      <span key={index}>{option.value} |</span>
+                    ))}
+                    
+                    {item.verified_admin == true ? <span className="text-amber-700 ml-2 font-bold">
+                      Verified Purchase
+                    </span> : <></> }
+                  </div>
+                  <div className="text-bodyFont text-xs text-black">
+                  {item.content}
+                  </div>
                 </div>
-                <a className="text-bodyFont text-sm ml-4 font-medium hover:underline hover:text-amber-600">
-                  {" "}
-                  I wish that I had found these before I spent 1000's on doctors
-                  and Physical therapy
-                </a>
-              </div>
-              <div className="text-bodyFont text-xs text-gray-500">
-                Reviewed in the United States on September 25, 2023
-              </div>
-              <div className="text-bodyFont text-xs text-gray-500 mb-2">
-                Style: Men's Size 8-13 | Size: 1 Pair (Pack of 1)
-                <span className="text-amber-700 ml-2 font-bold">
-                  Verified Purchase
-                </span>
-              </div>
-              <div className="text-bodyFont text-xs text-black">
-                Seriously these are the best things I've found. They have helped
-                my plantar fasciitis better than the Shot the foot doctor gave,
-                and the many physical therapy appointments which cost me every
-                time I went. I wish I had found them before all that. Even after
-                all that I still had pain, it was better, but not 100%, these
-                inserts have helped me profoundly. Please note that they do not
-                work in all shoes, but so far I've only had one pair of my shoes
-                that they didn't work in. I'll be chucking those. They've worked
-                in dress shoes, and my Puma workout shoes along with my Keen
-                hiking shoes. So if they don't work for you, try them in a
-                different shoe. I bet they will work in any flat shoe with
-                little or no arch support. Give them a shot if you suffer as I
-                did.
-              </div>
-            </div>
+              ))}
+
+            
             <hr></hr>
             <div className="m-4">
               <div className="flex mb-2">
