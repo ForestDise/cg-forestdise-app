@@ -17,7 +17,6 @@ function SellerSignin() {
   const [loading, setLoading] = useState(false);
   const [errorNotify, setErrorNotify] = useState("");
   const [successNotify, setSuccessNotify] = useState("");
-  const { userInfo } = useSelector((state) => state.user);
 
   const handleValidate = () => {
     let errors = {};

@@ -30,7 +30,6 @@ function Payment() {
           <PayMentTotal />
         </div>
       </div>
-      {/* <div><PaymentMethod/></div> */}
     </div>
   );
 }
