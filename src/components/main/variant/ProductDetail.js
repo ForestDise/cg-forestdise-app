@@ -30,12 +30,14 @@ function ProductDetail() {
   const [variantId, setVariantId] = useState(null);
   const [productId, setProductId] = useState(id);
   const [mainImage, setMainImage] = useState("");
+  const [variantRender, setVariantRender] = useState(null);
+  const [array,setArray] = useState([])
   const variantDetail = useSelector(selectVariantDetail);
   console.log(variantDetail);
   const reviewAnalyst = useSelector(selectReviewListByProductId);
   console.log(reviewAnalyst);
-  const variantRender = useSelector(selectVariantInfo);
-  console.log(variantRender);
+  const variantRender0 = useSelector(selectVariantInfo);
+  console.log(variantRender0);
   const reviewVariantList = useSelector((state) => state.review.reviews);
   console.log(reviewVariantList);
   const [data, setData] = useState({})
@@ -44,19 +46,20 @@ function ProductDetail() {
   useEffect(() => {
     getVariantDetail();
   }, [id]);
+
   useEffect(() => {
     getVariantInformation();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     getReviewAnalyst();
 
-  }, []);
+  }, [id]);
   useEffect(() => {
-    if (variantRender) {
+    if (variantRender0) {
       getReviewListByVariantId();
     }
-  }, [variantRender, variantId]);
+  }, [variantRender0, variantId, id]);
 
 
 
@@ -94,11 +97,12 @@ function ProductDetail() {
   };
 
   useEffect(() => {
-    if (variantRender) {
-      setMainImage(variantRender.imageDTOList[0].imgPath);
-      setVariantId(variantRender.id);
+    if (variantRender0) {
+      setMainImage(variantRender0.imageDTOList[0].imgPath);
+      setVariantId(variantRender0.id);
+      setVariantRender(variantRender0);
     }
-  }, [variantRender])
+  }, [variantRender, id])
 
   const statusLoading = useSelector(selectLoading);
   const statusSuccess = useSelector(selectSuccess);
@@ -262,12 +266,12 @@ function ProductDetail() {
                 </div>
               </Link>
               {reviewAnalyst &&
-                <div className="font-titleFont flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
+                <div className="font-titleFont flex items-baseline text-center justify-between text-sm text-yellow-500 mb-2 mt-2">
                   <div className="flex text-center justify-center ">
-                    <div className="text-sm">{reviewAnalyst.summaryDto.rating}</div>
+                    <div className="text-sm font-bold mr-1">{reviewAnalyst.summaryDto.rating.toFixed(1)}</div>
                     <StarRating
                       rating={reviewAnalyst.summaryDto.rating}
-                      fontSize={15}
+                      fontSize={18}
                     />
                   </div>
                   {/* 5 star */}
@@ -320,12 +324,12 @@ function ProductDetail() {
               ))}
               {variantDetail.productAttributeDTOList.map((attr, bindex) => (
                 <div key={bindex} className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0">
-                    <div className=" w-full h-full bg-white col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
-                      {attr.name}
-                    </div>
-                    <div className="w-full h-full bg-white col-span-3 text-left font-titleFont tracking-wide text-l text-amazon_blue">
-                      {attr.value}
-                    </div>
+                  <div className=" w-full h-full bg-white col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
+                    {attr.name}
+                  </div>
+                  <div className="w-full h-full bg-white col-span-3 text-left font-titleFont tracking-wide text-l text-amazon_blue">
+                    {attr.value}
+                  </div>
                 </div>
               ))}
               <hr></hr>
@@ -377,7 +381,7 @@ function ProductDetail() {
                         id: "",
                         quantity: 1,
                         cartId: userInfo.id,
-                        variantId: variantDetail.variantDto.id,
+                        variantId: variantRender.id,
                       })
                     )
                     : dispatch(
@@ -389,21 +393,21 @@ function ProductDetail() {
                           userId: "",
                         },
                         variantDto: {
-                          id: variantDetail.variantDto.id,
-                          name: variantDetail.variantDto.name,
-                          skuCode: variantDetail.variantDto.skuCode,
+                          id: variantRender.id,
+                          name: variantRender.name,
+                          skuCode: variantRender.skuCode,
                           stockQuantity:
-                            variantDetail.variantDto.stockQuantity,
-                          weight: variantDetail.variantDto.weight,
-                          price: variantDetail.variantDto.price,
-                          img: variantDetail.variantDto.img,
-                          salePrice: variantDetail.variantDto.salePrice,
+                            variantRender.stockQuantity,
+                          weight: variantRender.weight,
+                          price: variantRender.price,
+                          img: variantRender.img,
+                          salePrice: variantRender.salePrice,
                           optionValueDtoList:
-                            variantDetail.variantDto.optionValueDtoList,
-                          imageDtoList: variantDetail.variantDto.mageDtoList,
-                          videoDtoList: variantDetail.variantDto.videoDtoList,
+                            variantRender.optionValueDtoList,
+                          imageDtoList: variantRender.mageDtoList,
+                          videoDtoList: variantRender.videoDtoList,
                           reviewDtoList:
-                            variantDetail.variantDto.reviewDtoList,
+                            variantRender.reviewDtoList,
                         },
                       })
                     );
@@ -515,7 +519,7 @@ function ProductDetail() {
                     fontSize={15}
                   />
                 </div>
-                <div>{reviewAnalyst.summaryDto.rating} out of 5</div>
+                <div>{reviewAnalyst.summaryDto.rating.toFixed(1)} out of 5</div>
               </div>
               <span className="text-gray-400 text-xs mb-4">
                 {reviewAnalyst.summaryDto.reviewsTotal} global ratings
@@ -536,11 +540,12 @@ function ProductDetail() {
                         title="5 star represent ...% of rating"
                       >
                         <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
-                          <div className="w-3/6 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
+                          <div className="w-full h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"
+                            style={{ width: `${reviewAnalyst.summaryDto.ratingBreakdown.fiveStar.percentage}%` }}></div>
                         </div>
                       </a>
                     </td>
-                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.fiveStar.percentage}% ({reviewAnalyst.summaryDto.ratingBreakdown.fiveStar.count})</td>
+                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.fiveStar.percentage.toFixed(1)}% ({reviewAnalyst.summaryDto.ratingBreakdown.fiveStar.count})</td>
                   </tr>
                   <tr className="">
                     <td>
@@ -553,11 +558,12 @@ function ProductDetail() {
                         title="5 star represent ...% of rating"
                       >
                         <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
-                          <div className="w-1/6 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
+                          <div className="w-full h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"
+                            style={{ width: `${reviewAnalyst.summaryDto.ratingBreakdown.fourStar.percentage}%` }}></div>
                         </div>
                       </a>
                     </td>
-                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.fourStar.percentage}% ({reviewAnalyst.summaryDto.ratingBreakdown.fourStar.count})</td>
+                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.fourStar.percentage.toFixed(1)}% ({reviewAnalyst.summaryDto.ratingBreakdown.fourStar.count})</td>
                   </tr>
                   <tr className="mb-4">
                     <td>
@@ -570,11 +576,13 @@ function ProductDetail() {
                         title="5 star represent ...% of rating"
                       >
                         <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
-                          <div className="w-1/6 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
+                          <div className="w-full h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"
+                            style={{ width: `${reviewAnalyst.summaryDto.ratingBreakdown.threeStar.percentage}%` }}
+                          ></div>
                         </div>
                       </a>
                     </td>
-                    <td className="w-2/12 pl-1 text-left">{reviewAnalyst.summaryDto.ratingBreakdown.threeStar.percentage}% ({reviewAnalyst.summaryDto.ratingBreakdown.threeStar.count})</td>
+                    <td className="w-2/12 pl-1 text-left">{reviewAnalyst.summaryDto.ratingBreakdown.threeStar.percentage.toFixed(1)}% ({reviewAnalyst.summaryDto.ratingBreakdown.threeStar.count})</td>
                   </tr>
                   <tr className="mb-4">
                     <td>
@@ -587,11 +595,12 @@ function ProductDetail() {
                         title="5 star represent ...% of rating"
                       >
                         <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
-                          <div className="w-1/6 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
+                          <div className="w-full h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"
+                            style={{ width: `${reviewAnalyst.summaryDto.ratingBreakdown.twoStar.percentage}%` }}></div>
                         </div>
                       </a>
                     </td>
-                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.twoStar.percentage}% ({reviewAnalyst.summaryDto.ratingBreakdown.twoStar.count})</td>
+                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.twoStar.percentage.toFixed(1)}% ({reviewAnalyst.summaryDto.ratingBreakdown.twoStar.count})</td>
                   </tr>
                   <tr className="mt-4">
                     <td>
@@ -604,11 +613,12 @@ function ProductDetail() {
                         title="5 star represent ...% of rating"
                       >
                         <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
-                          <div className="w-0 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
+                          <div className="w-full h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"
+                            style={{ width: `${reviewAnalyst.summaryDto.ratingBreakdown.oneStar.percentage}%` }}></div>
                         </div>
                       </a>
                     </td>
-                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.oneStar.percentage}% ({reviewAnalyst.summaryDto.ratingBreakdown.oneStar.count})</td>
+                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.oneStar.percentage.toFixed(1)}% ({reviewAnalyst.summaryDto.ratingBreakdown.oneStar.count})</td>
                   </tr>
                 </tbody>
               </table>
