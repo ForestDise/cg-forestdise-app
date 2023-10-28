@@ -9,102 +9,200 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getVariant,
+  getVariantInfo,
   selectError,
   selectLoading,
   selectSuccess,
   selectVariantDetail,
+  selectVariantInfo
 } from "../../../features/variant/variantSlice";
 import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";
 import { setCategory } from "../../../features/sellerStore/sellerStoreSlice";
 import StarRating from "../../common/icon/StarRating";
-import { getReviewsByVariantId } from "../../../features/coment_review/reviewSlide"
+import { getReviewsByVariantId, getReviewByProductId, selectReviewListByProductId } from "../../../features/coment_review/reviewSlide"
 
 function ProductDetail() {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const [showRecommend, setShowRecommend] = useState(false);
+  const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
+  const { userInfo } = useSelector((state) => state.user);
   const [variantId, setVariantId] = useState(null);
   const [productId, setProductId] = useState(id);
   const [mainImage, setMainImage] = useState("");
-  const [showRecommend, setShowRecommend] = useState(false);
-  const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
-  const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.user);
+  const variantDetail = useSelector(selectVariantDetail);
+  console.log(variantDetail);
+  const reviewAnalyst = useSelector(selectReviewListByProductId);
+  console.log(reviewAnalyst);
+  const variantRender = useSelector(selectVariantInfo);
+  console.log(variantRender);
+  const reviewVariantList = useSelector((state) => state.review.reviews);
+  console.log(reviewVariantList);
+  const [data, setData] = useState({})
 
-  const getVariantDetail = async () => {
-    if (id != null) {
-      dispatch(getVariant(id));
-    }
-  };
 
   useEffect(() => {
     getVariantDetail();
-  }, [variantId]);
+  }, [id]);
+  useEffect(() => {
+    getVariantInformation();
+  }, []);
 
-  const getReviewListByVariantId = async () => {
-    if (variantId != null) {
-      dispatch(getReviewsByVariantId(variantId));
+  useEffect(() => {
+    getReviewAnalyst();
+
+  }, []);
+  useEffect(() => {
+    if (variantRender) {
+      getReviewListByVariantId();
+    }
+  }, [variantRender, variantId]);
+
+
+
+  const getVariantDetail = () => {
+    if (productId != null) {
+      dispatch(getVariant(productId));
+      console.log("====10====");
     }
   };
 
-  useEffect(() => {
-    getReviewListByVariantId(variantId);
-  }, [variantId]);
+  const getVariantInformation = () => {
+    if (productId != null) {
+      dispatch(getVariantInfo(productId));
+      console.log("====11====");
 
-  const variantDetail = useSelector(selectVariantDetail);
-  const statusLoading = useSelector(selectLoading);
-  const statusSuccess = useSelector(selectSuccess);
-  const statusError = useSelector(selectError);
-  const reviewVariantList = useSelector((state)=> state.review.reviews);
-  console.log(reviewVariantList);
-
-
-  useEffect(() => {
-    if (variantDetail && variantDetail.variantDto.img) {
-      setMainImage(variantDetail.variantDto.img);
-      setVariantId(variantDetail.variantDto.id);
     }
-  }, [variantDetail]);
+  };
+  const getReviewAnalyst = () => {
+    if (productId != null) {
+      dispatch(getReviewByProductId(productId));
+      console.log("====12====");
+
+    }
+  };
+  const getReviewListByVariantId = () => {
+    if (variantId != null) {
+      dispatch(getReviewsByVariantId(variantId));
+      console.log("====13====");
+
+    }
+  };
 
   const handleThumbnailClick = (imageUrl) => {
     setMainImage(imageUrl);
   };
 
-  // Tạo một đối tượng để lưu trạng thái của các cặp giá trị đã chọn
-  const [selectedOptions, setSelectedOptions] = useState({});
-  // Hàm được gọi khi một cặp giá trị tùy chọn thay đổi
-  const handleOptionChange = (optionName, optionValueId) => {
-    setSelectedOptions({
-      ...selectedOptions,
-      [optionName]: optionValueId,
-    });
-  };
   useEffect(() => {
-    console.log("selectedOptions đã thay đổi:", selectedOptions);
-  }, [selectedOptions]);
-  // Hàm set lại VariantId nếu cặp biến thể khớp
-  const findMatchingVariantId = (selectedOptions, variantListDto) => {
-    for (const variant of variantListDto) {
-      if (
-        Object.keys(selectedOptions).every((optionName) => {
-          const selectedOptionValue = selectedOptions[optionName];
-          return variant.optionValueDtoList.some(
-            (option) => option.value === selectedOptionValue
-          );
-        })
-      ) {
-        return variant.id;
-      }
+    if (variantRender) {
+      setMainImage(variantRender.imageDTOList[0].imgPath);
+      setVariantId(variantRender.id);
     }
-    return null; // Trả về null nếu không tìm thấy biến thể khớp
-  };
+  }, [variantRender])
 
+  const statusLoading = useSelector(selectLoading);
+  const statusSuccess = useSelector(selectSuccess);
+  const statusError = useSelector(selectError);
+
+  console.log(variantRender);
   console.log(statusLoading);
   console.log(statusSuccess);
   console.log(statusError);
   console.log(id);
-  console.log(variantDetail);
+  console.log(reviewVariantList);
+  console.log(reviewAnalyst);
+  console.log(variantRender);
 
-  return (
-    variantDetail && (
+
+
+  // useEffect(() => {
+  //   getVariantDetail();
+  //   console.log("run");
+  // }, [productId]);
+  // useEffect(() => {
+  // if (variantDetail) {
+  //   setVariantId(variantDetail.variantDto.id);
+  // }
+  // getVariantInformation(variantId);
+  // setMainImage(variantRender.imageDTOList[0].imgPath);
+  // setVariantId(variantRender.id);
+
+  // }, [productId]);
+
+
+
+  // useEffect(() => {
+  //   getReviewListByVariantId(variantId);
+  //   console.log(reviewVariantList);
+  // }, [variantId]);
+
+  // const variantDetail = useSelector(selectVariantDetail);
+  // const statusLoading = useSelector(selectLoading);
+  // const statusSuccess = useSelector(selectSuccess);
+  // const statusError = useSelector(selectError);
+  // const reviewVariantList = useSelector((state) => state.review.reviews);
+  // console.log(reviewVariantList);
+  // const reviewAnalyst = useSelector((state) => state.review.reviewsByProduct);
+  // console.log(reviewAnalyst);
+
+  // const getVariantInformation = async () => {
+  //   if (variantId != null) {
+  //     dispatch(getVariantInfo(variantId));
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (variantDetail) {
+  //     setVariantId(variantDetail.variantDto.id);
+  //     getVariantInformation(variantId);
+  //     console.log(variantId);
+  //   }
+  // }, [variantId]);
+
+
+  // useEffect(() => {
+  //   getVariantInformation(variantId);
+  // }, [variantId]);
+  // const variantRender = useSelector((state) => state.variant.variantDetail);
+  // console.log(variantRender);
+  // useEffect(() => {
+  //   if (variantRender) {
+  //     setMainImage(variantRender.imageDTOList[0].imgPath);
+  //     setVariantId(variantRender.id);
+  //   }
+  // }, [variantRender]);
+
+
+  // // Tạo một đối tượng để lưu trạng thái của các cặp giá trị đã chọn
+  // const [selectedOptions, setSelectedOptions] = useState({});
+  // // Hàm được gọi khi một cặp giá trị tùy chọn thay đổi
+  // const handleOptionChange = (optionName, optionValueId) => {
+  //   setSelectedOptions({
+  //     ...selectedOptions,
+  //     [optionName]: optionValueId,
+  //   });
+  // };
+  // useEffect(() => {
+  //   console.log("selectedOptions đã thay đổi:", selectedOptions);
+  // }, [selectedOptions]);
+  // // Hàm set lại VariantId nếu cặp biến thể khớp
+  // const findMatchingVariantId = (selectedOptions, variantListDto) => {
+  //   for (const variant of variantListDto) {
+  //     if (
+  //       Object.keys(selectedOptions).every((optionName) => {
+  //         const selectedOptionValue = selectedOptions[optionName];
+  //         return variant.optionValueDtoList.some(
+  //           (option) => option.value === selectedOptionValue
+  //         );
+  //       })
+  //     ) {
+  //       return variant.id;
+  //     }
+  //   }
+  //   return null; // Trả về null nếu không tìm thấy biến thể khớp
+  // };
+
+  if (variantDetail != null && variantRender != null) {
+    return (
       <div className="font-bodyFont w-full bg-gray-100 p-1">
         <div className="container mx-auto h-auto grid grid-cols-5 gap-2">
           {/* Thumnail start */}
@@ -121,8 +219,8 @@ function ProductDetail() {
             </div>
             <div>
               <div className="flex flex-wrap text-center justify-between object-contain hover:py-4 mx-21">
-                {variantDetail &&
-                  variantDetail.variantDto.imageDTOList?.map((item, index) => (
+                {variantRender &&
+                  variantRender.imageDTOList?.map((item, index) => (
                     <img
                       key={index}
 
@@ -132,8 +230,8 @@ function ProductDetail() {
                       onClick={() => handleThumbnailClick(item.imgPath)}
                     ></img>
                   ))}
-                {variantDetail &&
-                  variantDetail.videoDtoList?.map((item, i) => (
+                {variantRender &&
+                  variantRender.videoDtoList?.map((item, i) => (
                     <video
                       key={i}
                       controls
@@ -150,7 +248,7 @@ function ProductDetail() {
           <div className="w-full h-full bg-white px-4 col-span-2 border-gray-300 border-2 rounded-3xl">
             <div className="w-full h-full bg-white px-4 col-span-2 flex flex-col py-10">
               <div className="font-bodyFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
-                <h2>{variantDetail.variantDto.name}</h2>
+                {variantRender != null && <h2>{variantRender.name}</h2>}
               </div>
               <Link to={`/store/${storeInfo.id}`}>
                 <div className="font-titleFont tracking-wide text-green-900 size text-sm sm:text-xs hover:text-green-700 underline">
@@ -163,36 +261,37 @@ function ProductDetail() {
                   </span>
                 </div>
               </Link>
-              <div className="font-titleFont flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
-                <div className="flex text-center justify-center ">
-                  <div>{variantDetail.productDTO.ratings}</div>
-                  <StarRating
-                    rating={3.5}
-                    fontSize={15}
-                  />
-                </div>
-                {/* 5 star */}
-                <div className="">
-                  {variantDetail.productDTO.ratings} rating
-                </div>
-                <Link to={`/review/{productId}`} className="text-green-900">
-                  {" "}
-                  See all reviews
-                </Link>
-              </div>
+              {reviewAnalyst &&
+                <div className="font-titleFont flex items-center text-center justify-between text-sm text-yellow-500 mb-2">
+                  <div className="flex text-center justify-center ">
+                    <div className="text-sm">{reviewAnalyst.summaryDto.rating}</div>
+                    <StarRating
+                      rating={reviewAnalyst.summaryDto.rating}
+                      fontSize={15}
+                    />
+                  </div>
+                  {/* 5 star */}
+                  <div className="">
+                    {reviewAnalyst.summaryDto.reviewsTotal} rating
+                  </div>
+                  <Link to={`/review/{productId}`} className="text-green-900">
+                    {" "}
+                    See all reviews
+                  </Link>
+                </div>}
               <hr></hr>
-              {variantDetail.variantDto.stockQuantity > 0 ? (
+              {variantRender != null && variantRender.stockQuantity > 0 ? (
                 <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl flex mb-6 mt-4 ">
                   <h2 className="line-through mr-4 text-red-700">
-                    ${variantDetail.variantDto.price}
+                    ${variantRender.price}
                   </h2>
                   <h2>
                     <span className="">
-                      ${variantDetail.variantDto.salePrice}
+                      ${variantRender.salePrice}
                     </span>
                   </h2>
                   <span className="text-yellow-500 text-xs ml-4 pb-0">
-                    {variantDetail.variantDto.stockQuantity} Available
+                    {variantRender.stockQuantity} Available
                   </span>
                 </div>
               ) : (
@@ -203,55 +302,40 @@ function ProductDetail() {
                   </span>
                 </div>
               )}
-              {variantDetail &&
-                variantDetail.optionTableDto.map((option) => (
-                  <>
-                    <div className="flex flex-start justify-start">
-                      <div className="text-black mr-2">{option.name} : </div>
-                      <div>SE - Pink Stripes</div>
+              {variantDetail.optionTableDto.map((option, i) => (
+                <div key={i}>
+                  <div className="flex flex-start justify-start">
+                    <div className="text-black mr-2">{option.name} : </div>
+                    {variantRender != null && <div>{variantRender.optionValueDTOList[i].value}</div>}
+                  </div>
+                  <div className="flex justify-between items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
+                    <div className="space-x-4 flex text-xl">
+                      {option.optionValueDTOList.map((ele, index) => (
+                        variantRender.optionValueDTOList[i].id == ele.id ? (<button key={index} className=" text-sm w-16 h-10 rounded-sm text-center text-slate-70 bg-slate-950 text-white border-neutral-200 border-5"> {ele.value}</button>)
+                          : (<button key={index} className=" text-sm w-16 h-10 rounded-sm text-center text-slate-70 bg-gray-300 text-white"> {ele.value}</button>)
+                      ))}
                     </div>
-                    <div className="flex justify-between items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
-                      <div className="space-x-4 flex text-xl">
-                        {option.optionValueDTOList.map((ele, index) => (
-                          <label key={index}>
-                            <input
-                              className="sr-only peer"
-                              name="style"
-                              type="radio"
-                              value=""
-                            />
-                            <div className="w-18 h-18 pl-4 pr-4 rounded-sm flex text-center justify-between text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-                              {ele.value}
-                            </div>
-                          </label>
-                        ))}
-                      </div>
+                  </div>
+                </div>
+              ))}
+              {variantDetail.productAttributeDTOList.map((attr, bindex) => (
+                <div key={bindex} className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0">
+                    <div className=" w-full h-full bg-white col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
+                      {attr.name}
                     </div>
-                  </>
-                ))}
-
-              <div className="w-full mx-auto h-auto grid grid-cols-5 gap-2 left-0">
-                {variantDetail &&
-                  variantDetail.productAttributeDTOList.map((attr) => (
-
-                    <>
-                      <div className=" w-full h-full bg-white col-span-2 font-titleFont tracking-wide text-l text-amazon_blue text-left font-bold">
-                        {attr.name}
-                      </div>
-                      <div className="w-full h-full bg-white col-span-3 text-left font-titleFont border-1">
-                        {attr.value}
-                      </div>
-                    </>
-                  ))}
-              </div>
+                    <div className="w-full h-full bg-white col-span-3 text-left font-titleFont tracking-wide text-l text-amazon_blue">
+                      {attr.value}
+                    </div>
+                </div>
+              ))}
               <hr></hr>
               <div>
                 <h2 className="font-bold mt-2">About this item </h2>
                 <ul className="list-disc ml-4">
-                  {variantDetail &&
-                    variantDetail.productDTO.bulletDTOList.map((bullet) => (
+                  {variantDetail != null &&
+                    variantDetail.productDTO.bulletDTOList.map((bullet, i) => (
 
-                      <li className="font-titleFont tracking-wide text-sm text-amazon_blue">
+                      <li key={i} className="font-titleFont tracking-wide text-sm text-amazon_blue">
                         {bullet.name}
                       </li>
                     ))}
@@ -266,7 +350,7 @@ function ProductDetail() {
               <div className="font-titleFont tracking-wide text-lg text-amazon_blue size sm:text-xs  md:text-lg lg:text-xl xl:text-3xl">
                 <h2>
                   <span className="">$</span>
-                  {variantDetail.variantDto.salePrice}
+                  {variantRender.salePrice}
                 </h2>
               </div>
               <div>
@@ -289,40 +373,40 @@ function ProductDetail() {
                 onClick={() => {
                   userInfo
                     ? dispatch(
-                        addNewCartLine({
-                          id: "",
-                          quantity: 1,
-                          cartId: userInfo.id,
-                          variantId: variantDetail.variantDto.id,
-                        })
-                      )
+                      addNewCartLine({
+                        id: "",
+                        quantity: 1,
+                        cartId: userInfo.id,
+                        variantId: variantDetail.variantDto.id,
+                      })
+                    )
                     : dispatch(
-                        addToCart({
+                      addToCart({
+                        id: "",
+                        quantity: 1,
+                        cartDto: {
                           id: "",
-                          quantity: 1,
-                          cartDto: {
-                            id: "",
-                            userId: "",
-                          },
-                          variantDto: {
-                            id: variantDetail.variantDto.id,
-                            name: variantDetail.variantDto.name,
-                            skuCode: variantDetail.variantDto.skuCode,
-                            stockQuantity:
-                              variantDetail.variantDto.stockQuantity,
-                            weight: variantDetail.variantDto.weight,
-                            price: variantDetail.variantDto.price,
-                            img: variantDetail.variantDto.img,
-                            salePrice: variantDetail.variantDto.salePrice,
-                            optionValueDtoList:
-                              variantDetail.variantDto.optionValueDtoList,
-                            imageDtoList: variantDetail.variantDto.mageDtoList,
-                            videoDtoList: variantDetail.variantDto.videoDtoList,
-                            reviewDtoList:
-                              variantDetail.variantDto.reviewDtoList,
-                          },
-                        })
-                      );
+                          userId: "",
+                        },
+                        variantDto: {
+                          id: variantDetail.variantDto.id,
+                          name: variantDetail.variantDto.name,
+                          skuCode: variantDetail.variantDto.skuCode,
+                          stockQuantity:
+                            variantDetail.variantDto.stockQuantity,
+                          weight: variantDetail.variantDto.weight,
+                          price: variantDetail.variantDto.price,
+                          img: variantDetail.variantDto.img,
+                          salePrice: variantDetail.variantDto.salePrice,
+                          optionValueDtoList:
+                            variantDetail.variantDto.optionValueDtoList,
+                          imageDtoList: variantDetail.variantDto.mageDtoList,
+                          videoDtoList: variantDetail.variantDto.videoDtoList,
+                          reviewDtoList:
+                            variantDetail.variantDto.reviewDtoList,
+                        },
+                      })
+                    );
                 }}
                 className="rounded-lg bg-yellow-400 py-3 my-2 hover:bg-yellow-300 duration-100 cursor-pointer"
               >
@@ -419,157 +503,158 @@ function ProductDetail() {
         {/* Search comment end */}
         <div className="container mx-auto h-auto grid grid-cols-7 gap-2 text-bodyFont">
           {/* Star Index start */}
-          <div className="w-full h-full col-span-2 flex flex-col py-4 border-gray-300 text-bodyFont">
-            <h1 className="text-titleFont text-2xl font-bold ">
-              Customer reviews
-            </h1>
-            <div className="flex flex-row items-center text-center text-sm mb-2 ">
-              <div className="text-yellow-500 items-center mr-4">
-                <StarIcon sx={{ fontSize: 25 }} />
-                <StarIcon sx={{ fontSize: 25 }} />
-                <StarIcon sx={{ fontSize: 25 }} />
-                <StarIcon sx={{ fontSize: 25 }} />
-                <StarIcon sx={{ fontSize: 25 }} />
+          {reviewAnalyst &&
+            <div className="w-full h-full col-span-2 flex flex-col py-4 border-gray-300 text-bodyFont">
+              <h1 className="text-titleFont text-2xl font-bold ">
+                Customer reviews
+              </h1>
+              <div className="flex flex-row items-center text-center text-sm mb-2 ">
+                <div className="text-yellow-500 items-center mr-4">
+                  <StarRating
+                    rating={reviewAnalyst.summaryDto.rating}
+                    fontSize={15}
+                  />
+                </div>
+                <div>{reviewAnalyst.summaryDto.rating} out of 5</div>
               </div>
-              <div>4.7 out of 5</div>
-            </div>
-            <span className="text-gray-400 text-xs mb-4">
-              16,056 global ratings
-            </span>
-            <table className="text-xs border-spacing-2 border-collapse">
-              <tbody className="text-amazon_ember">
-                <tr className="">
-                  <td className="w-2/12	">
-                    <a className="decoration-0   text-left justify-between">
-                      {" "}
-                      5 star
-                    </a>
-                  </td>
-                  <td className="w-8/12	">
-                    <a
-                      href="#"
-                      className=""
-                      title="5 star represent ...% of rating"
-                    >
-                      <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
-                        <div className="w-3/6 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
-                      </div>
-                    </a>
-                  </td>
-                  <td className="w-2/12 pl-1 text-left	">50%</td>
-                </tr>
-                <tr className="">
-                  <td>
-                    <a className="decoration-0 text-left"> 4 star</a>
-                  </td>
-                  <td className="w-8/12	">
-                    <a
-                      href="#"
-                      className=""
-                      title="5 star represent ...% of rating"
-                    >
-                      <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
-                        <div className="w-1/6 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
-                      </div>
-                    </a>
-                  </td>
-                  <td className="w-2/12 pl-1 text-left	">16% </td>
-                </tr>
-                <tr className="mb-4">
-                  <td>
-                    <a className="decoration-0 text-left"> 3 star</a>
-                  </td>
-                  <td className="w-8/12	">
-                    <a
-                      href="#"
-                      className=""
-                      title="5 star represent ...% of rating"
-                    >
-                      <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
-                        <div className="w-1/6 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
-                      </div>
-                    </a>
-                  </td>
-                  <td className="w-2/12 pl-1 text-left">16%</td>
-                </tr>
-                <tr className="mb-4">
-                  <td>
-                    <a className="decoration-0 text-left"> 2 star</a>
-                  </td>
-                  <td className="w-8/12	">
-                    <a
-                      href="#"
-                      className=""
-                      title="5 star represent ...% of rating"
-                    >
-                      <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
-                        <div className="w-1/6 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
-                      </div>
-                    </a>
-                  </td>
-                  <td className="w-2/12 pl-1 text-left	">16% </td>
-                </tr>
-                <tr className="mt-4">
-                  <td>
-                    <a className="decoration-0   text-left"> 1 star</a>
-                  </td>
-                  <td className="w-8/12	">
-                    <a
-                      href="#"
-                      className=""
-                      title="5 star represent ...% of rating"
-                    >
-                      <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
-                        <div className="w-0 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
-                      </div>
-                    </a>
-                  </td>
-                  <td className="w-2/12 pl-1 text-left	">0% </td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="flex flex-row h-full item-center justify-start mt-4 mb-4">
-              {showRecommend && <ArrowDropUpIcon />}
-              {!showRecommend && <ArrowDropDownIcon />}
-              <span
-                onClick={() => {
-                  setShowRecommend(!showRecommend);
-                }}
-                className="hover:text-yellow-600 hover:underline text-bodyFont text-xs text-amazon_ember"
-              >
-                How customer reviews and ratings work?
+              <span className="text-gray-400 text-xs mb-4">
+                {reviewAnalyst.summaryDto.reviewsTotal} global ratings
               </span>
-            </div>
-            {showRecommend && (
-              <div className="flex flex-col w-10/12 text-start pl-3 font-titleFont text-sm pb-4">
-                <span>
-                  Customer Reviews, including Product Star Ratings help
-                  customers to learn more about the product and decide whether
-                  it is the right product for them.
-                </span>
-                <br></br>
-                <span>
-                  To calculate the overall star rating and percentage breakdown
-                  by star, we don’t use a simple average. Instead, our system
-                  considers things like how recent a review is and if the
-                  reviewer bought the item on Amazon. It also analyzed reviews
-                  to verify trustworthiness.
+              <table className="text-xs border-spacing-2 border-collapse">
+                <tbody className="text-amazon_ember">
+                  <tr className="">
+                    <td className="w-2/12	">
+                      <a href="#" className="decoration-0   text-left justify-between">
+                        {" "}
+                        5 star
+                      </a>
+                    </td>
+                    <td className="w-8/12	">
+                      <a
+                        href="#"
+                        className=""
+                        title="5 star represent ...% of rating"
+                      >
+                        <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
+                          <div className="w-3/6 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
+                        </div>
+                      </a>
+                    </td>
+                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.fiveStar.percentage}% ({reviewAnalyst.summaryDto.ratingBreakdown.fiveStar.count})</td>
+                  </tr>
+                  <tr className="">
+                    <td>
+                      <a className="decoration-0 text-left"> 4 star</a>
+                    </td>
+                    <td className="w-8/12	">
+                      <a
+                        href="#"
+                        className=""
+                        title="5 star represent ...% of rating"
+                      >
+                        <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
+                          <div className="w-1/6 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
+                        </div>
+                      </a>
+                    </td>
+                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.fourStar.percentage}% ({reviewAnalyst.summaryDto.ratingBreakdown.fourStar.count})</td>
+                  </tr>
+                  <tr className="mb-4">
+                    <td>
+                      <a className="decoration-0 text-left"> 3 star</a>
+                    </td>
+                    <td className="w-8/12	">
+                      <a
+                        href="#"
+                        className=""
+                        title="5 star represent ...% of rating"
+                      >
+                        <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
+                          <div className="w-1/6 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
+                        </div>
+                      </a>
+                    </td>
+                    <td className="w-2/12 pl-1 text-left">{reviewAnalyst.summaryDto.ratingBreakdown.threeStar.percentage}% ({reviewAnalyst.summaryDto.ratingBreakdown.threeStar.count})</td>
+                  </tr>
+                  <tr className="mb-4">
+                    <td>
+                      <a className="decoration-0 text-left"> 2 star</a>
+                    </td>
+                    <td className="w-8/12	">
+                      <a
+                        href="#"
+                        className=""
+                        title="5 star represent ...% of rating"
+                      >
+                        <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
+                          <div className="w-1/6 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
+                        </div>
+                      </a>
+                    </td>
+                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.twoStar.percentage}% ({reviewAnalyst.summaryDto.ratingBreakdown.twoStar.count})</td>
+                  </tr>
+                  <tr className="mt-4">
+                    <td>
+                      <a className="decoration-0   text-left"> 1 star</a>
+                    </td>
+                    <td className="w-8/12	">
+                      <a
+                        href="#"
+                        className=""
+                        title="5 star represent ...% of rating"
+                      >
+                        <div className="overflow-hidden hover:shadow-testShadow bg-gray-200 h-5 rounded-sm">
+                          <div className="w-0 h-full rounded-sm bg-yellow-400 transition-width ease	duration-200"></div>
+                        </div>
+                      </a>
+                    </td>
+                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.oneStar.percentage}% ({reviewAnalyst.summaryDto.ratingBreakdown.oneStar.count})</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div className="flex flex-row h-full item-center justify-start mt-4 mb-4">
+                {showRecommend && <ArrowDropUpIcon />}
+                {!showRecommend && <ArrowDropDownIcon />}
+                <span
+                  onClick={() => {
+                    setShowRecommend(!showRecommend);
+                  }}
+                  className="hover:text-yellow-600 hover:underline text-bodyFont text-xs text-amazon_ember"
+                >
+                  How customer reviews and ratings work?
                 </span>
               </div>
-            )}
-            {/* Star Index end */}
-            <hr></hr>
-            <h1 className="text-titleFont text-2xl font-bold">
-              Review this product
-            </h1>
-            <span className="text-bodyFont text-xs mb-4">
-              Share your thoughts with other customers
-            </span>
-            <button className=" p-1 bg-gray-300 rounded-md text-bodyFont text-xs mb-4">
-              Write a customer review
-            </button>
-            <hr></hr>
-          </div>
+              {showRecommend && (
+                <div className="flex flex-col w-10/12 text-start pl-3 font-titleFont text-sm pb-4">
+                  <span>
+                    Customer Reviews, including Product Star Ratings help
+                    customers to learn more about the product and decide whether
+                    it is the right product for them.
+                  </span>
+                  <br></br>
+                  <span>
+                    To calculate the overall star rating and percentage breakdown
+                    by star, we don’t use a simple average. Instead, our system
+                    considers things like how recent a review is and if the
+                    reviewer bought the item on Amazon. It also analyzed reviews
+                    to verify trustworthiness.
+                  </span>
+                </div>
+              )}
+              {/* Star Index end */}
+              <hr></hr>
+              <h1 className="text-titleFont text-2xl font-bold">
+                Review this product
+              </h1>
+              <span className="text-bodyFont text-xs mb-4">
+                Share your thoughts with other customers
+              </span>
+              <button className=" p-1 bg-gray-300 rounded-md text-bodyFont text-xs mb-4">
+                Write a customer review
+              </button>
+              <hr></hr>
+            </div>}
+
 
           <div className="w-full h-full col-span-5 flex flex-col py-4 border-gray-300 text-titleFont  ">
             <div className="flex flex-row text-center justify-between ">
@@ -590,9 +675,9 @@ function ProductDetail() {
             <h1 className="text-2xl font-bold mb-6">
               Top reviews from the United States
             </h1>
-            {variantDetail &&
-              variantDetail.variantDTOList[0].reviewDTOList?.map((item, index) => (
-                <div className="m-4">
+            {reviewVariantList != null &&
+              reviewVariantList.reviewDTOList?.map((item, index) => (
+                <div key={index} className="m-4">
                   <div className="flex mb-2">
                     <img
                       src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.6435-9/116429521_1655876004585921_941667011043408186_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=84a396&_nc_ohc=jX_SP-XeWGUAX8gd9Dl&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfB8K54ttI7F3njd8xLWtnInOErSx2FkaIhUXEuNjobBRw&oe=654A001A"
@@ -616,22 +701,22 @@ function ProductDetail() {
                     Reviewed in the United States on {item.update_at}
                   </div>
                   <div className="text-bodyFont text-xs text-gray-500 mb-2">
-                  Variant:
-                    {variantDetail.variantDTOList[0].optionValueDTOList.map((option,index)=> (
+                    Variant:
+                    {variantDetail.variantDTOList[0].optionValueDTOList.map((option, index) => (
                       <span key={index}>{option.value} |</span>
                     ))}
-                    
-                    {item.verified_admin == true ? <span className="text-amber-700 ml-2 font-bold">
+
+                    {item.verified_admin === true ? <span className="text-amber-700 ml-2 font-bold">
                       Verified Purchase
-                    </span> : <></> }
+                    </span> : <></>}
                   </div>
                   <div className="text-bodyFont text-xs text-black">
-                  {item.content}
+                    {item.content}
                   </div>
                 </div>
               ))}
 
-            
+
             <hr></hr>
             <div className="m-4">
               <div className="flex mb-2">
@@ -732,9 +817,10 @@ function ProductDetail() {
             {/* List Review Of Customer End */}
           </div>
         </div>
-      </div>
-    )
-  );
+      </div>)
+  } else {
+    return (<div>Loading</div>)
+  }
 
 }
 

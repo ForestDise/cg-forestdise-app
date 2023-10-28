@@ -16,9 +16,9 @@ export const findReview = async (variantId) => {
 export const findReviewByProductId = async (productId) => {
     let result = null;
     try {
-        result = await axios.get(`${REVIEW_MANAGEMENT_API}/shops/${productId}`);
+        result = await axios.get(`${REVIEW_MANAGEMENT_API}/product/${productId}`);
     } catch (e) {
-        console.log("Find book API error: " + e);
+        console.log("Find review API error: " + e);
     }
     return result;
 };

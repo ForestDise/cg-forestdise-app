@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCartLines } from "../../../features/cart/cartSlice";
 import { setStore } from "../../../features/sellerStore/sellerStoreSlice";
 import { getProducts } from "../../../features/home/homeSlice";
+import { getVariant} from "../../../features/variant/variantSlice";
 
 function Products() {
   const dispatch = useDispatch();

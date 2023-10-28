@@ -1,6 +1,11 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function Profile() {
+    const navigate = useNavigate();
+    const sellerInfo = useSelector((state) => state.seller.sellerInfo);
+    console.log(sellerInfo);
   return (
 
         <div className="h-full">
@@ -24,12 +29,12 @@ function Profile() {
                         <div className="pb-6">
                             <label for="name" className="font-semibold text-gray-700 block pb-1">Name</label>
                             <div className="flex">
-                                <input disabled id="username" className="border-1  rounded-r px-4 py-2 w-full" type="text" value="Jane Name" />
+                              <input disabled id="username" className="border-1  rounded-r px-4 py-2 w-full" type="text" value={sellerInfo.sellerName} />
                             </div>
                         </div>
                         <div className="pb-4">
                             <label for="about" className="font-semibold text-gray-700 block pb-1">Email</label>
-                            <input disabled id="email" className="border-1  rounded-r px-4 py-2 w-full" type="email" value="example@example.com" />
+                          <input disabled id="email" className="border-1  rounded-r px-4 py-2 w-full" type="email" value={sellerInfo.email} />
                             <span className="text-gray-600 pt-4 block opacity-70">Personal login information of your account</span>
                         </div>
                     </div>
