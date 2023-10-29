@@ -25,13 +25,14 @@ function ProductDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [showRecommend, setShowRecommend] = useState(false);
+  const [showComment, setShowComment] = useState(false);
   const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
   const { userInfo } = useSelector((state) => state.user);
   const [variantId, setVariantId] = useState(null);
   const [productId, setProductId] = useState(id);
   const [mainImage, setMainImage] = useState("");
   const [variantRender, setVariantRender] = useState(null);
-  const [array,setArray] = useState([])
+  const [array, setArray] = useState([])
   const variantDetail = useSelector(selectVariantDetail);
   console.log(variantDetail);
   const reviewAnalyst = useSelector(selectReviewListByProductId);
@@ -40,7 +41,6 @@ function ProductDetail() {
   console.log(variantRender0);
   const reviewVariantList = useSelector((state) => state.review.reviews);
   console.log(reviewVariantList);
-  const [data, setData] = useState({})
 
 
   useEffect(() => {
@@ -683,7 +683,7 @@ function ProductDetail() {
             {/* Carosel Review Image End */}
             {/* List Review Of Customer Start */}
             <h1 className="text-2xl font-bold mb-6">
-              Top reviews from the United States
+              Top reviews from the Viet Nam
             </h1>
             {reviewVariantList != null &&
               reviewVariantList.reviewDTOList?.map((item, index) => (
@@ -708,7 +708,7 @@ function ProductDetail() {
                     </a>
                   </div>
                   <div className="text-bodyFont text-xs text-gray-500">
-                    Reviewed in the United States on {item.update_at}
+                    Reviewed in the  Viet Nam on {item.update_at}
                   </div>
                   <div className="text-bodyFont text-xs text-gray-500 mb-2">
                     Variant:
@@ -723,7 +723,37 @@ function ProductDetail() {
                   <div className="text-bodyFont text-xs text-black">
                     {item.content}
                   </div>
+                  {showComment && <ArrowDropUpIcon />}
+                  {!showComment && <ArrowDropDownIcon />}
+                  <span
+                    onClick={() => {
+                      setShowComment(!showComment);
+                    }}
+                    className="hover:text-yellow-600 underline text-bodyFont text-xs text-amazon_ember"
+                  >
+                    Comments
+                  </span>
+                  {showComment && (
+                    <div className="flex flex-col w-10/12 text-start pl-6 text-bodyFont text-xs">
+                      <div className="flex mb-1">
+                        <img
+                          src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.6435-9/116429521_1655876004585921_941667011043408186_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=84a396&_nc_ohc=jX_SP-XeWGUAX8gd9Dl&_nc_ht=scontent.fsgn5-10.fna&oh=00_AfB8K54ttI7F3njd8xLWtnInOErSx2FkaIhUXEuNjobBRw&oe=654A001A"
+                          className="rounded-full w-5 h-5"
+                        />
+                        <div className="ml-2 text-titleFont">{item.userDto.clientName}</div>
+                      </div>
+                      <span>
+                         Instead, our system
+                        considers things like how recent a review is and if the
+                        reviewer bought the item on Amazon. It also analyzed reviews
+                        to verify trustworthiness.
+                      </span>
+                    </div>
+                  )}
+                  <hr></hr>
                 </div>
+               
+
               ))}
 
 
