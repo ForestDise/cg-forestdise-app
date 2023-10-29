@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 function Categories() {
   return (
-    <div>
+    <div className='fixed top-50 pr-10'>
       <div className='text-titleFont text-sm'>
         <Link to="/dashboard" classNameName="text-black hover:text-blue-700 font-bold text-bodyFont text-xl"> <span>Dashboard</span></Link>
        /Category
@@ -26,7 +26,7 @@ function Categories() {
                 <input type="text" id="table-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items"/>
               </div>
             </div>
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 pr-10">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                   <th scope="col" className="p-4">

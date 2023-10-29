@@ -45,7 +45,7 @@ function HeaderBottom() {
         <li className="headerHover hidden md:inline-flex">Customer Service</li>
         <li className="headerHover hidden md:inline-flex">Gift Cards</li>
         <li className="headerHover hidden md:inline-flex">Registry</li>
-        <li className="headerHover hidden md:inline-flex">Sell</li>
+        <Link to="/selling"><li className="headerHover hidden md:inline-flex">Sell</li></Link>
       </ul>
       {/* ListItem end */}
 
