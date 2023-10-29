@@ -20,6 +20,7 @@ import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";
 import { setCategory } from "../../../features/sellerStore/sellerStoreSlice";
 import StarRating from "../../common/icon/StarRating";
 import { getReviewsByVariantId, getReviewByProductId, selectReviewListByProductId } from "../../../features/coment_review/reviewSlide"
+import FormatDate from "../../common/format/FormatDate";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -41,6 +42,8 @@ function ProductDetail() {
   console.log(variantRender0);
   const reviewVariantList = useSelector((state) => state.review.reviews);
   console.log(reviewVariantList);
+  const [idArray, setIdArray] = useState([]);
+  const [variantDTOListForLoop, setVariantDTOListForLoop] = useState([])
 
 
   useEffect(() => {
@@ -101,8 +104,22 @@ function ProductDetail() {
       setMainImage(variantRender0.imageDTOList[0].imgPath);
       setVariantId(variantRender0.id);
       setVariantRender(variantRender0);
+      console.log(variantRender)
+      console.log("555555")
+      //logic change variantId
+      if (variantRender0 && variantDetail) {
+        const optionValueList = variantRender0.optionValueDTOList;
+        console.log(optionValueList);
+        const variantDTOList = variantDetail.variantDTOList;
+        console.log(variantDTOList);
+        setVariantDTOListForLoop(variantDTOList);
+        const ids = optionValueList.map(obj => obj.id);
+        console.log(ids);
+        setIdArray(ids); //[1,4]
+        console.log(idArray);
+      }
     }
-  }, [variantRender, id])
+  }, [variantRender0, id, variantDetail, reviewVariantList, reviewAnalyst])
 
   const statusLoading = useSelector(selectLoading);
   const statusSuccess = useSelector(selectSuccess);
@@ -116,94 +133,31 @@ function ProductDetail() {
   console.log(reviewVariantList);
   console.log(reviewAnalyst);
   console.log(variantRender);
+  console.log("yeeeeee");
+  console.log(variantDTOListForLoop);
 
 
 
-  // useEffect(() => {
-  //   getVariantDetail();
-  //   console.log("run");
-  // }, [productId]);
-  // useEffect(() => {
-  // if (variantDetail) {
-  //   setVariantId(variantDetail.variantDto.id);
-  // }
-  // getVariantInformation(variantId);
-  // setMainImage(variantRender.imageDTOList[0].imgPath);
-  // setVariantId(variantRender.id);
+  const changeValueId = (i, id) => {
+    console.log(variantDTOListForLoop);
+    console.log("yeeeeee2");
+    if (i >= 0 && i < idArray.length) {
+      const newArray = [...idArray]; // Tạo một bản sao mới của mảng state
+      newArray[i] = id;
+      setIdArray(newArray); // Cập nhật mảng state với mảng mới
+      console.log(idArray); //[1,4]
+    }
+    variantDTOListForLoop.forEach(variant => {
+      const matchedOptionIds = variant.optionValueDTOList.map(option => option.id);
+      const isMatched = idArray.every(id => matchedOptionIds.includes(id));
+      if (isMatched) {
+        setVariantRender(variant);
+        setMainImage(variant.imageDTOList[0].imgPath);
 
-  // }, [productId]);
+      }
+    })
+  }
 
-
-
-  // useEffect(() => {
-  //   getReviewListByVariantId(variantId);
-  //   console.log(reviewVariantList);
-  // }, [variantId]);
-
-  // const variantDetail = useSelector(selectVariantDetail);
-  // const statusLoading = useSelector(selectLoading);
-  // const statusSuccess = useSelector(selectSuccess);
-  // const statusError = useSelector(selectError);
-  // const reviewVariantList = useSelector((state) => state.review.reviews);
-  // console.log(reviewVariantList);
-  // const reviewAnalyst = useSelector((state) => state.review.reviewsByProduct);
-  // console.log(reviewAnalyst);
-
-  // const getVariantInformation = async () => {
-  //   if (variantId != null) {
-  //     dispatch(getVariantInfo(variantId));
-  //   }
-  // };
-  // useEffect(() => {
-  //   if (variantDetail) {
-  //     setVariantId(variantDetail.variantDto.id);
-  //     getVariantInformation(variantId);
-  //     console.log(variantId);
-  //   }
-  // }, [variantId]);
-
-
-  // useEffect(() => {
-  //   getVariantInformation(variantId);
-  // }, [variantId]);
-  // const variantRender = useSelector((state) => state.variant.variantDetail);
-  // console.log(variantRender);
-  // useEffect(() => {
-  //   if (variantRender) {
-  //     setMainImage(variantRender.imageDTOList[0].imgPath);
-  //     setVariantId(variantRender.id);
-  //   }
-  // }, [variantRender]);
-
-
-  // // Tạo một đối tượng để lưu trạng thái của các cặp giá trị đã chọn
-  // const [selectedOptions, setSelectedOptions] = useState({});
-  // // Hàm được gọi khi một cặp giá trị tùy chọn thay đổi
-  // const handleOptionChange = (optionName, optionValueId) => {
-  //   setSelectedOptions({
-  //     ...selectedOptions,
-  //     [optionName]: optionValueId,
-  //   });
-  // };
-  // useEffect(() => {
-  //   console.log("selectedOptions đã thay đổi:", selectedOptions);
-  // }, [selectedOptions]);
-  // // Hàm set lại VariantId nếu cặp biến thể khớp
-  // const findMatchingVariantId = (selectedOptions, variantListDto) => {
-  //   for (const variant of variantListDto) {
-  //     if (
-  //       Object.keys(selectedOptions).every((optionName) => {
-  //         const selectedOptionValue = selectedOptions[optionName];
-  //         return variant.optionValueDtoList.some(
-  //           (option) => option.value === selectedOptionValue
-  //         );
-  //       })
-  //     ) {
-  //       return variant.id;
-  //     }
-  //   }
-  //   return null; // Trả về null nếu không tìm thấy biến thể khớp
-  // };
 
   if (variantDetail != null && variantRender != null) {
     return (
@@ -315,8 +269,8 @@ function ProductDetail() {
                   <div className="flex justify-between items-baseline mt-4 mb-6 pb-6 border-b border-slate-200 ">
                     <div className="space-x-4 flex text-xl">
                       {option.optionValueDTOList.map((ele, index) => (
-                        variantRender.optionValueDTOList[i].id == ele.id ? (<button key={index} className=" text-sm w-16 h-10 rounded-sm text-center text-slate-70 bg-slate-950 text-white border-neutral-200 border-5"> {ele.value}</button>)
-                          : (<button key={index} className=" text-sm w-16 h-10 rounded-sm text-center text-slate-70 bg-gray-300 text-white"> {ele.value}</button>)
+                        variantRender.optionValueDTOList[i].id == ele.id ? (<button key={index} onClick={() => changeValueId(i, ele.id)} className=" text-sm w-16 h-10 rounded-sm text-center text-slate-70 bg-slate-950 text-white border-neutral-200 border-5"> {ele.value}</button>)
+                          : (<button key={index} onClick={() => changeValueId(i, ele.id)} className=" text-sm w-16 h-10 rounded-sm text-center text-slate-70 bg-gray-300 text-white"> {ele.value}</button>)
                       ))}
                     </div>
                   </div>
@@ -370,58 +324,75 @@ function ProductDetail() {
                   </span>
                 </Link>
               </div>
-              <div>
-                <h1 className="my-4 text-2xl text-green-900">In Stock</h1>
-              </div>
-              <button
-                onClick={() => {
-                  userInfo
-                    ? dispatch(
-                      addNewCartLine({
-                        id: "",
-                        quantity: 1,
-                        cartId: userInfo.id,
-                        variantId: variantRender.id,
-                      })
-                    )
-                    : dispatch(
-                      addToCart({
-                        id: "",
-                        quantity: 1,
-                        cartDto: {
-                          id: "",
-                          userId: "",
-                        },
-                        variantDto: {
-                          id: variantRender.id,
-                          name: variantRender.name,
-                          skuCode: variantRender.skuCode,
-                          stockQuantity:
-                            variantRender.stockQuantity,
-                          weight: variantRender.weight,
-                          price: variantRender.price,
-                          img: variantRender.img,
-                          salePrice: variantRender.salePrice,
-                          optionValueDtoList:
-                            variantRender.optionValueDtoList,
-                          imageDtoList: variantRender.mageDtoList,
-                          videoDtoList: variantRender.videoDtoList,
-                          reviewDtoList:
-                            variantRender.reviewDtoList,
-                        },
-                      })
-                    );
-                }}
-                className="rounded-lg bg-yellow-400 py-3 my-2 hover:bg-yellow-300 duration-100 cursor-pointer"
-              >
-                Add To Cart
-              </button>
-              <button
-                className="rounded-lg py-3 my-2 bg-gradient-to-t from-slate-200 to-slate-100 hover:bg-gradient-to-b border
-              border-zinc-400 active:border-yellow-800 active:shadow-amazonInput duration-100 cursor-pointer"
-              >
-                Buy Now
-              </button>
+
+              {variantRender != null && variantRender.stockQuantity > 0 ? (
+                <>
+                  <h1 className="my-4 text-2xl text-green-900">In Stock</h1>
+                  <button
+                    onClick={() => {
+                      userInfo
+                        ? dispatch(
+                          addNewCartLine({
+                            id: "",
+                            quantity: 1,
+                            cartId: userInfo.id,
+                            variantId: variantRender.id,
+                          })
+                        )
+                        : dispatch(
+                          addToCart({
+                            id: "",
+                            quantity: 1,
+                            cartDto: {
+                              id: "",
+                              userId: "",
+                            },
+                            variantDto: {
+                              id: variantRender.id,
+                              name: variantRender.name,
+                              skuCode: variantRender.skuCode,
+                              stockQuantity:
+                                variantRender.stockQuantity,
+                              weight: variantRender.weight,
+                              price: variantRender.price,
+                              img: variantRender.img,
+                              salePrice: variantRender.salePrice,
+                              optionValueDtoList:
+                                variantRender.optionValueDtoList,
+                              imageDtoList: variantRender.mageDtoList,
+                              videoDtoList: variantRender.videoDtoList,
+                              reviewDtoList:
+                                variantRender.reviewDtoList,
+                            },
+                          })
+                        );
+                    }}
+                    className="rounded-lg bg-yellow-400 py-3 my-2 hover:bg-yellow-300 duration-100 cursor-pointer"
+                  >
+                    Add To Cart
+                  </button>
+                  <button
+                    className="rounded-lg py-3 my-2 bg-gradient-to-t from-slate-200 to-slate-100 hover:bg-gradient-to-b border
+                    border-zinc-400 active:border-yellow-800 active:shadow-amazonInput duration-100 cursor-pointer" 
+                  >
+                    Buy Now
+                  </button>
+                </>
+              ) : (
+                <>
+                  <h1 className="my-4 text-2xl text-green-900">Out of Stock</h1>
+                  <button className="rounded-lg bg-yellow-400 py-3 my-2 hover:bg-yellow-300 duration-100 cursor-pointer opacity-25" disabled>
+                    Add To Cart
+                  </button>
+                  <button
+                    className="rounded-lg py-3 my-2 bg-gradient-to-t from-slate-200 to-slate-100 hover:bg-gradient-to-b border
+                    border-zinc-400 active:border-yellow-800 active:shadow-amazonInput duration-100 cursor-pointer opacity-25" disabled
+                  >
+                    Buy Now
+                  </button>
+                </>
+              )}
+
               <div className="w-full mx-auto h-auto grid grid-cols-6 gap-2 left-0 ">
                 <div className=" w-full h-full bg-white  col-span-2 font-titleFont tracking-wide text-sm text-amazon_blue text-left">
                   Ship from
@@ -465,23 +436,23 @@ function ProductDetail() {
         <div className="container mx-auto h-auto text-3xl font-bold py-4">
           <h1>From the manufacturer</h1>
           <img
-            className="w-full px-48 my-4 object-contain"
+            className="w-full px-24 my-4 object-contain"
             src={variantDetail.storeDto.dealsImage}
             alt="ProductImg"
           ></img>
           <img
-            className="w-full px-48 my-4  object-contain"
+            className="w-full px-24 my-4  object-contain"
             src={variantDetail.storeDto.dealsSquareImage}
             alt="ProductImg"
           ></img>
           <h1>{variantDetail.storeDto.name}</h1>
           <img
-            className="w-full px-48 my-4  object-contain"
+            className="w-full px-24 my-4  object-contain"
             src={variantDetail.storeDto.homeImage}
             alt="ProductImg"
           ></img>
           <img
-            className="w-full px-48 my-4  object-contain"
+            className="w-full px-24 my-4  object-contain"
             src={variantDetail.storeDto.interactiveImage}
             alt="ProductImg"
           ></img>
@@ -519,7 +490,7 @@ function ProductDetail() {
                     fontSize={15}
                   />
                 </div>
-                <div>{reviewAnalyst.summaryDto.rating.toFixed(1)} out of 5</div>
+                <div>{reviewAnalyst.summaryDto.rating.toFixed(0)} out of 5</div>
               </div>
               <span className="text-gray-400 text-xs mb-4">
                 {reviewAnalyst.summaryDto.reviewsTotal} global ratings
@@ -545,7 +516,7 @@ function ProductDetail() {
                         </div>
                       </a>
                     </td>
-                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.fiveStar.percentage.toFixed(1)}% ({reviewAnalyst.summaryDto.ratingBreakdown.fiveStar.count})</td>
+                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.fiveStar.percentage.toFixed(0)}% ({reviewAnalyst.summaryDto.ratingBreakdown.fiveStar.count})</td>
                   </tr>
                   <tr className="">
                     <td>
@@ -563,7 +534,7 @@ function ProductDetail() {
                         </div>
                       </a>
                     </td>
-                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.fourStar.percentage.toFixed(1)}% ({reviewAnalyst.summaryDto.ratingBreakdown.fourStar.count})</td>
+                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.fourStar.percentage.toFixed(0)}% ({reviewAnalyst.summaryDto.ratingBreakdown.fourStar.count})</td>
                   </tr>
                   <tr className="mb-4">
                     <td>
@@ -582,7 +553,7 @@ function ProductDetail() {
                         </div>
                       </a>
                     </td>
-                    <td className="w-2/12 pl-1 text-left">{reviewAnalyst.summaryDto.ratingBreakdown.threeStar.percentage.toFixed(1)}% ({reviewAnalyst.summaryDto.ratingBreakdown.threeStar.count})</td>
+                    <td className="w-2/12 pl-1 text-left">{reviewAnalyst.summaryDto.ratingBreakdown.threeStar.percentage.toFixed(0)}% ({reviewAnalyst.summaryDto.ratingBreakdown.threeStar.count})</td>
                   </tr>
                   <tr className="mb-4">
                     <td>
@@ -600,7 +571,7 @@ function ProductDetail() {
                         </div>
                       </a>
                     </td>
-                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.twoStar.percentage.toFixed(1)}% ({reviewAnalyst.summaryDto.ratingBreakdown.twoStar.count})</td>
+                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.twoStar.percentage.toFixed(0)}% ({reviewAnalyst.summaryDto.ratingBreakdown.twoStar.count})</td>
                   </tr>
                   <tr className="mt-4">
                     <td>
@@ -618,7 +589,7 @@ function ProductDetail() {
                         </div>
                       </a>
                     </td>
-                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.oneStar.percentage.toFixed(1)}% ({reviewAnalyst.summaryDto.ratingBreakdown.oneStar.count})</td>
+                    <td className="w-2/12 pl-1 text-left	">{reviewAnalyst.summaryDto.ratingBreakdown.oneStar.percentage.toFixed(0)}% ({reviewAnalyst.summaryDto.ratingBreakdown.oneStar.count})</td>
                   </tr>
                 </tbody>
               </table>
@@ -708,7 +679,7 @@ function ProductDetail() {
                     </a>
                   </div>
                   <div className="text-bodyFont text-xs text-gray-500">
-                    Reviewed in the  Viet Nam on {item.update_at}
+                    Reviewed in the  Viet Nam on {FormatDate(item.update_at)}.
                   </div>
                   <div className="text-bodyFont text-xs text-gray-500 mb-2">
                     Variant:
@@ -743,7 +714,7 @@ function ProductDetail() {
                         <div className="ml-2 text-titleFont">{item.userDto.clientName}</div>
                       </div>
                       <span>
-                         Instead, our system
+                        Instead, our system
                         considers things like how recent a review is and if the
                         reviewer bought the item on Amazon. It also analyzed reviews
                         to verify trustworthiness.
@@ -752,7 +723,7 @@ function ProductDetail() {
                   )}
                   <hr></hr>
                 </div>
-               
+
 
               ))}
 
@@ -859,7 +830,51 @@ function ProductDetail() {
         </div>
       </div>)
   } else {
-    return (<div>Loading</div>)
+    return (
+    <div className="flex justify-around pl-20 pr-20 mt-500">
+        <div role="status">
+          <svg aria-hidden="true" className="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+          </svg>
+          <span className="sr-only">Loading...</span>
+        </div>
+        <div role="status">
+          <svg aria-hidden="true" className="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+          </svg>
+          <span className="sr-only">Loading...</span>
+        </div>
+        <div role="status">
+          <svg aria-hidden="true" className="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-green-500" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+          </svg>
+          <span className="sr-only">Loading...</span>
+        </div>
+        <div role="status">
+          <svg aria-hidden="true" className="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-red-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+          </svg>
+          <span className="sr-only">Loading...</span>
+        </div>
+        <div role="status">
+          <svg aria-hidden="true" className="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-yellow-400" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+          </svg>
+          <span className="sr-only">Loading...</span>
+        </div>
+        <div role="status">
+          <svg aria-hidden="true" className="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-pink-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+          </svg>
+          <span className="sr-only">Loading...</span>
+        </div>
+    </div>)
   }
 
 }

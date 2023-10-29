@@ -1,5 +1,5 @@
 import React from 'react'
-import { logoBlack } from "../../../assets";
+import { logoSeller } from "../../../assets";
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -9,10 +9,10 @@ function Header() {
   console.log(sellerInfo);
 
   return (
-    <div className="w-full bg-white border-b-2 text-amazon_blue px-4 py-1 flex justify-between items-center gap-4">
+    <div className="w-full bg-white border-b-2 text-amazon_blue px-4 py-1 flex justify-between items-center gap-4 sticky top-0 z-50 h-20">
       {/* Logo start */}
       <div onClick={() => navigate("/selling")} className="">
-        <img className="w-[7rem] mt-0" src={logoBlack} alt="logo-dasboard"></img>
+        <img className="w-[9rem] h-[6rem] mt-0" src={logoSeller} alt="logo-dasboard"></img>
       </div>
       {/* Logo end */}
 

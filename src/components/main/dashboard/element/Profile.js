@@ -8,7 +8,7 @@ function Profile() {
     console.log(sellerInfo);
   return (
 
-        <div className="h-full">
+      <div className="h-full fixed top-50 w-full mr-10">
 
             <div className="border-b-2 block md:flex">
 

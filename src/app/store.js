@@ -32,11 +32,24 @@ const persistConfig = {
   version: 1,
   storage,
 };
-
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
 const sellerStorePersistedReducer = persistReducer(persistConfig, sellerStoreReducer);
 const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
 const variantPersistedReducer = persistReducer(persistConfig, variantReducer);
+// const bulletPersistedReducer = persistReducer(persistConfig, bulletReducer);
+const hashtagPersistedReducer = persistReducer(persistConfig, hashtagReducer);
+const productPersistedReducer = persistReducer(persistConfig, productReducer);
+const shopPersistedReducer = persistReducer(persistConfig, shopReducer);
+const commentPersistedReducer = persistReducer(persistConfig, commentReducer);
+const reviewPersistedReducer = persistReducer(persistConfig, reviewReducer);
+const sellerPersistedReducer = persistReducer(persistConfig, sellerReducer);
+const categoryPersistedReducer = persistReducer(persistConfig, categoryReducer);
+const storeCategoryPersistedReducer = persistReducer(persistConfig, storeCategoryReducer);
+const optionPersistedReducer = persistReducer(persistConfig, optionReducer);
+const optionValuePersistedReducer = persistReducer(persistConfig, optionValueReducer);
+
+
+
 
 export const store = configureStore({
   reducer: {
@@ -46,16 +59,16 @@ export const store = configureStore({
     variant: variantPersistedReducer,
     user: userPersistedReducer,
     bullet: bulletReducer,
-    hashtag: hashtagReducer,
-    product: productReducer,
-    shop: shopReducer,
-    comment: commentReducer,
-    review: reviewReducer,
-    seller: sellerReducer,
-    category: categoryReducer,
-    storeCategory: storeCategoryReducer,
-    option: optionReducer,
-    optionValue: optionValueReducer
+    hashtag: hashtagPersistedReducer,
+    product: productPersistedReducer,
+    shop: shopPersistedReducer,
+    comment: commentPersistedReducer,
+    review: reviewPersistedReducer,
+    seller: sellerPersistedReducer,
+    category: categoryPersistedReducer,
+    storeCategory: storeCategoryPersistedReducer,
+    option: optionPersistedReducer,
+    optionValue: optionValuePersistedReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

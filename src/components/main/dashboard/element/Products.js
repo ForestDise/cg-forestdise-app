@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 function Products() {
   return (
-    <div>
+    <div className='fixed top-50 w-full mr-10'>
       <div className='text-titleFont text-sm'>
         <Link to="/dashboard" classNameName="text-black hover:text-blue-700 font-bold text-bodyFont text-xl"> <span>Dashboard</span></Link>
         /Products
