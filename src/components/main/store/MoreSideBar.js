@@ -10,6 +10,7 @@ import {
   toggleMoreSideBar,
   toggleMoreCategory,
   setSelectedCategory,
+  setSelectedSubCategory,
   setSelectedCurrent,
   addMoreCategoryToggle,
   toggleOffMoreCategory,
@@ -28,6 +29,9 @@ function MoreSideBar() {
   const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
   const selectedCategory = useSelector(
     (state) => state.sellerStore.selectedCategory
+  );
+  const selectedSubCategory = useSelector(
+    (state) => state.sellerStore.selectedSubCategory
   );
   const motionMoreDivRef = useRef();
   const dispatch = useDispatch();
@@ -153,6 +157,7 @@ function MoreSideBar() {
                               dispatch(changeCategory("Deals"));
                               dispatch(changeSubCategory(""));
                               dispatch(setStoreBanner(storeInfo.dealsImage));
+                              dispatch(toggleMoreSideBar(false));
                             }}
                             className="flex items-center font-medium w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                           >
@@ -241,6 +246,7 @@ function MoreSideBar() {
                                   dispatch(setStoreBanner(category.heroImage));
                                   dispatch(changeCategory(selectedCategory));
                                   dispatch(changeSubCategory(""));
+                                  dispatch(toggleMoreSideBar(false));
                                 }}
                                 className="flex items-center font-medium w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                               >
@@ -253,8 +259,20 @@ function MoreSideBar() {
                                 category.parentStoreCategory.name ===
                                   selectedCategory && (
                                   <li key={category.id}>
-                                    <a
+                                    <Link
+                                      name={category.name}
+                                      onMouseOver={() => {
+                                        dispatch(
+                                          changeBannerImage(category.heroImage)
+                                        );
+                                        dispatch(
+                                          setSelectedSubCategory(category.name)
+                                        );
+                                      }}
                                       onClick={(e) => {
+                                        dispatch(
+                                          setSelectedCurrent(category.name)
+                                        );
                                         dispatch(
                                           setStoreBanner(category.heroImage)
                                         );
@@ -262,13 +280,15 @@ function MoreSideBar() {
                                           changeCategory(selectedCategory)
                                         );
                                         dispatch(
-                                          changeSubCategory(category.name)
+                                          changeSubCategory(e.target.name)
                                         );
+                                        dispatch(toggleMoreSideBar(false));
                                       }}
                                       className="flex items-center cursor-pointer font-light w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                                      to={`/store/${storeInfo.id}/${selectedCategory}/${selectedSubCategory}`}
                                     >
                                       {category.name}
-                                    </a>
+                                    </Link>
                                   </li>
                                 )
                             )}

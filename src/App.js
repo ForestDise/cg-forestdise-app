@@ -45,6 +45,7 @@ import Images from "./components/main/selling/main/Images";
 import HomeSelling from "./components/main/selling/main/HomeSelling";
 import SellerRegistration from "./pages/SellerRegistration";
 import SellerSignin from "./pages/SellerSignin";
+import SubCategoryContent from "./components/main/store/SubCategoryContent";
 
 
 const Layout = () => {
@@ -60,7 +61,7 @@ const Layout = () => {
 const SellingLayout = () => {
   return (
     <div>
-      <SellingHeader />
+<SellingHeader />
       <Selling>
         <Outlet />
       </Selling>
@@ -114,6 +115,10 @@ function App() {
             <Route
               path="/store/:id/:categoryName"
               element={<CategoryContent />}
+            ></Route>
+            <Route
+              path="/store/:id/:categoryName/:subCategoryName"
+              element={<SubCategoryContent />}
             ></Route>
           </Route>
         </Route>

@@ -19,13 +19,11 @@ function Products() {
   useEffect(() => {
     if(products.length < 1){
       dispatch(getProducts());
-      console.log("====home====");
     }
     if (userInfo) {
-      dispatch(getCartLines(userInfo.id));
-      console.log("====userInfo=====");
+      dispatch(getCartLines(userInfo.id));   
     }
-    console.log("====products=====");
+    
   }, [userInfo]);
   console.log(userInfo);
 
@@ -82,7 +80,7 @@ function Products() {
                 className="font-titleFont tracking-wide text-lg text-amazon_blue
               font-medium"
               >
-                {product.title.substring(0, 20)}
+                {product.title.substring(0, 40)}...
               </h2>
             </div>
             <div>
