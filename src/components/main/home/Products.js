@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCartLines } from "../../../features/cart/cartSlice";
 import { setStore } from "../../../features/sellerStore/sellerStoreSlice";
 import { getProducts } from "../../../features/home/homeSlice";
+import { getVariant} from "../../../features/variant/variantSlice";
 
 function Products() {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function Products() {
     }
     
   }, [userInfo]);
+  console.log(userInfo);
 
   return (
     <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-10 px-4">

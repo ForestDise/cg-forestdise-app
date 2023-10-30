@@ -6,15 +6,16 @@ import {
 } from "../../api/reviewAPI";
 
 const initialState = {
-    reviews: null,
+    reviews: [],
+    reviewsByProduct :null,
     review: null,
     loading: false,
     error: null,
     success: false,
 };
 
-export const getReviewsByVariantId = createAsyncThunk("getreview", async (variantId, customer) => {
-    const response = await findReview(variantId, customer);
+export const getReviewsByVariantId = createAsyncThunk("getreview", async (variantId) => {
+    const response = await findReview(variantId);
     return response.data;
 });
 
@@ -78,7 +79,7 @@ export const reviewSlide = createSlice({
             .addCase(getReviewByProductId.fulfilled, (state, action) => {
                 state.success = true;
                 state.loading = false;
-                state.store = action.payload;
+                state.reviewsByProduct = action.payload;
                 state.error = false;
             })
 
@@ -112,7 +113,7 @@ export const selectLoading = (state) => state.shop.loading;
 export const selectError = (state) => state.shop.error;
 export const selectSuccess = (state) => state.shop.success;
 export const selectReviewListByVariantId = (state) => state.review.reviews;
-export const selectReviewListByProductId = (state) => state.review.reviews;
+export const selectReviewListByProductId = (state) => state.review.reviewsByProduct;
 export const selectReviewCreated = (state) => state.review.review;
 
 //Enhancement feature of book slice

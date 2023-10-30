@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import BannerInventory from '../../../assets/bannerInventory01.png'
-import Vitals from './inventory-child/Vitals';
-import Variants from './inventory-child/Variants';
-import Offers from './inventory-child/Offers';
-import Images from './inventory-child/Images';
+import Product from './main/Product';
+import Variants from './main/Variants';
+import Offers from './main/Offers';
+import Images from './main/Images';
+
 
 
 function Inventory() {
@@ -11,7 +12,7 @@ function Inventory() {
     const [showComponentVariants, setShowComponentVariants] = useState(false);
     const [showComponentOffers, setShowComponentOffers] = useState(false);
     const [showComponentImages, setShowComponentImages] = useState(false);
-    const handleShowComponent1 =() => {
+    const handleShowComponent1 = () => {
         setShowComponentVitals(true);
         setShowComponentVariants(false);
         setShowComponentOffers(false);
@@ -44,7 +45,7 @@ function Inventory() {
     return (
         <div className='w-full grid grid-cols-10'>
             <div className='col-span-2 flex flex-col text-3xl font-bold mt-30'>
-                <button className='bg-gray-700 ' onClick={handleShowComponent1}>Vitals Info</button>
+                <button className='bg-gray-700 ' onClick={handleShowComponent1}>Products</button>
                 <button className='bg-white text-black' onClick={handleShowComponent2}>Variations</button>
                 <button className='bg-gray-700' onClick={handleShowComponent3}>Offers</button>
                 <button className='bg-white text-black' onClick={handleShowComponent4}>Images</button>
@@ -57,10 +58,10 @@ function Inventory() {
 
             </div>}
 
-            {showComponentVitals  && <Vitals/>}
-            {showComponentVariants && <Variants/>}
+            {showComponentVitals && <Product />}
+            {showComponentVariants && <Variants />}
             {showComponentOffers && <Offers/>}
-            {showComponentImages && <Images/>}
+            {showComponentImages && <Images />}
 
 
         </div>
