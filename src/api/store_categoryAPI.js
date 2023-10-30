@@ -13,4 +13,14 @@ export const createCategory = async (category) => {
     }
     return result;
 };
+export const createCategoryList = async ({categoryList, storeId}) => {
+    let result = null;
+    try {
+        result = await axios.post(`${STORECATE_MANAGEMENT_API}/${storeId}`, categoryList);
+        console.log(result);
+    } catch (e) {
+        console.log("create categoryList API error: " + e);
+    }
+    return result;
+};
 
