@@ -160,7 +160,7 @@ function SearchContent() {
                   className="font-titleFont tracking-wide text-lg text-amazon_blue
               font-medium"
                 >
-                  {product.title.substring(0, 20)}
+                  {product.title.substring(0, 40)}...
                 </h2>
               </div>
               <div>

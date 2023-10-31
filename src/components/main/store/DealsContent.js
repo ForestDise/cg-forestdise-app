@@ -20,7 +20,7 @@ function DealsContent() {
 
   async function fetchData() {
     await axios
-      .get("http://localhost:8080/api/products")
+      .get(`http://localhost:8080/api/stores/${storeInfo.id}/products`)
       .then((res) => {
         setProductData(res.data);
       })
@@ -84,7 +84,7 @@ function DealsContent() {
                   className="font-titleFont tracking-wide text-lg text-amazon_blue
               font-medium"
                 >
-                  {product.title.substring(0, 20)}
+                  {product.title.substring(0, 40)}...
                 </h2>
               </div>
               <div>
@@ -124,7 +124,7 @@ function DealsContent() {
                 index <= 7 && (
                   <div
                     key={category.id}
-                    className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
+                    className="w-[356px] h-[356px] cursor-pointer border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
              shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
                   >
                     <img className="mx-auto" src={category.squareImage}></img>
