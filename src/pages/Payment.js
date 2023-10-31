@@ -1,9 +1,7 @@
 import React from "react";
 import Header from "../components/main/payment/Header";
-import { dividerClasses } from "@mui/material";
 import Footer from "../components/main/payment/Footer";
 import Address from "../components/main/payment/Address";
-import PaymentMethod from "../components/main/payment/PaymentMethod";
 import Method from "../components/main/payment/Method";
 import PayMentTotal from "../components/main/payment/PayMentTotal";
 import ReviewItemAndShipping from "../components/main/payment/ReviewItemAndShipping";
