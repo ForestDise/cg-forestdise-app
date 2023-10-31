@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { findVariant, findVariantById } from "../../api/variantAPI";
+import { findVariant, findVariantById, createVariant } from "../../api/variantAPI";
 
 const initialState = {
     variant: null,
     variantDetail: null,
+    variants:[],
     loading: false,
     error: null,
     success: false,
@@ -17,6 +18,11 @@ export const getVariantInfo = createAsyncThunk("variant/info", async (productId)
   const response = await findVariantById(productId);
   return response.data;
 })
+export const addVariant = createAsyncThunk("create/variant", async (variant, productId) => {
+  const response = await createVariant(variant, productId);
+  console.log(response.data);
+  return response.data;
+});
 export const variantSlice = createSlice({
     name: "variant",
     initialState,
@@ -66,6 +72,22 @@ export const variantSlice = createSlice({
         state.variantDetail = action.payload;
         state.error = false;
       })
+      .addCase(addVariant.pending, (state) => {
+        state.success = false;
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(addVariant.rejected, (state, action) => {
+        state.success = false;
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(addVariant.fulfilled, (state, action) => {
+        state.success = true;
+        state.loading = false;
+        state.variants.push(action.payload.variantDto);
+        state.error = false;
+      })
     }
 })
 export const {
@@ -79,6 +101,7 @@ export const selectError = (state) => state.variant.error;
 export const selectSuccess = (state) => state.variant.success;
 export const selectVariantDetail = (state) => state.variant.variant;
 export const selectVariantInfo = (state) => state.variant.variantDetail;
+export const selectVariantListCreated = (state) => state.variant.variants;
 
 export default variantSlice.reducer;
 

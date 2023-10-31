@@ -30,10 +30,10 @@ export const updateVariant = async (Variant) => {
   }
   return result;
 };
-export const createVariant = async (variant) => {
+export const createVariant = async ({variant,productId}) => {
   let result = null;
   try {
-    result = await axios.post(`${VARIANT_MANAGEMENT_API}`, variant);
+    result = await axios.post(`${VARIANT_MANAGEMENT_API}/variant/${productId}/create`, variant);
   } catch (e) {
     console.log("create variant API error: " + e);
   }
