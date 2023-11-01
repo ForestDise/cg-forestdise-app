@@ -46,6 +46,7 @@ import HomeSelling from "./components/main/selling/main/HomeSelling";
 import SellerRegistration from "./pages/SellerRegistration";
 import SellerSignin from "./pages/SellerSignin";
 import SubCategoryContent from "./components/main/store/SubCategoryContent";
+import Confirm from "./pages/Confirm";
 
 
 const Layout = () => {
@@ -96,6 +97,7 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Fragment>
+        <Route path="/confirm" element={<Confirm />} />
         <Route path="/error" element={<Error />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/signin" element={<Signin />} />
