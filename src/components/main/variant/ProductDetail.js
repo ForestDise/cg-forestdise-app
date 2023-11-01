@@ -19,7 +19,7 @@ import {
 import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";
 import { setCategory } from "../../../features/sellerStore/sellerStoreSlice";
 import StarRating from "../../common/icon/StarRating";
-import { getReviewsByVariantId, getReviewByProductId, selectReviewListByProductId } from "../../../features/coment_review/reviewSlide"
+import { getReviewsByVariantId, getReviewByProductId, selectReviewListByProductId, addReview } from "../../../features/coment_review/reviewSlide"
 import FormatDate from "../../common/format/FormatDate";
 
 function ProductDetail() {
