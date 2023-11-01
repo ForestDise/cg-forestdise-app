@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCartLines } from "../../../features/cart/cartSlice";
 import { setStore } from "../../../features/sellerStore/sellerStoreSlice";
 import { getProducts } from "../../../features/home/homeSlice";
+import { getVariant} from "../../../features/variant/variantSlice";
 
 function Products() {
   const dispatch = useDispatch();
@@ -18,14 +19,13 @@ function Products() {
   useEffect(() => {
     if(products.length < 1){
       dispatch(getProducts());
-      console.log("====home====");
     }
     if (userInfo) {
-      dispatch(getCartLines(userInfo.id));
-      console.log("====userInfo=====");
+      dispatch(getCartLines(userInfo.id));   
     }
-    console.log("====products=====");
+    
   }, [userInfo]);
+  console.log(userInfo);
 
   return (
     <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-10 px-4">
@@ -80,7 +80,7 @@ function Products() {
                 className="font-titleFont tracking-wide text-lg text-amazon_blue
               font-medium"
               >
-                {product.title.substring(0, 20)}
+                {product.title.substring(0, 40)}...
               </h2>
             </div>
             <div>

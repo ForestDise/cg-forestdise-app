@@ -15,35 +15,62 @@ import variantReducer from "../features/variant/variantSlice";
 import userReducer from "../features/user/userSlice";
 import bulletReducer from "../features/variant/bulletSlide";
 import hashtagReducer from "../features/variant/hashtagSlide";
-import productReducer from "../features/variant/productSide";
+import productReducer from "../features/variant/productSlide";
 import shopReducer from "../features/variant/shopSlide";
 import commentReducer from "../features/coment_review/commentSlide";
 import reviewReducer from "../features/coment_review/reviewSlide";
 import sellerStoreReducer from "../features/sellerStore/sellerStoreSlice";
+import sellerReducer from "../features/seller/sellerSlice";
+import categoryReducer from "../features/variant/categorySlide";
 import homeReducer from "../features/home/homeSlice";
+import storeCategoryReducer from "../features/variant/storeCategorySlide"
+import optionReducer from "../features/variant/optionSlide"
+import optionValueReducer from "../features/variant/optionValueSlide"
+import paymentReducer from "../features/payment/paymentSlice";
 
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
 };
-
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
 const sellerStorePersistedReducer = persistReducer(persistConfig, sellerStoreReducer);
 const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
+const variantPersistedReducer = persistReducer(persistConfig, variantReducer);
+// const bulletPersistedReducer = persistReducer(persistConfig, bulletReducer);
+const hashtagPersistedReducer = persistReducer(persistConfig, hashtagReducer);
+const productPersistedReducer = persistReducer(persistConfig, productReducer);
+const shopPersistedReducer = persistReducer(persistConfig, shopReducer);
+const commentPersistedReducer = persistReducer(persistConfig, commentReducer);
+const reviewPersistedReducer = persistReducer(persistConfig, reviewReducer);
+const sellerPersistedReducer = persistReducer(persistConfig, sellerReducer);
+const categoryPersistedReducer = persistReducer(persistConfig, categoryReducer);
+const storeCategoryPersistedReducer = persistReducer(persistConfig, storeCategoryReducer);
+const optionPersistedReducer = persistReducer(persistConfig, optionReducer);
+const optionValuePersistedReducer = persistReducer(persistConfig, optionValueReducer);
+
+
+
+
 export const store = configureStore({
   reducer: {
     home: homeReducer,
     cart: cartPersistedReducer,
     sellerStore: sellerStorePersistedReducer,
-    variant: variantReducer,
+    variant: variantPersistedReducer,
     user: userPersistedReducer,
     bullet: bulletReducer,
-    hashtag: hashtagReducer,
-    product: productReducer,
-    shop: shopReducer,
-    comment: commentReducer,
-    review: reviewReducer,
+    hashtag: hashtagPersistedReducer,
+    product: productPersistedReducer,
+    shop: shopPersistedReducer,
+    comment: commentPersistedReducer,
+    review: reviewPersistedReducer,
+    seller: sellerPersistedReducer,
+    category: categoryPersistedReducer,
+    storeCategory: storeCategoryPersistedReducer,
+    option: optionPersistedReducer,
+    optionValue: optionValuePersistedReducer,
+    payment: paymentReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

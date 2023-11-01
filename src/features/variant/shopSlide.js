@@ -1,35 +1,30 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-    findShops,
-    findShop,
-    createShop,
-    updateShop
-} from "../../api/shopAPI";
-
+import { findShops,findShop,createShop,updateShop } from "../../api/storeForSellerAPI";
 const initialState = {
-    stores: null,
-    store: null,
+    stores: [],
+    store: {},
     loading: false,
     error: null,
     success: false,
 };
 
-export const getStores = createAsyncThunk("store/list", async () => {
+export const getStores = createAsyncThunk("list", async () => {
     const response = await findShops();
     return response.data;
 });
 
-export const getStore = createAsyncThunk("store/detail", async (shopId) => {
+export const getStore = createAsyncThunk("detail", async (shopId) => {
     const response = await findShop(shopId);
     return response.data;
 });
 
-export const addStore = createAsyncThunk("store/create", async (shop) => {
-    const response = await createShop(shop);
+export const addStore = createAsyncThunk("create", async (shop,sellerId) => {
+    const response = await createShop(shop, sellerId);
+    console.log(response.data);
     return response.data;
 });
 
-export const editStore = createAsyncThunk("store/edit", async (shop) => {
+export const editStore = createAsyncThunk("edit", async (shop) => {
     const response = await updateShop(shop);
     return response.data;
 });
@@ -137,7 +132,7 @@ export const selectSuccess = (state) => state.shop.success;
 export const selectStoreList = (state) => state.shop.stores;
 export const selectStoreDetail = (state) => state.shop.store;
 export const selectStoreAdded = (state) => state.shop.store;
-export const selectStoreEdited = (state) => state.shop.store;
+// export const selectStoreEdited = (state) => state.shop.store;
 
 //Enhancement feature of book slice
 export const setLoadingTrueIfCalled = (isCalled) => (dispatch, getState) => {

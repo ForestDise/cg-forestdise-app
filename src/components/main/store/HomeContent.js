@@ -6,12 +6,28 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  changeCategory,
+  changeSubCategory,
+  changeBannerImage,
+  setSelectedCategory,
+  setSelectedCurrent,
+  setStore,
+  setCategory,
+  setStoreBanner,
+  setSearchProducts,
+  setSearchParams,
+  setSearchParamsResult,
+} from "../../../features/sellerStore/sellerStoreSlice";
 
 function HomeContent() {
   const dispatch = useDispatch();
   const [productData, setProductData] = useState([]);
   const storeInfo = useSelector((state) => state.sellerStore.storeInfo);
   const categories = useSelector((state) => state.sellerStore.categories);
+  const selectedCategory = useSelector(
+    (state) => state.sellerStore.selectedCategory
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +36,7 @@ function HomeContent() {
 
   async function fetchData() {
     await axios
-      .get("http://localhost:8080/api/products")
+      .get(`http://localhost:8080/api/stores/${storeInfo.id}/products`)
       .then((res) => {
         setProductData(res.data);
       })
@@ -84,7 +100,7 @@ function HomeContent() {
                   className="font-titleFont tracking-wide text-lg text-amazon_blue
               font-medium"
                 >
-                  {product.title.substring(0, 20)}
+                  {product.title.substring(0, 40)}...
                 </h2>
               </div>
               <div>
@@ -117,24 +133,52 @@ function HomeContent() {
 
       <div className="bg-white w-full h-[732px]">
         <div className="grid grid-cols-4 gap-2 relative px-4 py-4">
-          <div
-            className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
-             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
+          <Link
+            name="Deals"
+            to={`/store/${storeInfo.id}/deals`}
+            onMouseOver={(e) => {
+              dispatch(setSelectedCategory(e.target.name));
+              dispatch(changeBannerImage(storeInfo.dealsImage));
+            }}
+            onClick={() => {
+              dispatch(changeCategory("Deals"));
+              dispatch(changeSubCategory(""));
+              dispatch(setStoreBanner(storeInfo.dealsImage));
+            }}
           >
-            <img className="mx-auto" src={storeInfo.dealsSquareImage}></img>
-          </div>
+            <div
+              className="w-[356px] h-[356px] cursor-pointer border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
+             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
+            >
+              <img className="mx-auto" src={storeInfo.dealsSquareImage}></img>
+            </div>
+          </Link>
           {categories
             .filter((category) => category.parentStoreCategory === null)
             .map(
               (category, index) =>
                 index <= 7 && (
-                  <div
-                    key={category.id}
-                    className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
-             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
+                  <Link
+                    onMouseOver={() => {
+                      dispatch(changeBannerImage(category.heroImage));
+                      dispatch(setSelectedCategory(category.name));
+                    }}
+                    onClick={() => {
+                      dispatch(setSelectedCurrent(category.name));
+                      dispatch(setStoreBanner(category.heroImage));
+                      dispatch(changeCategory(selectedCategory));
+                      dispatch(changeSubCategory(""));
+                    }}
+                    to={`/store/${storeInfo.id}/${selectedCategory}`}
                   >
-                    <img className="mx-auto" src={category.squareImage}></img>
-                  </div>
+                    <div
+                      key={category.id}
+                      className="w-[356px] h-[356px] cursor-pointer border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
+             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
+                    >
+                      <img className="mx-auto" src={category.squareImage}></img>
+                    </div>
+                  </Link>
                 )
             )}
         </div>

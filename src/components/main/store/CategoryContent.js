@@ -22,11 +22,12 @@ function CategoryContent() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [selectedCurrent]);
 
   async function fetchData() {
+    let params = selectedCategory.replace(/&/g, "%26");
     await axios
-      .get("http://localhost:8080/api/products")
+      .get(`http://localhost:8080/api/stores/${storeInfo.id}/products/category?name=${params}`)
       .then((res) => {
         setProductData(res.data);
       })
@@ -90,7 +91,7 @@ function CategoryContent() {
                   className="font-titleFont tracking-wide text-lg text-amazon_blue
               font-medium"
                 >
-                  {product.title.substring(0, 20)}
+                  {product.title.substring(0, 40)}...
                 </h2>
               </div>
               <div>
@@ -124,16 +125,13 @@ function CategoryContent() {
       <div className="bg-white w-full h-[732px]">
         <div className="grid grid-cols-4 gap-2 relative px-4 py-4">
           {categories
-            .filter(
-              (category) =>
-                category.parentStoreCategory !== null
-            )
+            .filter((category) => category.parentStoreCategory !== null)
             .map(
               (category, index) =>
                 category.parentStoreCategory.name === selectedCurrent && (
                   <div
-                  key={category.id}
-                    className="w-[356px] h-[356px] border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
+                    key={category.id}
+                    className="w-[356px] h-[356px] cursor-pointer border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
              shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
                   >
                     <img className="mx-auto" src={category.squareImage}></img>

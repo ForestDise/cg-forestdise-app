@@ -11,6 +11,7 @@ const initialState = {
     bannerImage: "",
   },
   selectedCategory: null,
+  selectedSubCategory: null,
   selectedCurrent: null,
   moreSideBar: false,
   moreCategoryToggle: {
@@ -60,6 +61,9 @@ export const sellerStoreSlice = createSlice({
     },
     setSelectedCategory: (state, action) => {
       state.selectedCategory = action.payload;
+    },
+    setSelectedSubCategory: (state, action) => {
+      state.selectedSubCategory = action.payload;
     },
     setSelectedCurrent: (state, action) => {
       state.selectedCurrent = action.payload;
@@ -136,6 +140,7 @@ export const {
   setSearchParamsResult,
   setStoreBanner,
   setSelectedCategory,
+  setSelectedSubCategory,
   setSelectedCurrent,
   changeCategory,
   changeSubCategory,

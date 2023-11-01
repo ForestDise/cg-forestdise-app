@@ -1,11 +1,12 @@
-import React, {Fragment, createContext, useState} from "react";
+
+import React, {Fragment} from "react";
 import {
-    Outlet,
-    Route,
-    RouterProvider,
-    ScrollRestoration,
-    createBrowserRouter,
-    createRoutesFromElements,
+  Outlet,
+  Route,
+  RouterProvider,
+  ScrollRestoration,
+  createBrowserRouter,
+  createRoutesFromElements,
 } from "react-router-dom";
 import Home from "./pages/Home";
 import Cart from "./components/main/cart/Cart";
@@ -21,8 +22,8 @@ import Footer from "./components/common/footer/Footer";
 import ProductDetail from "./components/main/variant/ProductDetail";
 import SellingHeader from "./components/common/sellingheader/SellingHeader";
 import Selling from "./components/main/selling/Selling";
-import Market from "./components/main/selling/Market";
-import ListingProduct from "./components/main/selling/ListingProduct";
+import ShopCreat from "./components/main/selling/main/ShopCreate";
+import Category from "./components/main/selling/main/Category";
 import Inventory from "./components/main/selling/Inventory";
 import Orders from "./components/main/selling/Orders";
 import Info from "./components/main/selling/Info";
@@ -30,27 +31,51 @@ import Payment from "./pages/Payment";
 import StoreHeader from "./components/main/store/StoreHeader";
 import StoreFooter from "./components/main/store/StoreFooter";
 import StoreBanner from "./components/main/store/StoreBanner";
+import Variants from "./components/main/selling/main/Variants";
+import Product from "./components/main/selling/main/Product";
+import Offers from "./components/main/selling/main/Offers";
+import Dashboard from "./components/main/dashboard/Dashboard";
+import DashBoardHeader from "./components/main/dashboard/DashBoardHeader";
+import Categories from "./components/main/dashboard/element/Categories";
+import HomeDasboard from "./components/main/dashboard/element/HomeDasboard";
+import OrdersDashboard from "./components/main/dashboard/element/OrdersDashboard";
+import Products from "./components/main/dashboard/element/Products";
+import Profile from "./components/main/dashboard/element/Profile";
+import Images from "./components/main/selling/main/Images";
+import HomeSelling from "./components/main/selling/main/HomeSelling";
 import SellerRegistration from "./pages/SellerRegistration";
 import SellerSignin from "./pages/SellerSignin";
+import SubCategoryContent from "./components/main/store/SubCategoryContent";
 
 
 const Layout = () => {
-    return (
-        <div>
-            <Header/>
-            <ScrollRestoration/>
-            <Outlet/>
-            <Footer/>
-        </div>
-    );
+  return (
+    <div>
+      <Header />
+      <ScrollRestoration />
+      <Outlet />
+      <Footer />
+    </div>
+  );
 };
 const SellingLayout = () => {
   return (
     <div>
-      <SellingHeader />
-      <ScrollRestoration />
-      <Outlet />
+<SellingHeader />
+      <Selling>
+        <Outlet />
+      </Selling>
       <Footer />
+    </div>
+  );
+};
+const DashboardLayout = () => {
+  return (
+    <div>
+      <DashBoardHeader />
+      <Dashboard>
+        <Outlet/>
+      </Dashboard>
     </div>
   );
 };
@@ -67,8 +92,6 @@ const StoreLayout = () => {
 };
 
 function App() {
-  const [selectedCurrent, setSelectedCurrent] = useState("");
-
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -93,18 +116,28 @@ function App() {
               path="/store/:id/:categoryName"
               element={<CategoryContent />}
             ></Route>
+            <Route
+              path="/store/:id/:categoryName/:subCategoryName"
+              element={<SubCategoryContent />}
+            ></Route>
           </Route>
         </Route>
         <Route path="/payment" element={<Payment />} />
         <Route path="/selling" element={<SellingLayout />}>
-          <Route index element={<Selling />} />
-          <Route path="/selling/market" element={<Market />} />
-          <Route path="/selling/listing" element={<ListingProduct />} />
-          <Route path="/selling/inventory" element={<Inventory />} />
-          <Route path="/selling/order" element={<Orders />} />
-          <Route path="/selling/info" element={<Info />} />
-          <Route path="/selling/sellerInfo" element={<Info />} />
-          <Route path="/selling/inventory/vitals" element={<Inventory />} />
+          <Route index element={<HomeSelling />} />
+          <Route path="/selling/shop" element={<ShopCreat />} />
+          <Route path="/selling/category" element={<Category />} />
+          <Route path="/selling/product" element={<Product/>} />
+          <Route path="/selling/attributes" element={<Offers />} />
+          <Route path="/selling/variant" element={<Variants />} />
+          <Route path="/selling/images" element={<Images />} />
+        </Route>
+        <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<HomeDasboard />} />
+            <Route path="/dashboard/categories" element={<Categories />} />
+            <Route path="/dashboard/products" element={<Products />} />
+            <Route path="/dashboard/orders" element={<OrdersDashboard />} />
+            <Route path="/dashboard/profile" element={<Profile />} />
         </Route>
       </Fragment>
     )

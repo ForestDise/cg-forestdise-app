@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { findVariant } from "../../api/variantAPI";
+import { findVariant, findVariantById } from "../../api/variantAPI";
 
 const initialState = {
     variant: null,
+    variantDetail: null,
     loading: false,
     error: null,
     success: false,
@@ -10,8 +11,11 @@ const initialState = {
 
 export const getVariant = createAsyncThunk("variant/detail", async (productId) => {
   const response = await findVariant(productId);
-    console.log(response.data);
     return response.data;
+})
+export const getVariantInfo = createAsyncThunk("variant/info", async (productId) => {
+  const response = await findVariantById(productId);
+  return response.data;
 })
 export const variantSlice = createSlice({
     name: "variant",
@@ -46,6 +50,22 @@ export const variantSlice = createSlice({
         state.variant = action.payload;
         state.error = false;
       })
+      .addCase(getVariantInfo.pending, (state) => {
+        state.success = false;
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getVariantInfo.rejected, (state, action) => {
+        state.success = false;
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(getVariantInfo.fulfilled, (state, action) => {
+        state.success = true;
+        state.loading = false;
+        state.variantDetail = action.payload;
+        state.error = false;
+      })
     }
 })
 export const {
@@ -58,15 +78,7 @@ export const selectLoading = (state) => state.variant.loading;
 export const selectError = (state) => state.variant.error;
 export const selectSuccess = (state) => state.variant.success;
 export const selectVariantDetail = (state) => state.variant.variant;
-
-//Enhancement feature of book slice
-export const setLoadingTrueIfCalled = (isCalled) => (dispatch, getState) => {
-  const currentValue = selectLoading(getState());
-  if (currentValue === isCalled) {
-    dispatch(setLoading(true));
-  }
-};
-
+export const selectVariantInfo = (state) => state.variant.variantDetail;
 
 export default variantSlice.reducer;
 
