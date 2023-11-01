@@ -141,18 +141,16 @@ function CategoryContent() {
           {categories
             .filter((category) => category.parentStoreCategory !== null)
             .map(
-              (category, index) =>
+              (category) =>
                 category.parentStoreCategory.name === selectedCurrent && (
                   <Link
                     name={category.name}
-                    onMouseOver={() => {
-                      dispatch(setSelectedSubCategory(category.name));
-                    }}
                     onClick={(e) => {
+                      dispatch(setSelectedSubCategory(category.name));
                       dispatch(setSelectedCurrent(category.name));
                       dispatch(setStoreBanner(category.heroImage));
                       dispatch(changeCategory(selectedCategory));
-                      dispatch(changeSubCategory(e.target.name));
+                      dispatch(changeSubCategory(category.name));
                     }}
                     className="font-light block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     to={`/store/${storeInfo.id}/${selectedCategory}/${selectedSubCategory}`}

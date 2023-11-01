@@ -345,8 +345,7 @@ export default function StoreHeader() {
                                         <li key={category.id}>
                                           <Link
                                             name={category.name}
-                                            onMouseOver={() => {
-                                              
+                                            onMouseOver={() => {                                            
                                               dispatch(
                                                 setSelectedSubCategory(
                                                   category.name
