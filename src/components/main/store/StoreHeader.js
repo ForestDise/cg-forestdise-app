@@ -346,11 +346,7 @@ export default function StoreHeader() {
                                           <Link
                                             name={category.name}
                                             onMouseOver={() => {
-                                              dispatch(
-                                                changeBannerImage(
-                                                  category.heroImage
-                                                )
-                                              );
+                                              
                                               dispatch(
                                                 setSelectedSubCategory(
                                                   category.name
@@ -426,11 +422,6 @@ export default function StoreHeader() {
                                           <Link
                                             name={category.name}
                                             onMouseOver={() => {
-                                              dispatch(
-                                                changeBannerImage(
-                                                  category.heroImage
-                                                )
-                                              );
                                               dispatch(
                                                 setSelectedSubCategory(
                                                   category.name

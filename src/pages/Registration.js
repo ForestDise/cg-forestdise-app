@@ -63,12 +63,12 @@ function Registration() {
     setLoading(true);
     setRegisteredEmail(false);
     await axios
-      .post("http://localhost:8080/api/register/seller", registerData)
+      .post("http://localhost:8080/api/register", registerData)
       .then(() => {
         setLoading(false);
-        setSuccessNotify("Account created successfully");
+        setSuccessNotify("Account created successfully. A confirmation link has been sent to your email");
         setTimeout(() => {
-          navigate("/sellercentral/signin");
+          navigate("/signin");
         }, 2500);
       })
       .catch((err) => {

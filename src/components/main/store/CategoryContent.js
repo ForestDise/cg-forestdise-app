@@ -6,6 +6,17 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  changeCategory,
+  changeSubCategory,
+  toggleMoreSideBar,
+  setSelectedCategory,
+  setSelectedCurrent,
+  setSelectedSubCategory,
+  setStore,
+  setCategory,
+  setStoreBanner,
+} from "../../../features/sellerStore/sellerStoreSlice";
 
 function CategoryContent() {
   const dispatch = useDispatch();
@@ -14,6 +25,9 @@ function CategoryContent() {
   const categories = useSelector((state) => state.sellerStore.categories);
   const selectedCategory = useSelector(
     (state) => state.sellerStore.selectedCategory
+  );
+  const selectedSubCategory = useSelector(
+    (state) => state.sellerStore.selectedSubCategory
   );
   const selectedCurrent = useSelector(
     (state) => state.sellerStore.selectedCurrent
@@ -129,13 +143,28 @@ function CategoryContent() {
             .map(
               (category, index) =>
                 category.parentStoreCategory.name === selectedCurrent && (
-                  <div
-                    key={category.id}
-                    className="w-[356px] h-[356px] cursor-pointer border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
-             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
+                  <Link
+                    name={category.name}
+                    onMouseOver={() => {
+                      dispatch(setSelectedSubCategory(category.name));
+                    }}
+                    onClick={(e) => {
+                      dispatch(setSelectedCurrent(category.name));
+                      dispatch(setStoreBanner(category.heroImage));
+                      dispatch(changeCategory(selectedCategory));
+                      dispatch(changeSubCategory(e.target.name));
+                    }}
+                    className="font-light block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    to={`/store/${storeInfo.id}/${selectedCategory}/${selectedSubCategory}`}
                   >
-                    <img className="mx-auto" src={category.squareImage}></img>
-                  </div>
+                    <div
+                      key={category.id}
+                      className="w-[356px] h-[356px] cursor-pointer border-[1px] border-gray-200 rounded-[12px]  bg-gray-200
+             shadow-none hover:shadow-testShadow hover:rounded-[12px] duration-200"
+                    >
+                      <img className="mx-auto" src={category.squareImage}></img>
+                    </div>
+                  </Link>
                 )
             )}
         </div>

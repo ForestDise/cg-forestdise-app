@@ -1,5 +1,4 @@
-
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 import {
   Outlet,
   Route,
@@ -48,7 +47,6 @@ import SellerSignin from "./pages/SellerSignin";
 import SubCategoryContent from "./components/main/store/SubCategoryContent";
 import Confirm from "./pages/Confirm";
 
-
 const Layout = () => {
   return (
     <div>
@@ -75,7 +73,7 @@ const DashboardLayout = () => {
     <div>
       <DashBoardHeader />
       <Dashboard>
-        <Outlet/>
+        <Outlet />
       </Dashboard>
     </div>
   );
@@ -93,7 +91,6 @@ const StoreLayout = () => {
 };
 
 function App() {
-
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Fragment>
@@ -129,17 +126,17 @@ function App() {
           <Route index element={<HomeSelling />} />
           <Route path="/selling/shop" element={<ShopCreat />} />
           <Route path="/selling/category" element={<Category />} />
-          <Route path="/selling/product" element={<Product/>} />
+          <Route path="/selling/product" element={<Product />} />
           <Route path="/selling/attributes" element={<Offers />} />
           <Route path="/selling/variant" element={<Variants />} />
           <Route path="/selling/images" element={<Images />} />
         </Route>
         <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<HomeDasboard />} />
-            <Route path="/dashboard/categories" element={<Categories />} />
-            <Route path="/dashboard/products" element={<Products />} />
-            <Route path="/dashboard/orders" element={<OrdersDashboard />} />
-            <Route path="/dashboard/profile" element={<Profile />} />
+          <Route index element={<HomeDasboard />} />
+          <Route path="/dashboard/categories" element={<Categories />} />
+          <Route path="/dashboard/products" element={<Products />} />
+          <Route path="/dashboard/orders" element={<OrdersDashboard />} />
+          <Route path="/dashboard/profile" element={<Profile />} />
         </Route>
       </Fragment>
     )

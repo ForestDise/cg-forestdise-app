@@ -26,6 +26,7 @@ import homeReducer from "../features/home/homeSlice";
 import storeCategoryReducer from "../features/variant/storeCategorySlide"
 import optionReducer from "../features/variant/optionSlide"
 import optionValueReducer from "../features/variant/optionValueSlide"
+import paymentReducer from "../features/payment/paymentSlice";
 
 const persistConfig = {
   key: "root",
@@ -68,7 +69,8 @@ export const store = configureStore({
     category: categoryPersistedReducer,
     storeCategory: storeCategoryPersistedReducer,
     option: optionPersistedReducer,
-    optionValue: optionValuePersistedReducer
+    optionValue: optionValuePersistedReducer,
+    payment: paymentReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

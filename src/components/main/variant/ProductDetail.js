@@ -17,7 +17,7 @@ import {
   selectVariantInfo
 } from "../../../features/variant/variantSlice";
 import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";
-import { setCategory } from "../../../features/sellerStore/sellerStoreSlice";
+import { setCategory, changeCategory, changeSubCategory } from "../../../features/sellerStore/sellerStoreSlice";
 import StarRating from "../../common/icon/StarRating";
 import { getReviewsByVariantId, getReviewByProductId, selectReviewListByProductId } from "../../../features/coment_review/reviewSlide"
 import FormatDate from "../../common/format/FormatDate";
@@ -69,29 +69,23 @@ function ProductDetail() {
   const getVariantDetail = () => {
     if (productId != null) {
       dispatch(getVariant(productId));
-      console.log("====10====");
     }
   };
 
   const getVariantInformation = () => {
     if (productId != null) {
       dispatch(getVariantInfo(productId));
-      console.log("====11====");
 
     }
   };
   const getReviewAnalyst = () => {
     if (productId != null) {
       dispatch(getReviewByProductId(productId));
-      console.log("====12====");
-
     }
   };
   const getReviewListByVariantId = () => {
     if (variantId != null) {
       dispatch(getReviewsByVariantId(variantId));
-      console.log("====13====");
-
     }
   };
 
@@ -139,8 +133,6 @@ function ProductDetail() {
 
 
   const changeValueId = (i, id) => {
-    console.log(variantDTOListForLoop);
-    console.log("yeeeeee2");
     if (i >= 0 && i < idArray.length) {
       const newArray = [...idArray]; // Tạo một bản sao mới của mảng state
       newArray[i] = id;
@@ -180,7 +172,6 @@ function ProductDetail() {
 
                 {variantRender &&
                   variantRender.imageDTOList?.map((item, index) => (
-
                     <img
                       key={index}
 
@@ -190,7 +181,6 @@ function ProductDetail() {
                       onClick={() => handleThumbnailClick(item.imgPath)}
                     ></img>
                   ))}
-
                 {variantRender &&
                   variantRender.videoDtoList?.map((item, i) => (
                     <video
@@ -216,6 +206,8 @@ function ProductDetail() {
                   <span
                     onClick={() => {
                       dispatch(setCategory(storeInfo.storeCategoryList));
+                      dispatch(changeCategory(""));
+                      dispatch(changeSubCategory(""));
                     }}
                   >
                     Visit the {storeInfo.name}
