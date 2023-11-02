@@ -31,10 +31,8 @@ function ShopCreate() {
             dispatch(addStore({shop:data,sellerId:sellerInfo.id}))
             .then(() => {
                 setStoreName("");
-                alert("Tạo thành công cửa hàng" + JSON.stringify(data.name));
-                alert("Tạo thành công cửa hàng" + data.name);
                 Swal.fire({
-                    title: 'Create The First Successfull Store In Forestdise' + data.name,
+                    title: 'Create Store In Forestdise: ' + data.name,
                     showClass: {
                         popup: 'animate__animated animate__fadeInDown'
                     },
@@ -71,8 +69,6 @@ function ShopCreate() {
                             
                         </div>
                     </form>
-                    {/* {loading ? <>lOADING</>:<>Success</>} */}
-
                 </div>
 
             </div>

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { findVariant, findVariantById, createVariant } from "../../api/variantAPI";
+import { findVariant, findVariantById, createVariant, updateVariantAfterCreate, deleteVariantAfterCreate } from "../../api/variantAPI";
 
 const initialState = {
     variant: null,
@@ -18,8 +18,18 @@ export const getVariantInfo = createAsyncThunk("variant/info", async (productId)
   const response = await findVariantById(productId);
   return response.data;
 })
-export const addVariant = createAsyncThunk("create/variant", async (variant, productId) => {
-  const response = await createVariant(variant, productId);
+export const addVariant = createAsyncThunk("create/variant", async (variant, variantId) => {
+  const response = await createVariant(variant, variantId);
+  console.log(response.data);
+  return response.data;
+});
+export const updateVariant = createAsyncThunk("update/variant", async (variant, variantId) => {
+  const response = await updateVariantAfterCreate(variant, variantId);
+  console.log(response.data);
+  return response.data;
+});
+export const deleteVariant = createAsyncThunk("delete/variant", async (variantId) => {
+  const response = await deleteVariantAfterCreate(variantId);
   console.log(response.data);
   return response.data;
 });
@@ -86,6 +96,59 @@ export const variantSlice = createSlice({
         state.success = true;
         state.loading = false;
         state.variants.push(action.payload.variantDto);
+        state.error = false;
+      })
+      .addCase(updateVariant.pending, (state) => {
+        state.success = false;
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(updateVariant.rejected, (state, action) => {
+        state.success = false;
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(updateVariant.fulfilled, (state, action) => {
+        state.success = true;
+        state.loading = false;
+        const item = state.variants.find(
+          (item) => item.id === action.payload.id
+        );
+        if (item) {
+          item.name = action.payload.name;
+          item.skuCode = action.payload.skuCode;
+          item.stockQuantity = action.payload.stockQuantity;
+          item.weight = action.payload.weight;
+          item.price = action.payload.price;
+          item.salePrice = action.payload.salePrice;
+        } else {
+          // 
+        }
+        state.error = false;
+      })
+      .addCase(deleteVariant.pending, (state) => {
+        state.success = false;
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(deleteVariant.rejected, (state, action) => {
+        state.success = false;
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(deleteVariant.fulfilled, (state, action) => {
+        state.success = true;
+        state.loading = false;
+        const item = state.variants.find(
+          (item) => item.id === action.payload
+        );
+        if (item) {
+          state.variants = state.variants.filter(
+            (item) => item.id !== action.payload
+          );
+        } else {
+          // 
+        }
         state.error = false;
       })
     }

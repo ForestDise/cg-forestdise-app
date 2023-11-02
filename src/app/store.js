@@ -27,6 +27,8 @@ import storeCategoryReducer from "../features/variant/storeCategorySlide"
 import optionReducer from "../features/variant/optionSlide"
 import optionValueReducer from "../features/variant/optionValueSlide"
 import paymentReducer from "../features/payment/paymentSlice";
+import imageReducer from "../features/variant/ImageSlide"
+
 
 const persistConfig = {
   key: "root",
@@ -57,7 +59,7 @@ export const store = configureStore({
     home: homeReducer,
     cart: cartPersistedReducer,
     sellerStore: sellerStorePersistedReducer,
-    variant: variantPersistedReducer,
+    variant: variantReducer,
     user: userPersistedReducer,
     bullet: bulletReducer,
     hashtag: hashtagPersistedReducer,
@@ -68,9 +70,10 @@ export const store = configureStore({
     seller: sellerPersistedReducer,
     category: categoryPersistedReducer,
     storeCategory: storeCategoryPersistedReducer,
-    option: optionPersistedReducer,
-    optionValue: optionValuePersistedReducer,
-    payment: paymentReducer
+    option: optionReducer,
+    optionValue: optionValueReducer,
+    payment: paymentReducer,
+    image: imageReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

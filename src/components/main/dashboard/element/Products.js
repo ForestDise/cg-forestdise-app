@@ -1,7 +1,13 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 
 function Products() {
+  const sellerInfo = useSelector((state) => state.seller.sellerInfo);
+  const store = useSelector((state) => state.shop.store);
+  // const storecategories = useSelector(selectStoreCategoryList);
+  
+
   return (
     <div className='fixed top-50 w-full mr-10'>
       <div className='text-titleFont text-sm'>

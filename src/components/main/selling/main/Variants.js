@@ -2,12 +2,13 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { BsDashCircleDotted } from "react-icons/bs";
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { Link, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { createOptionList } from '../../../../features/variant/optionSlide';
 import { createOptionValueList } from '../../../../features/variant/optionValueSlide'
-import { addVariant } from '../../../../features/variant/variantSlice'
+import { addVariant, updateVariant, deleteVariant } from '../../../../features/variant/variantSlice'
+import { useForm } from 'react-hook-form';
+
 
 
 function Variants() {
@@ -26,7 +27,8 @@ function Variants() {
   const [optionValueList, setOptionValueList] = useState([[], [], [], [], []]);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [selectedVariantId, setSelectedVariantId] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
 
   const handleSetOption = (e) => {
@@ -151,34 +153,84 @@ function Variants() {
     skuCode: { required: "SkuCode is required" },
     stockQuantity: {
       required: "StockQuantity is required",
-      // validate: (value) => parseFloat(value) > 0 || 'Price must be greater than 0'
+      min: { value: 50, message: "stockQuantity must be at least 50" }
     },
-    weight: { required: "Weight is required" },
+    weight: {
+      required: "Weight is required",
+      min: { value: 0, message: "weight must be at least 0" }
+    },
     price: {
       required: "Price is required",
-      // validate: (value) => parseFloat(value) > 0 || 'Price must be greater than 0',
+      min: { value: 15, message: "Price must be at least 15" }
     },
     salePrice: {
       required: "SalePrice is required",
-      // validate: (value) => parseFloat(value) > 0 || 'Price must be greater than 0',
+      min: { value: 0, message: "SalePrice must be at least 0" }
     },
   };
-  const onSubmit = (data, id) => {
-
+  const handleClickToUpdate = (id) => {
+    setSelectedVariantId(id);
+    setShowForm(true);
   }
 
-  const f = (a, b) => [].concat(...a.map(d => b.map(e => [].concat(d, e))));
-  const cartesian = (a, b, ...c) => (b ? cartesian(f(a, b), ...c) : a);
-  const test = () => {
-    console.log(22);
-    cartesian([1, 2], [10, 20], [100, 200, 300]);
+  // const f = (a, b) => [].concat(...a.map(d => b.map(e => [].concat(d, e))));
+  // const cartesian = (a, b, ...c) => (b ? cartesian(f(a, b), ...c) : a);
+  // const test = () => {
+  //   console.log(22);
+  //   cartesian([1, 2], [10, 20], [100, 200, 300]);
+  // }
+  const handleUpdate = (variantId, updatedData) => {
+    dispatch(updateVariant({ variant: updatedData, variantId: variantId }));
+    // Swal.fire({
+    //   title: 'Done !',
+    //   showClass: {
+    //     popup: 'animate__animated animate__fadeInDown'
+    //   },
+    //   hideClass: {
+    //     popup: 'animate__animated animate__fadeOutUp'
+    //   }
+    // })
+
+
+  };
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const onSubmit = async (data) => {
+    const customData = {
+      name: data.name,
+      skuCode: data.skuCode,
+      stockQuantity: parseInt(data.stockQuantity, 10),
+      weight: parseFloat(data.weight),
+      price: parseFloat(data.price),
+      salePrice: parseFloat(data.salePrice)
+    }
+    console.log(customData);
+
+    dispatch(updateVariant({ variant: customData, variantId: selectedVariantId }));
+    console.log(data);
+    setShowForm(false);
+  };
+
+  const openDeleteVariantModal = (variantId) => {
+    dispatch(deleteVariant({ variantId: variantId }));
+    Swal.fire({
+      title: variantId + 'is deleted !!! ',
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+      }
+    })
   }
+
+
 
   return (
     <div className='col-span-8 p-0 text-titleFont ml-10'>
-      <h1 className='text-3xl text-center'> SET VARIANT FOR PRODUCT : {product.id} - {product.name}</h1>
+      <h1 className='text-xl font-bold text-titleFont text-center'> Listing Variant :  {product.id} - {product.title}</h1>
       {/* select option */}
-      <div className='border-2 rounded-xl border-stone-500 mb-8 flex flex-col p-10'>
+      {variantListCreated.length == 0 ? <div className='border-2 rounded-xl border-stone-500 mb-8 flex flex-col p-10'>
         <div className='flex text-base items-baseline'>
           <label> Enter option:</label>
           <input onChange={handleSetOption}
@@ -201,10 +253,11 @@ function Variants() {
         ))}
         <p className='text-xs mr-6 text-center'> Pair Of Selected Variant: {optionList.join('-')}</p>
         <button className='h-10 bg-gray-800 rounded-xl text-titleFont' onClick={() => { dispatch(createOptionList({ optionList: optionList, productId: product.id })) }}>Choose this variants</button>
-      </div>
+      </div> : <></>}
+
 
       {/* [{"id":1,"name":"color"},{"id"=2,"name=size"}] */}
-      {optionListCreated.length > 0 ? optionListCreated.map((item, i) => (
+      {variantListCreated.length == 0 && optionListCreated.length > 0 ? optionListCreated.map((item, i) => (
         <div key={i} className='border-2 rounded-xl border-stone-500 p-10 flex items-baseline justify-around'>
           <label>{item.name}</label>
           <input
@@ -227,14 +280,85 @@ function Variants() {
         </div>
 
       )) : <></>}
-      {variantListCreated.length == 0 && optionValueListCreated.length > 0 ? <button className='w-20 h-10 bg-neutral-600 hover:bg-slate-200 text-xs border-2 rounded-sm items-end' onClick={createListVariant}> CONFIRM VARIANT</button> :
-        <button onClick={showError} className='w-20 h-10 bg-neutral-600 hover:bg-slate-200 text-xs border-2 rounded-sm items-end'> CONFIRM VARIANT</button>}
-
-
-
-
+      {variantListCreated.length == 0 && optionValueListCreated.length > 0 ? <button className='w-20 h-10 text-xs border-2 rounded-full text-end  text-gray-900 bg-blue-700 hover:bg-blue-800 mt-8' onClick={createListVariant}> GENERATE VARIANT</button> :
+        <button onClick={showError} className='w-20 h-10 bg-neutral-600 hover:bg-slate-300 text-xs border-2 rounded-full items-end mt-8'> GENERATE VARIANT</button>}
+      {variantListCreated.length > 0 && optionValueListCreated.length > 0 ? <Link to="/selling/images"><button className='w-25 h-10 text-xs border-2 rounded-full text-end  text-gray-900 bg-blue-700 hover:bg-blue-800 mt-8'>  Go to adding image</button></Link> :
+        <button disabled className='w-25 h-10 bg-neutral-600 hover:bg-slate-300 text-xs border-2 rounded-full items-end mt-8'> Go to adding the images</button>
+      }
+      {
+        showForm &&
+        <div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{selectedVariantId}
+            </div>
+            <div className="px-6 py-4">
+              <label>TITLE</label>
+              <input
+                name="name"
+                type="text" {...register("name", registerOptions.name)}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="title" required />
+                <small className='text-red-700 text-titleFont text-sm'>
+                  {errors?.name && errors.name.message}
+                </small>
+            </div>
+            <div className="px-6 py-4">
+              <label>SKUCODE</label>
+              <input
+                name="skuCode"
+                type="text" {...register("skuCode", registerOptions.skuCode)}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John1" required />
+                <small className='text-red-700 text-titleFont text-sm'>
+                  {errors?.skuCode && errors.skuCode.message}
+                </small>
+            </div>
+            <div className="px-6 py-4">
+              <label>STOCK QUANTITY</label>
+              <input
+                name="stockQuantity"
+                type="number" {...register("stockQuantity", registerOptions.stockQuantity)}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John1" required />
+                <small className='text-red-700 text-titleFont text-sm'>
+                  {errors?.stockQuantity && errors.stockQuantity.message}
+                </small>
+            </div>
+            <div className="px-6 py-4">
+              <label>WEIGHT</label>
+              <input
+                name="weight"
+                type="number" {...register("weight", registerOptions.weight)}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John1" required />
+                <small className='text-red-700 text-titleFont text-sm'>
+                  {errors?.weight && errors.weight.message}
+                </small>
+            </div>
+            <div className="px-6 py-4">
+              <label>PRICE</label>
+              <input
+                name="price"
+                type="number" {...register("price", registerOptions.price)}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John1" required />
+                <small className='text-red-700 text-titleFont text-sm'>
+                  {errors?.price && errors.price.message}
+                </small>
+            </div>
+            <div className="px-6 py-4">
+              <label>SALE PRICE</label>
+              <input
+                name="salePrice"
+                type="number" {...register("salePrice", registerOptions.salePrice)}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John1" required />
+                <small className='text-red-700 text-titleFont text-sm'>
+                  {errors?.salePrice && errors.salePrice.message}
+                </small>
+            </div>
+            <div className="px-6 py-4">
+              <button type="submit" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Update</button>
+            </div>
+          </form>
+        </div>
+      }
       {/* tạo biến thể */}
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      {variantListCreated.length > 0 ? <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -265,55 +389,37 @@ function Variants() {
           </thead>
           <tbody>
             {variantListCreated && variantListCreated.map((variant, index) => (
-              <form key={index} onSubmit={handleSubmit(onSubmit(variant.id))}>
-                <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                  <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {variant.optionValueDTOList.map(item => item.value).join('/')}
-                  </td>
-                  <td className="px-6 py-4">
-                    <input
-                      name="title"
-                      type="text" {...register("name", registerOptions.name)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
-                  </td>
-                  <td className="px-6 py-4">
-                    <input
-                      type="text" {...register("skuCode", registerOptions.skuCode)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John1" required />
-                  </td>
-                  <td className="px-6 py-4">
-                    <input
-                      type="number" {...register("stockQuantity", registerOptions.stockQuantity)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John1" required />
-                  </td>
-                  <td className="px-6 py-4">
-                    <input
-                      type="number" {...register("weight", registerOptions.weight)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John1" required />
-                  </td>
-                  <td className="px-6 py-4">
-                    <input
-                      type="number" {...register("price", registerOptions.price)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John1" required />
-                  </td>
-                  <td className="px-6 py-4">
-                    <input
-                      type="number" {...register("salePrice", registerOptions.salePrice)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John1" required />
-                  </td>
-                  <td className="px-6 py-4">
-                    <a type="submit" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Create</a>
-                  </td>
-                </tr>
-              </form>
-
+              <tr key={index} className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {variant.optionValueDTOList.map(item => item.value).join('/')}
+                </td>
+                <td className="px-6 py-4">
+                  <span>{variant.name}</span>
+                </td>
+                <td className="px-6 py-4">
+                  <span>{variant.skuCode}</span>
+                </td>
+                <td className="px-6 py-4">
+                  <span>{variant.stockQuantity}</span>
+                </td>
+                <td className="px-6 py-4">
+                  <span>{variant.weight}</span>
+                </td>
+                <td className="px-6 py-4">
+                  <span>{variant.price}</span>
+                </td>
+                <td className="px-6 py-4">
+                  <span>{variant.salePrice}</span>
+                </td>
+                <td className="px-3 py-4 flex">
+                  <button onClick={() => handleClickToUpdate(variant.id)} className="mr-4 block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create</button>
+                  <button onClick={() => { openDeleteVariantModal(variant.id) }} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Delete</button>
+                </td>
+              </tr>
             ))}
-
           </tbody>
         </table>
-      </div>
-
-      {/* lấy ra list option sau đó hiện bảng */}
+      </div> : <></>}
 
     </div>
   )
