@@ -14,40 +14,19 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { useDispatch, useSelector } from 'react-redux';
 import { createImagesList } from '../../../../features/variant/ImageSlide';
 import { deleteVariant } from '../../../../features/variant/variantSlice'
+import { Link } from 'react-router-dom';
 
 
 
 function Images() {
   const [imageUpload, setImageUpload] = useState(null);
   const [imageUrls, setImageUrls] = useState([]);
-  const variantListCreated = useSelector((state) => state.variant.variants);
+  const variantList = useSelector((state) => state.variant.variants);
   const [selectedVariantId, setSelectedVariantId] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const dispatch = useDispatch();
+  const [variantListCreated, setVariantListCreated] = useState(variantList);
   
-
-
-  // const imagesListRef = ref(firebaseStorage, "images/");
-  // const uploadFile = () => {
-  //   if (imageUpload == null) return;
-  //   const imageRef = ref(firebaseStorage, `images/${imageUpload.name + v4()}`);
-  //   uploadBytes(imageRef, imageUpload).then((snapshot) => {
-  //     getDownloadURL(snapshot.ref).then((url) => {
-  //       setImageUrls((prev) => [...prev, url]);
-  //     });
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   listAll(imagesListRef).then((response) => {
-  //     response.items.forEach((item) => {
-  //       getDownloadURL(item).then((url) => {
-  //         setImageUrls((prev) => [...prev, url]);
-  //       });
-  //     });
-  //   });
-  // }, []);
-  // console.log(imageUrls.toString());
   const handleMultipleFileUpload = (files) => {
 
     if (files.length > 0) {
@@ -107,35 +86,20 @@ function Images() {
   const addImageForVariant = () => {
     dispatch(createImagesList({ imageUrls: imageUrls, variantId: selectedVariantId }));
     setShowForm(false);
+    Swal.fire({
+      title: 'Add images successfull ! ',
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+      }
+    })
 
   }
   
   return (
     <div className='p-0'>
-      {/* <h1 className='text-6xl text-center'><AddAPhotoIcon/></h1>
-      <div className="flex items-center justify-center w-54 h-54 px-9">
-        <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-            <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-            </svg>
-            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-          </div>
-          <input id="dropzone-file" type="file"
-            onChange={(event) => {
-              handleMultipleFileUpload(event.target.files);
-            }} className="hidden" multiple />
-        </label>
-      </div>
-      <div className='flex items-center justify-center'>
-        {imageUrls.length > 0 && imageUrls.map((item, index) => (
-          <div className=''>
-            <img key={index} alt='hihi' src={item} className="rounded-xl w-20 h-15 mt-5 mr-10" />
-
-          </div>
-        ))}
-      </div> */}
       {showForm && 
       <div>
           <h1 className='text-6xl text-center'><AddAPhotoIcon /></h1>
@@ -162,8 +126,9 @@ function Images() {
               </div>
             ))}
           </div>
-          <button onClick={addImageForVariant}>Add images for variantID {selectedVariantId} </button>
+          <button className="h-full w-25 text-center bg-slate-700 " onClick={addImageForVariant}>Add images for variantID {selectedVariantId} </button>
       </div>}
+      <Link to="/dashboard"><div onClick={() => { setVariantListCreated ([])}}>NEXT</div></Link>
       {variantListCreated.length > 0 ?
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">

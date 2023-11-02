@@ -38,8 +38,6 @@ const persistConfig = {
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
 const sellerStorePersistedReducer = persistReducer(persistConfig, sellerStoreReducer);
 const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
-const variantPersistedReducer = persistReducer(persistConfig, variantReducer);
-// const bulletPersistedReducer = persistReducer(persistConfig, bulletReducer);
 const hashtagPersistedReducer = persistReducer(persistConfig, hashtagReducer);
 const productPersistedReducer = persistReducer(persistConfig, productReducer);
 const shopPersistedReducer = persistReducer(persistConfig, shopReducer);
@@ -48,11 +46,6 @@ const reviewPersistedReducer = persistReducer(persistConfig, reviewReducer);
 const sellerPersistedReducer = persistReducer(persistConfig, sellerReducer);
 const categoryPersistedReducer = persistReducer(persistConfig, categoryReducer);
 const storeCategoryPersistedReducer = persistReducer(persistConfig, storeCategoryReducer);
-const optionPersistedReducer = persistReducer(persistConfig, optionReducer);
-const optionValuePersistedReducer = persistReducer(persistConfig, optionValueReducer);
-
-
-
 
 export const store = configureStore({
   reducer: {
