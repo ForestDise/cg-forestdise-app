@@ -13,6 +13,7 @@ function Registration() {
   const [registeredEmail, setRegisteredEmail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [successNotify, setSuccessNotify] = useState("");
+  const [emailNotify, setEmailNotify] = useState("");
   const navigate = useNavigate();
 
   const REGEX = {
@@ -63,12 +64,13 @@ function Registration() {
     setLoading(true);
     setRegisteredEmail(false);
     await axios
-      .post("http://localhost:8080/api/register/seller", registerData)
+      .post("http://localhost:8080/api/register", registerData)
       .then(() => {
         setLoading(false);
         setSuccessNotify("Account created successfully");
+        setEmailNotify("A confirmation link has been sent to your email");
         setTimeout(() => {
-          navigate("/sellercentral/signin");
+          navigate("/signin");
         }, 2500);
       })
       .catch((err) => {
@@ -100,10 +102,8 @@ function Registration() {
               onSubmit={handleSubmit}
               className="w-[350px] mx-auto flex flex-col items-center"
             >
-              <Link
-                to="/"
-              >
-                <img  className="w-36" src={logoBlack} alt="logo" />
+              <Link to="/">
+                <img className="w-36" src={logoBlack} alt="logo" />
               </Link>
               <div className="w-full border border-zinc-200 bg-gray-100 rounded-md p-6">
                 <h2 className="font-titleFont text-3xl font-medium mb-4">
@@ -239,17 +239,30 @@ function Registration() {
                       />
                     </div>
                   )}
-                  {successNotify && (
+                  {successNotify && emailNotify && (
                     <div>
-                      <motion.p
-                        initial={{ y: 10, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-base font-titleFont font-semibold text-green-500
+                      <div>
+                        <motion.p
+                          initial={{ y: 10, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ duration: 0.5 }}
+                          className="text-base font-titleFont font-semibold text-green-500
                         border-[1px] border-green-500 px-2 text-center"
-                      >
-                        {successNotify}
-                      </motion.p>
+                        >
+                          {successNotify}
+                        </motion.p>
+                      </div>
+                      <div>
+                        <motion.p
+                          initial={{ y: 10, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ duration: 0.5 }}
+                          className="text-xs font-titleFont font-semibold text-green-500
+                        border-[1px] border-green-500 px-2 text-center mt-2"
+                        >
+                          {emailNotify}
+                        </motion.p>
+                      </div>
                     </div>
                   )}
                 </div>

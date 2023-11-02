@@ -263,9 +263,6 @@ function MoreSideBar() {
                                       name={category.name}
                                       onMouseOver={() => {
                                         dispatch(
-                                          changeBannerImage(category.heroImage)
-                                        );
-                                        dispatch(
                                           setSelectedSubCategory(category.name)
                                         );
                                       }}
