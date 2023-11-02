@@ -137,6 +137,7 @@ function Method() {
                           >
                             <input
                                 type="radio"
+                                name="paymentMethod"
                                 className="mr-2"
                                 onClick={() => setMethodShown(formPayment)}
                             />

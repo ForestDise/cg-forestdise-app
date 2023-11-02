@@ -53,17 +53,19 @@ function HeaderBreadcrumb() {
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
-                <a
+                <Link
                   onClick={() => {
+                    dispatch(setSelectedCurrent(breadcrumb.category));
                     dispatch(setSelectedCategory(breadcrumb.category));
                     dispatch(setStoreBanner(breadcrumb.bannerImage));
                     dispatch(changeCategory(selectedCategory));
                     dispatch(changeSubCategory(""));
                   }}
                   className="inline-flex items-center cursor-pointer text-xs font-medium text-gray-500 hover:underline dark:text-gray-400 dark:hover:text-white"
+                  to={`/store/${storeInfo.id}/${selectedCategory}`}
                 >
                   {breadcrumb.category}
-                </a>
+                </Link>
               </div>
             </li>
           )}
