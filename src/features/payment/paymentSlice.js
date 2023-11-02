@@ -5,8 +5,11 @@ import {
     findShippingMethod,
     findAddress,
     updateAddress,
-    addAddress
+    addAddress,
+    createShopOrder,
+    findShopOrder
 } from "../../api/paymentAPI";
+import {add} from "react-modal/lib/helpers/classList";
 
 export const getAddress = createAsyncThunk("address/list",
     async (userId) => {
@@ -44,7 +47,20 @@ export const getShippingMethod = createAsyncThunk("shippingMethod",
         return response.data;
     })
 
+export const getShopOrder = createAsyncThunk("shopOrder",
+    async (userId) => {
+    const response = await findShopOrder(userId);
+    return response.data;
+    })
+
+export const addShopOrder = createAsyncThunk("shopOrder/add",
+    async (shopOrder) => {
+    const response = await createShopOrder(shopOrder);
+    return response.data;
+    })
+
 const initialState = {
+    shopOrder: [],
     paymentMethod: [],
     shippingMethod: [],
     address: [],
@@ -155,6 +171,38 @@ export const paymentSlice = createSlice({
                 state.loading = false;
                 state.error = false;
                 state.shippingMethod = action.payload;
+            })
+            .addCase(getShopOrder.pending,(state) => {
+                state.success = false;
+                state.loading = true;
+                state.error = false;
+            })
+            .addCase(getShopOrder.rejected,(state,action) => {
+                state.success = false;
+                state.loading = false;
+                state.error = action.error;
+            })
+            .addCase(getShopOrder.fulfilled,(state,action) => {
+                state.success = true;
+                state.loading = false;
+                state.error = false;
+                state.shopOrder = action.payload;
+            })
+            .addCase(addShopOrder.pending,(state) => {
+                state.success = false;
+                state.loading = true;
+                state.error = false;
+            })
+            .addCase(addShopOrder.rejected,(state,action) => {
+                state.success = false;
+                state.loading = false;
+                state.error = action.error;
+            })
+            .addCase(addShopOrder.fulfilled,(state,action) => {
+                state.success = true;
+                state.loading = false;
+                state.error = false;
+                state.shopOrder = action.payload;
             });
     }
 });

@@ -113,8 +113,10 @@ function Address() {
                         >
                           <input
                               type="radio"
+                              name="address"
                               className="mr-2"
-                              onClick={() => setAddressShown(addr)}
+                              value={addr.id}
+                              onClick={() => {setAddressShown(addr)}}
                           />
                           <span className="font-semibold">{addr.name}</span> {addr.street},{" "}
                           {addr.ward}, {addr.district}, {addr.city}
@@ -130,7 +132,9 @@ function Address() {
                       <div className="flex-initial pl-2">
                         <button
                             className="text-blue-600 mt-1 hover:text-orange-500 hover:underline"
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={() => {
+                              setIsModalOpen(true)}
+                        }
                         >
                           Add a new address
                         </button>
