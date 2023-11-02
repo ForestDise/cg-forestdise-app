@@ -10,7 +10,7 @@ function Confirm() {
   let query = useQuery();
   let status = query.get("status").toString();
 
-  const isSuccess = status === "success";
+  const isSuccess = status === "success";                                     
 
   return (
     <Fragment>

@@ -62,7 +62,6 @@ function Header() {
           </div>
           {/* Logo end */}
 
-
           {/* Deliver start */}
           <div className="headerHover hidden mdl:inline-flex">
             <LocationOnIcon />
@@ -144,90 +143,89 @@ function Header() {
             </p>
 
             {showUserOption && (
-              
-                  <div
-                    onMouseEnter={() => {
-                      setShowUserOption(true);
-                    }}
-                    onMouseLeave={() => {
-                      setShowUserOption(false);
-                    }}
-                    className=" z-20 top-[50px] right-[180px] px-1 font-bodyFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-[240px] dark:bg-gray-700 dark:divide-gray-600"
-                  >
-                    <ul
-                      className="font-bodyFont py-2 text-sm text-gray-700 dark:text-gray-400"
-                      aria-labelledby="dropdownLargeButton"
-                    >
-                      <li className="mx-auto text-center flex flex-col gap-1 justify-between p-2 border-b rounded-t dark:border-gray-600">
-                        {userInfo ? (
-                          <Fragment>
-                            <button
-                              className="w-full py-1 text-sm font-semibold
+              <div
+                onMouseEnter={() => {
+                  setShowUserOption(true);
+                }}
+                onMouseLeave={() => {
+                  setShowUserOption(false);
+                }}
+                className=" z-20 lg:top-[50px] md:top-[42px] sm:top-[36px] lg:right-[180px] mdl:right-[320px] sm:right-[180px] px-1 font-bodyFont absolute font-normal bg-white divide-y divide-gray-100 rounded-lg shadow mdl:w-[240px] sm:w-[180px] dark:bg-gray-700 dark:divide-gray-600"
+              >
+                <ul
+                  className="font-bodyFont py-2 mdl:text-sm sm:text-xs text-gray-700 dark:text-gray-400"
+                  aria-labelledby="dropdownLargeButton"
+                >
+                  <li className="mx-auto text-center flex flex-col gap-1 justify-between p-2 border-b rounded-t dark:border-gray-600">
+                    {userInfo ? (
+                      <Fragment>
+                        <button
+                          className="w-full py-1 text-sm font-semibold
               rounded-md bg-gradient-to-t from-slate-200 to-slate-100 hover:bg-gradient-to-b border
               border-zinc-400 active:border-yellow-800 active:shadow-amazonInput"
-                            >
-                              Manage Profiles
-                            </button>
+                        >
+                          Manage Profiles
+                        </button>
 
-                            <p className="text-xs mt-1 text-black">
-                              Who shopping? Select a profile.
-                            </p>
-                          </Fragment>
-                        ) : (
-                          <Fragment>
-                            <Link to="/signin">
-                              <button
-                                className="w-full bg-yellow-400 rounded-md py-1
+                        <p className="text-xs mt-1 text-black">
+                          Who shopping? Select a profile.
+                        </p>
+                      </Fragment>
+                    ) : (
+                      <Fragment>
+                        <Link to="/signin">
+                          <button
+                            className="w-full bg-yellow-400 rounded-md py-1
                 font-semibold cursor-pointer hover:bg-yellow-500 active:bg-yellow-700"
-                              >
-                                Sign in
-                              </button>
-                            </Link>
-                            <p className="text-xs mt-1">
-                              New Customer?
-                              <Link to="/register">
-                                <span className="text-blue-600 ml-1 cursor-pointer">
-                                  {" "}
-                                  Start here.
-                                </span>
-                              </Link>
-                            </p>
-                          </Fragment>
-                        )}
-                      </li>
-                      <li>
-                        <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                          <FavoriteBorderIcon />
-                          &nbsp; Your wishlist
-                        </a>
-                      </li>
-                      <li>
-                        <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                          <HistoryIcon />
-                          &nbsp; Browsing History
-                        </a>
-                      </li>
-                      <li>
-                        <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                          <LocalShippingIcon />
-                          &nbsp; Orders
-                        </a>
-                      </li>
-                      {userInfo && (
-                        <li>
-                          <a
-                            onClick={() => {
-                              handleLogOut();
-                            }}
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                           >
-                            <LogoutIcon />
-                            &nbsp; Sign out
-                          </a>
-                        </li>
-                      )}
-                    </ul>
-                  </div>
+                            Sign in
+                          </button>
+                        </Link>
+                        <p className="text-xs mt-1">
+                          New Customer?
+                          <Link to="/register">
+                            <span className="text-blue-600 ml-1 cursor-pointer">
+                              {" "}
+                              Start here.
+                            </span>
+                          </Link>
+                        </p>
+                      </Fragment>
+                    )}
+                  </li>
+                  <li>
+                    <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <FavoriteBorderIcon />
+                      &nbsp; Your wishlist
+                    </a>
+                  </li>
+                  <li>
+                    <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <HistoryIcon />
+                      &nbsp; Browsing History
+                    </a>
+                  </li>
+                  <li>
+                    <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <LocalShippingIcon />
+                      &nbsp; Orders
+                    </a>
+                  </li>
+                  {userInfo && (
+                    <li>
+                      <a
+                        onClick={() => {
+                          handleLogOut();
+                        }}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
+                        <LogoutIcon />
+                        &nbsp; Sign out
+                      </a>
+                    </li>
+                  )}
+                </ul>
+              </div>
             )}
           </div>
 
