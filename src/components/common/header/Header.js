@@ -22,7 +22,7 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
-  const { products} = useSelector((state) => state.cart);
+  const {products} = useSelector((state) => state.cart);
   const [numberCart, setNumberCart] = useState(0);
 
   useEffect(() => {
@@ -34,16 +34,7 @@ function Header() {
     
   }, [products]);
 
-  {
-    /* const changeScroll = () => {
-    let overFlowStyle = document.body.style.overflow;
-    document.body.style.overflow =
-      overFlowStyle === "hidden" ? "auto" : "hidden";
-  }; */
-  }
-  
-
-  const handleLogOut = () => {
+  const handleLogOut = async () => {
     dispatch(logOutUser());
     dispatch(resetCart());
     dispatch(resetSaveForLater());
