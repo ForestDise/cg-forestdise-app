@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addStore, selectLoading, selectError, selectSuccess, selectStoreDetail, selectStoreAdded } from '../../../../features/variant/shopSlide';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { selectSellerDetail } from '../../../../features/seller/sellerSlice'
+import Swal from 'sweetalert2';
+
 
 
 
@@ -29,8 +31,15 @@ function ShopCreate() {
             dispatch(addStore({shop:data,sellerId:sellerInfo.id}))
             .then(() => {
                 setStoreName("");
-                alert("Tạo thành công cửa hàng" + JSON.stringify(data.name));
-                alert("Tạo thành công cửa hàng" + data.name);
+                Swal.fire({
+                    title: 'Create Store In Forestdise: ' + data.name,
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    }
+                })
             })
                 .catch((error) => {
                     alert("Tạo store không thành công");
@@ -60,8 +69,6 @@ function ShopCreate() {
                             
                         </div>
                     </form>
-                    {/* {loading ? <>lOADING</>:<>Success</>} */}
-
                 </div>
 
             </div>

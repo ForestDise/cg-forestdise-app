@@ -21,21 +21,30 @@ export const findVariantById = async (productId) => {
   }
   return result;
 };
-export const updateVariant = async (Variant) => {
+export const updateVariantAfterCreate = async ({variant, variantId}) => {
   let result = null;
   try {
-    result = await axios.put(`${VARIANT_MANAGEMENT_API}/${Variant.id}`, Variant);
+    result = await axios.put(`${VARIANT_MANAGEMENT_API}/variant/update/${variantId}`, variant);
   } catch (e) {
     console.log("Update variant API error: " + e);
   }
   return result;
 };
-export const createVariant = async (variant) => {
+export const createVariant = async ({variant,productId}) => {
   let result = null;
   try {
-    result = await axios.post(`${VARIANT_MANAGEMENT_API}`, variant);
+    result = await axios.post(`${VARIANT_MANAGEMENT_API}/variant/${productId}/create`, variant);
   } catch (e) {
     console.log("create variant API error: " + e);
+  }
+  return result;
+};
+export const deleteVariantAfterCreate = async ({variantId }) => {
+  let result = null;
+  try {
+    result = await axios.delete(`${VARIANT_MANAGEMENT_API}/variant/delete/${variantId}`);
+  } catch (e) {
+    console.log("delete variant API error: " + e);
   }
   return result;
 };
