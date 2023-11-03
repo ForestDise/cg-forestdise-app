@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { logOutUser } from "../../../features/user/userSlice";
-import { motion } from "framer-motion";
 import { resetCart, resetSaveForLater } from "../../../features/cart/cartSlice";
 
 function Header() {
@@ -44,7 +43,7 @@ function Header() {
   }
   
 
-  const handleLogOut = async () => {
+  const handleLogOut = () => {
     dispatch(logOutUser());
     dispatch(resetCart());
     dispatch(resetSaveForLater());
