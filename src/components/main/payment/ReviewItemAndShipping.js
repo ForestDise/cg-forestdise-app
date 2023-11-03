@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {decrementQuantity, editCartLine, getCartLines, incrementQuantity} from "../../../features/cart/cartSlice";
-import {getShippingMethod} from "../../../features/payment/paymentSlice";
+import {getShippingMethod, order} from "../../../features/payment/paymentSlice";
 
 function ReviewItemAndShipping() {
   const dispatch = useDispatch();
@@ -125,13 +125,13 @@ function ReviewItemAndShipping() {
                   </div>
                   <div className="col-span-3">
                     <div className="font-bold">Choose a delivery option:</div>
-                    {shippingMethod.map((method) => (
-                        <div className="mb-2" key={method.id}>
-                          <input type="radio" />
+                    {shippingMethod.map((item) => (
+                        <div className="mb-2" key={item.id}>
+                          <input type="radio" onClick={()=> dispatch(order({"shippingMethodId":item.id}))}/>
                           <span className="ml-3 text-green-700 font-semibold">
-                        {method.name}
+                        {item.name}
                       </span>
-                          <div className="ml-6">${method.price} - Shipping</div>
+                          <div className="ml-6">${item.price} - Shipping</div>
                         </div>
                     ))}
                   </div>

@@ -104,8 +104,7 @@ export const clearAllCartLine = async (cartId) => {
 export const findSaveForLater = async (cartId) => {
   let result = null;
   try {
-    result = await axios.get(
-      `${CART_MANAGEMENT_API}/save-for-later/${cartId}`);
+    result = await axios.get(`${CART_MANAGEMENT_API}/save-for-later/${cartId}`);
   } catch (e) {
     console.log("Find products API error: " + e);
   }
@@ -115,7 +114,7 @@ export const findSaveForLater = async (cartId) => {
 export const addSaveForLater = async (product) => {
   let result = null;
   try {
-    result = await axios.post(`${CART_MANAGEMENT_API}/save-for-later`,product);
+    result = await axios.post(`${CART_MANAGEMENT_API}/save-for-later`, product);
   } catch (e) {
     console.log("save products API error: " + e);
   }

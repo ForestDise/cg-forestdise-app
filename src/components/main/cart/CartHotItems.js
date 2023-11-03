@@ -27,7 +27,8 @@ const CartSidebar = () => {
             <div className="flex flex-col gap-4">
                 <CartPayment/>
                 {!isSuccess ? (
-                    <Spinner/>
+                    // <Spinner/>
+                    <></>
                 ) : (
                     <div className="bg-white rounded-lg">
                         <h3 className="sm:p-2 lg:p-4 font-semibold md:text-md sm:text-xs lg:text-lg">
