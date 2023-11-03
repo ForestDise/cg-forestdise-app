@@ -38,11 +38,6 @@ const persistConfig = {
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
 const sellerStorePersistedReducer = persistReducer(persistConfig, sellerStoreReducer);
 const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
-<<<<<<< HEAD
-// const variantPersistedReducer = persistReducer(persistConfig, variantReducer);
-// const bulletPersistedReducer = persistReducer(persistConfig, bulletReducer);
-=======
->>>>>>> 6b85645f5d14b2a7c1673292cd814c3051ef361d
 const hashtagPersistedReducer = persistReducer(persistConfig, hashtagReducer);
 const productPersistedReducer = persistReducer(persistConfig, productReducer);
 const shopPersistedReducer = persistReducer(persistConfig, shopReducer);
@@ -51,14 +46,6 @@ const reviewPersistedReducer = persistReducer(persistConfig, reviewReducer);
 const sellerPersistedReducer = persistReducer(persistConfig, sellerReducer);
 const categoryPersistedReducer = persistReducer(persistConfig, categoryReducer);
 const storeCategoryPersistedReducer = persistReducer(persistConfig, storeCategoryReducer);
-<<<<<<< HEAD
-// const optionPersistedReducer = persistReducer(persistConfig, optionReducer);
-// const optionValuePersistedReducer = persistReducer(persistConfig, optionValueReducer);
-
-
-
-=======
->>>>>>> 6b85645f5d14b2a7c1673292cd814c3051ef361d
 
 export const store = configureStore({
   reducer: {
@@ -79,10 +66,7 @@ export const store = configureStore({
     option: optionReducer,
     optionValue: optionValueReducer,
     payment: paymentReducer,
-<<<<<<< HEAD
-=======
     image: imageReducer,
->>>>>>> 6b85645f5d14b2a7c1673292cd814c3051ef361d
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
