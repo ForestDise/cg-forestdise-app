@@ -10,7 +10,7 @@ function Home() {
           <div className='flex justify-between'>
             <div className='font-bold text-3xl'>$3000</div>
             <div className='flex flex-col items-right'>
-              <div> tang 30%</div>
+              <div> Decrease 30%</div>
               <div> Comparing To 30.12.2022</div>
             </div>
           </div>
@@ -21,7 +21,7 @@ function Home() {
           <div className='flex justify-between'>
             <div className='font-bold text-3xl'>3000</div>
             <div className='flex flex-col items-right'>
-              <div> tang 30%</div>
+              <div> Increase 30%</div>
               <div> Comparing To 30.12.2022</div>
             </div>
           </div>
@@ -32,7 +32,7 @@ function Home() {
           <div className='flex justify-between'>
             <div className='font-bold text-3xl'>30</div>
             <div className='flex flex-col items-right'>
-              <div> tang 30%</div>
+              <div> Increase 30%</div>
               <div> Comparing To 30.12.2022</div>
             </div>
           </div>

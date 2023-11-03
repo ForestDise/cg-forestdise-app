@@ -23,10 +23,10 @@ export const findReviewByProductId = async (productId) => {
     return result;
 };
 
-export const createReview = async (review) => {
+export const createReview = async ({review, variantId, userId}) => {
     let result = null;
     try {
-        result = await axios.post(`${REVIEW_MANAGEMENT_API}`, review);
+        result = await axios.post(`${REVIEW_MANAGEMENT_API}/${userId}/${variantId}`, review);
     } catch (e) {
         console.log("create book API error: " + e);
     }

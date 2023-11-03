@@ -44,7 +44,7 @@ export const optionValueSlide = createSlice({
             .addCase(createOptionValueList.fulfilled, (state, action) => {
                 state.success = true;
                 state.loading = false;
-                state.optionValues = action.payload;
+                state.optionValues.push(action.payload.optionValueDtoList);
                 state.error = false;
             })
     },
