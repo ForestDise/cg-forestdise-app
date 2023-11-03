@@ -23,10 +23,7 @@ function Product() {
 
     const [firebaseFile, setFirebaseFile] = useState('');
     const [progresspercent, setProgresspercent] = useState(0);
-    const [currentUser, setCurrentUser] = useState(1);
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const handleRegistration = (data) => console.log(data);
-    const handleError = (errors) => { };
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [selectedYourCate, setSelectedYourCate] = useState(null);
@@ -36,7 +33,7 @@ function Product() {
         title: { required: "Title is required" },
         description: {
             required: "Description is required",
-            minLength: { value: 20 }
+            minLength: { value: 20, message: "Description must be at least 20 characters" }
         },
         file: { required: "File is required" }
     };
@@ -118,7 +115,7 @@ function Product() {
                             <label htmlFor="file" className='mb-2 text-sm font-medium text-gray-900 dark:text-gray mt-5'>Image</label>
                             <br></br>
                             <input
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                                 type="file" name="file"
                                 {...register("file", registerOptions.file)}
                                 onChange={handleFile}
@@ -126,7 +123,7 @@ function Product() {
                             <small className='text-red-700 text-titleFont'>
                                 {errors?.file && errors.file.message}
                             </small>
-                            {firebaseFile && <img alt='hihi' src={firebaseFile} className="rounded-3xl w-20 h-20 mt-10" />}
+                            {firebaseFile && <img alt='hihi' src={firebaseFile} className="rounded-3xl w-30 h-30 mt-10" />}
                             {
                                 !firebaseFile &&
                                 <div className='outerbar'>

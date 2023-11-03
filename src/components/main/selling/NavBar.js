@@ -1,37 +1,40 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 
 function NavBar() {
     return (
         <div className='grid grid-cols-8 h-10 bt-4'>
             <div className='col-span-1'></div>
-            <div className='col-span-6'>
+            <div className='col-span-6 text-titleFont'>
                 <div className='grid grid-cols-8'>
-                    <Link to="/selling/shop" className="text-black hover:text-blue-400 font-bold text-bodyFont">
+                    <NavLink exact activeStyle={{
+                        backgroundColor: 'white',
+                        color: 'red'
+                    }} to="/selling/shop" className="text-center h-10 pt-2 text-black text-sm hover:text-stone-700 hover:bg-slate-300 hover:border-2 font-bold text-titleFont">
                         <div className='col-span-1'>Store</div>
-                    </Link>
-                    <Link to="/selling/category" className="text-black hover:text-blue-400 font-bold text-bodyFont">
+                    </NavLink>
+                    <NavLink to="/selling/category" className= " text-center h-10 pt-2 text-black text-sm  hover:text-stone-700 hover:bg-slate-300 hover:border-2 font-bold text-titleFont">
                         <div className='col-span-1'>Category</div>
-                    </Link>
-                    <Link to="/selling/product" className="text-black hover:text-blue-400 font-bold text-bodyFont">
+                    </NavLink>
+                    <NavLink to="/selling/product" className="text-center h-10 pt-2 text-black text-sm  hover:text-stone-700 hover:bg-slate-300 hover:border-2 font-bold text-titleFont">
                         <div className='col-span-1'>Product Vitals</div>
-                    </Link>
-                    <Link to="/selling/variant" className="text-black hover:text-blue-400 font-bold text-bodyFont">
+                    </NavLink>
+                    <NavLink to="/selling/variant" className="text-center h-10 pt-2 text-black text-sm  hover:text-stone-700 hover:bg-slate-300 hover:border-2 font-bold text-titleFont">
                         <div className='col-span-1'>Variants</div>
-                    </Link>
-                    <Link to="/selling/attributes" className="text-black hover:text-blue-400 font-bold text-bodyFont">
+                    </NavLink>
+                    <NavLink to="/selling/attributes" className="text-center h-10 pt-2 text-black text-sm  hover:text-stone-700 hover:bg-slate-300 hover:border-2 font-bold text-titleFont">
                         <div className='col-span-1'>Offers</div>
-                    </Link>
-                    <Link to="/selling/images" className="text-black hover:text-blue-400 font-bold text-bodyFont">
+                    </NavLink>
+                    <NavLink to="/selling/images" className="text-center h-10 pt-2 text-black text-sm  hover:text-stone-700 hover:bg-slate-300 hover:border-2 font-bold text-titleFont">
                         <div className='col-span-1'>Images</div>
-                    </Link>
-                    <Link to="/dashboard" className="text-black hover:text-blue-400 font-bold text-bodyFont">
-                        <div className='col-span-1'>Video</div>
-                    </Link>
-                    <Link to="/dashboard" className="text-black hover:text-blue-400 font-bold text-bodyFont">
+                    </NavLink>
+                    <NavLink to="/dashboard" className="text-center h-10 pt-2 text-black text-sm  hover:text-stone-700 hover:bg-slate-300 hover:border-2 font-bold text-titleFont">
+                        <div className='col-span-1'>Go to Dashboard</div>
+                    </NavLink>
+                    <NavLink to="/dashboard" className="text-center h-10 pt-2 text-black text-sm  hover:text-stone-700 hover:bg-slate-300 hover:border-2 font-bold text-titleFont">
                         <div className='col-span-1'>More Details</div>
-                    </Link>
+                    </NavLink>
                     
 
                 </div>

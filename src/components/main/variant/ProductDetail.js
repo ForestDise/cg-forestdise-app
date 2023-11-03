@@ -178,17 +178,17 @@ function ProductDetail() {
                       className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300"
                       src={item.imgPath}
                       alt="ProductImg"
-                      onClick={() => handleThumbnailClick(item.imgPath)}
+                      onClick={() => handleThumbnailClick(item?.imgPath)}
                     ></img>
                   ))}
-                {variantRender &&
+                {variantRender && 
                   variantRender.videoDtoList?.map((item, i) => (
                     <video
                       key={i}
                       controls
                       className="w-8 h-8 object-contain basis-1/6 rounded-sm hover:outline outline-offset-1 outline-cyan-500 shadow-2xl duration-300 px-4"
                     >
-                      <source src={item.videoPath} type="video/mp4" />
+                      <source src={item?.videoPath} type="video/mp4" />
                     </video>
                   ))}
               </div>
@@ -214,7 +214,7 @@ function ProductDetail() {
                   </span>
                 </div>
               </Link>
-              {reviewAnalyst &&
+              {reviewAnalyst != null &&
                 <div className="font-titleFont flex items-baseline text-center justify-between text-sm text-yellow-500 mb-2 mt-2">
                   <div className="flex text-center justify-center ">
                     <div className="text-sm font-bold mr-1">{reviewAnalyst.summaryDto.rating.toFixed(1)}</div>
@@ -368,7 +368,7 @@ function ProductDetail() {
                   </button>
                   <button
                     className="rounded-lg py-3 my-2 bg-gradient-to-t from-slate-200 to-slate-100 hover:bg-gradient-to-b border
-                    border-zinc-400 active:border-yellow-800 active:shadow-amazonInput duration-100 cursor-pointer" 
+                    border-zinc-400 active:border-yellow-800 active:shadow-amazonInput duration-100 cursor-pointer"
                   >
                     Buy Now
                   </button>
@@ -826,7 +826,7 @@ function ProductDetail() {
       </div>)
   } else {
     return (
-    <div className="flex justify-around pl-20 pr-20 mt-500">
+      <div className="flex justify-around pl-20 pr-20 mt-500">
         <div role="status">
           <svg aria-hidden="true" className="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
@@ -869,7 +869,7 @@ function ProductDetail() {
           </svg>
           <span className="sr-only">Loading...</span>
         </div>
-    </div>)
+      </div>)
   }
 
 }

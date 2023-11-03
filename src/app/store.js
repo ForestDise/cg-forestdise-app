@@ -27,6 +27,8 @@ import storeCategoryReducer from "../features/variant/storeCategorySlide"
 import optionReducer from "../features/variant/optionSlide"
 import optionValueReducer from "../features/variant/optionValueSlide"
 import paymentReducer from "../features/payment/paymentSlice";
+import imageReducer from "../features/variant/ImageSlide"
+
 
 const persistConfig = {
   key: "root",
@@ -36,8 +38,6 @@ const persistConfig = {
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
 const sellerStorePersistedReducer = persistReducer(persistConfig, sellerStoreReducer);
 const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
-const variantPersistedReducer = persistReducer(persistConfig, variantReducer);
-// const bulletPersistedReducer = persistReducer(persistConfig, bulletReducer);
 const hashtagPersistedReducer = persistReducer(persistConfig, hashtagReducer);
 const productPersistedReducer = persistReducer(persistConfig, productReducer);
 const shopPersistedReducer = persistReducer(persistConfig, shopReducer);
@@ -46,18 +46,13 @@ const reviewPersistedReducer = persistReducer(persistConfig, reviewReducer);
 const sellerPersistedReducer = persistReducer(persistConfig, sellerReducer);
 const categoryPersistedReducer = persistReducer(persistConfig, categoryReducer);
 const storeCategoryPersistedReducer = persistReducer(persistConfig, storeCategoryReducer);
-const optionPersistedReducer = persistReducer(persistConfig, optionReducer);
-const optionValuePersistedReducer = persistReducer(persistConfig, optionValueReducer);
-
-
-
 
 export const store = configureStore({
   reducer: {
     home: homeReducer,
     cart: cartPersistedReducer,
     sellerStore: sellerStorePersistedReducer,
-    variant: variantPersistedReducer,
+    variant: variantReducer,
     user: userPersistedReducer,
     bullet: bulletReducer,
     hashtag: hashtagPersistedReducer,
@@ -68,9 +63,10 @@ export const store = configureStore({
     seller: sellerPersistedReducer,
     category: categoryPersistedReducer,
     storeCategory: storeCategoryPersistedReducer,
-    option: optionPersistedReducer,
-    optionValue: optionValuePersistedReducer,
-    payment: paymentReducer
+    option: optionReducer,
+    optionValue: optionValueReducer,
+    payment: paymentReducer,
+    image: imageReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

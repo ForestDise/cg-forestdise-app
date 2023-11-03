@@ -24,8 +24,8 @@ export const getReviewByProductId = createAsyncThunk("Reviews", async (productId
     return response.data;
 });
 
-export const addReview = createAsyncThunk("Review/create", async (review) => {
-    const response = await createReview(review);
+export const addReview = createAsyncThunk("Review/create", async (review,variantId, userId) => {
+    const response = await createReview(review, variantId, userId);
     return response.data;
 });
 
