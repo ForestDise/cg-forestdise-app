@@ -17,7 +17,7 @@ import {
   selectVariantInfo
 } from "../../../features/variant/variantSlice";
 import { addNewCartLine, addToCart } from "../../../features/cart/cartSlice";
-import { setCategory } from "../../../features/sellerStore/sellerStoreSlice";
+import { setCategory, changeCategory, changeSubCategory } from "../../../features/sellerStore/sellerStoreSlice";
 import StarRating from "../../common/icon/StarRating";
 import { getReviewsByVariantId, getReviewByProductId, selectReviewListByProductId } from "../../../features/coment_review/reviewSlide"
 import FormatDate from "../../common/format/FormatDate";
@@ -69,29 +69,23 @@ function ProductDetail() {
   const getVariantDetail = () => {
     if (productId != null) {
       dispatch(getVariant(productId));
-      console.log("====10====");
     }
   };
 
   const getVariantInformation = () => {
     if (productId != null) {
       dispatch(getVariantInfo(productId));
-      console.log("====11====");
 
     }
   };
   const getReviewAnalyst = () => {
     if (productId != null) {
       dispatch(getReviewByProductId(productId));
-      console.log("====12====");
-
     }
   };
   const getReviewListByVariantId = () => {
     if (variantId != null) {
       dispatch(getReviewsByVariantId(variantId));
-      console.log("====13====");
-
     }
   };
 
@@ -139,8 +133,6 @@ function ProductDetail() {
 
 
   const changeValueId = (i, id) => {
-    console.log(variantDTOListForLoop);
-    console.log("yeeeeee2");
     if (i >= 0 && i < idArray.length) {
       const newArray = [...idArray]; // Tạo một bản sao mới của mảng state
       newArray[i] = id;
@@ -177,6 +169,7 @@ function ProductDetail() {
             </div>
             <div>
               <div className="flex flex-wrap text-center justify-between object-contain hover:py-4 mx-21">
+
                 {variantRender &&
                   variantRender.imageDTOList?.map((item, index) => (
                     <img
@@ -213,6 +206,8 @@ function ProductDetail() {
                   <span
                     onClick={() => {
                       dispatch(setCategory(storeInfo.storeCategoryList));
+                      dispatch(changeCategory(""));
+                      dispatch(changeSubCategory(""));
                     }}
                   >
                     Visit the {storeInfo.name}
@@ -359,7 +354,7 @@ function ProductDetail() {
                               salePrice: variantRender.salePrice,
                               optionValueDtoList:
                                 variantRender.optionValueDtoList,
-                              imageDtoList: variantRender.mageDtoList,
+                              imageDtoList: variantRender.imageDtoList,
                               videoDtoList: variantRender.videoDtoList,
                               reviewDtoList:
                                 variantRender.reviewDtoList,

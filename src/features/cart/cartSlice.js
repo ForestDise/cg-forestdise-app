@@ -7,7 +7,7 @@ import {
   clearAllCartLine,
   findSaveForLater,
   addSaveForLater,
-  removeSaveForLater
+  removeSaveForLater,
 } from "../../api/CartAPI";
 
 export const getCartLines = createAsyncThunk(
@@ -87,7 +87,9 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const item = state.products.find((item) => item.variantDto.id === action.payload.variantDto.id);
+      const item = state.products.find(
+        (item) => item.variantDto.id === action.payload.variantDto.id
+      );
       if (item) {
         item.quantity += action.payload.quantity;
       } else {
@@ -95,7 +97,9 @@ export const cartSlice = createSlice({
       }
     },
     incrementQuantity: (state, action) => {
-      const item = state.products.find((item) => item.variantDto.id === action.payload.variantDto.id);
+      const item = state.products.find(
+        (item) => item.variantDto.id === action.payload.variantDto.id
+      );
       item.quantity++;
     },
     decrementQuantity: (state, action) => {
@@ -116,11 +120,13 @@ export const cartSlice = createSlice({
     resetCart: (state) => {
       state.products = [];
     },
-    resetSaveForLater: (state) =>{
+    resetSaveForLater: (state) => {
       state.empties = [];
     },
     saveForLater: (state, action) => {
-      const item = state.empties.find((item) => item.variantDto.id === action.payload.variantDto.id);
+      const item = state.empties.find(
+        (item) => item.variantDto.id === action.payload.variantDto.id
+      );
       if (!item) {
         state.empties.push(action.payload);
       }
@@ -291,7 +297,7 @@ export const {
   incrementQuantity,
   saveForLater,
   deleteEmpties,
-  resetSaveForLater
+  resetSaveForLater,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

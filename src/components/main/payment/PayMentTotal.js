@@ -1,26 +1,61 @@
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { addShopOrder } from "../../../features/payment/paymentSlice";
+import { clearCartLine } from "../../../features/cart/cartSlice";
 
 const PayMentTotal = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { userInfo } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.cart);
-  const [totalPrice, setTotalPrice] = useState("");
+  const { shopOrder, success } = useSelector((state) => state.payment);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalItem, setTotalItem] = useState(0);
+  const date = new Date();
+
+  const handleOrder = () => {
+    const newValues = products.map((item) => ({
+      userId: userInfo.id,
+      variantId: item.variantDto.id,
+      orderDate:
+        date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
+      addressId: shopOrder[0].addressId,
+      paymentMethodId: shopOrder[1].paymentMethodId,
+      shippingMethodId: shopOrder[2].shippingMethodId,
+      quantity: item.quantity,
+      orderTotal: (item.quantity * item.variantDto.price).toFixed(2),
+    }));
+
+    newValues.forEach((newValue) => {
+      dispatch(addShopOrder(newValue));
+    });
+
+    if (success) {
+      dispatch(clearCartLine(userInfo.id));
+      navigate("/");
+    }
+  };
 
   useEffect(() => {
-    let total = 0;
-    products.map((item) => {
-      total += item.variantDto.price * item.quantity;
-      return setTotalPrice(total.toFixed(2));
+    let totalPrice = 0;
+    let totalItem = 0;
+    products.forEach((item) => {
+      totalPrice += item.variantDto.price * item.quantity;
+      totalItem += item.quantity;
     });
+    setTotalItem(totalItem);
+    setTotalPrice(totalPrice);
   }, [products]);
 
   return (
     <>
       <div className="border border-gray-400 rounded-md">
         <div className="w-auto h-auto col-span-1 flex flex-col p-4">
-          <button className="w-full font-titleFont sm:text-xs md:text-md lg:text-lg bg-gradient-to-tr bg-yellow-400 hover:bg-yellow-500 duration-200 py-1.5 rounded-xl mt-3">
+          <button
+            className="w-full font-titleFont sm:text-xs md:text-md lg:text-lg bg-gradient-to-tr bg-yellow-400 hover:bg-yellow-500 duration-200 py-1.5 rounded-xl mt-3"
+            onClick={() => handleOrder()}
+          >
             Place your order
           </button>
           <div class="text-center">
@@ -36,50 +71,30 @@ const PayMentTotal = () => {
             Order Summary
           </div>
           <div class="grid grid-cols-4 gap-1 text-sm font-sans">
-            <div class="col-span-2">Items (2):</div>
-            <div class="col-span-2 text-end">$ 2.343.324</div>
+            <div class="col-span-2">Items ({totalItem}):</div>
+            <div class="col-span-2 text-end">$ {totalPrice.toFixed(2)}</div>
             <div class="col-span-2">Shipping & handling:</div>
-            <div class="col-span-2 text-end">$ 879.759</div>
+            <div class="col-span-2 text-end">$ {8}</div>
             <div class="col-span-2"></div>
             <div class="col-span-2 text-end">
               <div class="border border-gray-300"></div>
             </div>
             <div class="col-span-2">Total before tax:</div>
-            <div class="col-span-2 text-end">$ 3.223.083</div>
+            <div class="col-span-2 text-end">
+              $ {(totalPrice + 8).toFixed(2)}
+            </div>
             <div class="col-span-2">Estimated tax to be</div>
-            <div class="col-span-2 text-end"></div>
-            <div class="col-span-2">collected:*</div>
-            <div class="col-span-2 text-end">$ 0</div>
-            <div class="col-span-2">Import Fees Deposit: </div>
-            <div class="col-span-2 text-end">$ 151.903</div>
-            <div class="col-span-2">Exchange rate guarantee fee: </div>
-            <div class="col-span-2 text-end">$ 80.156</div>
-            <div class="border border-gray-300 col-span-4"></div>
+            <div class="col-span-2 text-end">
+              {((totalPrice * 10) / 100).toFixed(2)}
+            </div>
             <div class="col-span-2 text-red-600 font-bold text-lg">
               Order total:
             </div>
             <div class="col-span-2 text-end text-red-600 font-bold text-lg">
               {" "}
-              $ 3.455.142
+              $ {(totalPrice + 8 + (totalPrice * 10) / 100).toFixed(2)}
             </div>
             <div class="border border-gray-300 col-span-4"></div>
-          </div>
-          <div class="font-bold">Amazon Currency Converter</div>
-          <div class="font-sans">Enabled - Pay in $</div>
-          <div class="grid grid-cols-4 gap-4 mt-4">
-            <div class="col-span-2">
-              <input type="radio" />
-              <span class="ml-2">$ 3,455,142</span>
-            </div>
-            <div class="col-span-2">
-              <input type="radio" />
-              <span class="ml-2">$ 3,455,142</span>
-            </div>
-          </div>
-          <div>
-            <button class="text-blue-600 text-sm font-sans hover:text-orange-500 hover:underline mt-4">
-              Change card currency
-            </button>
           </div>
           <div>
             <button class="text-blue-600 text-sm hover:text-orange-500 hover:underline">
@@ -87,15 +102,11 @@ const PayMentTotal = () => {
             </button>
           </div>
           <div>1 USD = 24540 VND</div>
-
-          {/* <div>
-            <p className="sm:text-xs md:text-md lg:text-lg font-semibold sm:px-1 lg:px-10 py-1 flex items-center gap-2 justify-between">
-              Total:{" "}
-              <span className="sm:text-xs md:text-md lg:text-lg font-bold ">
-                ${products.length > 0 ? totalPrice : 0}
-              </span>
-            </p>
-          </div> */}
+          <div>
+            {(totalPrice + 8 + (totalPrice * 10) / 100).toFixed(2)} USD ={" "}
+            {((totalPrice + 8 + (totalPrice * 10) / 100) * 24540).toFixed(0)}{" "}
+            VND
+          </div>
         </div>
         <div class="bg-gray-200 text-sm p-4 font-sans border-t border-gray-400 rounded-b-lg ">
           <div class="text-blue-600 text-sm hover:text-orange-500 hover:underline">

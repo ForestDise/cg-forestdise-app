@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {decrementQuantity, editCartLine, getCartLines, incrementQuantity} from "../../../features/cart/cartSlice";
-import {getShippingMethod} from "../../../features/payment/paymentSlice";
+import {getShippingMethod, order} from "../../../features/payment/paymentSlice";
 
 function ReviewItemAndShipping() {
   const dispatch = useDispatch();
@@ -45,7 +45,7 @@ function ReviewItemAndShipping() {
                             />
                             <div>
                               <div className="font-semibold">{product.variantDto.name}</div>
-                              <div className="text-red-700 font-bold">${product.variantDto.price*product.quantity}</div>
+                              <div className="text-red-700 font-bold">${(product.variantDto.price*product.quantity).toFixed(2)}</div>
                               <div className="bg-[#F0F2F2] md:text-lg sm:text-xs lg:text-lg flex justify-center items-center gap-1 w-24 py-1 text-center drop-shadow-lg rounded-md">
                                 <p>Qty:</p>
                                 <p
@@ -125,13 +125,13 @@ function ReviewItemAndShipping() {
                   </div>
                   <div className="col-span-3">
                     <div className="font-bold">Choose a delivery option:</div>
-                    {shippingMethod.map((method) => (
-                        <div className="mb-2" key={method.id}>
-                          <input type="radio" />
+                    {shippingMethod.map((item) => (
+                        <div className="mb-2" key={item.id}>
+                          <input type="radio" onClick={()=> dispatch(order({"shippingMethodId":item.id}))}/>
                           <span className="ml-3 text-green-700 font-semibold">
-                        {method.name}
+                        {item.name}
                       </span>
-                          <div className="ml-6">${method.price} - Shipping</div>
+                          <div className="ml-6">${item.price} - Shipping</div>
                         </div>
                     ))}
                   </div>

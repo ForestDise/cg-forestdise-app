@@ -61,3 +61,23 @@ export const updateAddress = async (address) => {
     }
     return result;
 };
+
+export const findShopOrder = async (userId) => {
+    let result = null;
+    try {
+        result = await axios.get(`${PAYMENT_METHOD_API}/${userId}}`)
+    } catch (e) {
+        console.log("add shop order API error: " + e);
+    }
+    return result;
+}
+
+export const createShopOrder = async (shopOrder) => {
+    let result = null;
+    try {
+        result = await axios.post(`${PAYMENT_METHOD_API}`, shopOrder);
+    } catch (e) {
+        console.log()
+    }
+    return result;
+}

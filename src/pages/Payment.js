@@ -1,8 +1,8 @@
 import React from "react";
 import Header from "../components/main/payment/Header";
 import Footer from "../components/main/payment/Footer";
-import Address from "../components/main/payment/Address";
-import Method from "../components/main/payment/Method";
+import Address from "../components/main/payment/ShippingAddress";
+import Method from "../components/main/payment/PaymentMethod";
 import PayMentTotal from "../components/main/payment/PayMentTotal";
 import ReviewItemAndShipping from "../components/main/payment/ReviewItemAndShipping";
 function Payment() {

@@ -36,7 +36,7 @@ const persistConfig = {
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
 const sellerStorePersistedReducer = persistReducer(persistConfig, sellerStoreReducer);
 const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
-const variantPersistedReducer = persistReducer(persistConfig, variantReducer);
+// const variantPersistedReducer = persistReducer(persistConfig, variantReducer);
 // const bulletPersistedReducer = persistReducer(persistConfig, bulletReducer);
 const hashtagPersistedReducer = persistReducer(persistConfig, hashtagReducer);
 const productPersistedReducer = persistReducer(persistConfig, productReducer);
@@ -46,8 +46,8 @@ const reviewPersistedReducer = persistReducer(persistConfig, reviewReducer);
 const sellerPersistedReducer = persistReducer(persistConfig, sellerReducer);
 const categoryPersistedReducer = persistReducer(persistConfig, categoryReducer);
 const storeCategoryPersistedReducer = persistReducer(persistConfig, storeCategoryReducer);
-const optionPersistedReducer = persistReducer(persistConfig, optionReducer);
-const optionValuePersistedReducer = persistReducer(persistConfig, optionValueReducer);
+// const optionPersistedReducer = persistReducer(persistConfig, optionReducer);
+// const optionValuePersistedReducer = persistReducer(persistConfig, optionValueReducer);
 
 
 
@@ -57,7 +57,7 @@ export const store = configureStore({
     home: homeReducer,
     cart: cartPersistedReducer,
     sellerStore: sellerStorePersistedReducer,
-    variant: variantPersistedReducer,
+    variant: variantReducer,
     user: userPersistedReducer,
     bullet: bulletReducer,
     hashtag: hashtagPersistedReducer,
@@ -68,9 +68,9 @@ export const store = configureStore({
     seller: sellerPersistedReducer,
     category: categoryPersistedReducer,
     storeCategory: storeCategoryPersistedReducer,
-    option: optionPersistedReducer,
-    optionValue: optionValuePersistedReducer,
-    payment: paymentReducer
+    option: optionReducer,
+    optionValue: optionValueReducer,
+    payment: paymentReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
