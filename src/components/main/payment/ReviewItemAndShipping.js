@@ -45,7 +45,7 @@ function ReviewItemAndShipping() {
                             />
                             <div>
                               <div className="font-semibold">{product.variantDto.name}</div>
-                              <div className="text-red-700 font-bold">${product.variantDto.price*product.quantity}</div>
+                              <div className="text-red-700 font-bold">${(product.variantDto.price*product.quantity).toFixed(2)}</div>
                               <div className="bg-[#F0F2F2] md:text-lg sm:text-xs lg:text-lg flex justify-center items-center gap-1 w-24 py-1 text-center drop-shadow-lg rounded-md">
                                 <p>Qty:</p>
                                 <p
