@@ -1,44 +1,61 @@
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { addShopOrder } from "../../../features/payment/paymentSlice";
+import { clearCartLine } from "../../../features/cart/cartSlice";
 
 const PayMentTotal = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.cart);
-  const { shippingMethod } = useSelector((state) => state.payment.shippingMethod);
+  const { shopOrder, success } = useSelector((state) => state.payment);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItem, setTotalItem] = useState(0);
-  const [shippingMethodPrice, setShippingMethodPrice] = useState(0);
-  const address = useSelector((state) => state.payment.address);
-  const [shopOrder, setShopOrder] = useState({
-    userId: userInfo.id,
-    variantId: null,
-    orderDate: "",
-    addressId: null,
-    paymentMethodId: null,
-    shippingMethodId: null,
-    quantity: null,
-    orderTotal: null
-  })
+  const date = new Date();
+
+  const handleOrder = () => {
+    const newValues = products.map((item) => ({
+      userId: userInfo.id,
+      variantId: item.variantDto.id,
+      orderDate:
+        date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
+      addressId: shopOrder[0].addressId,
+      paymentMethodId: shopOrder[1].paymentMethodId,
+      shippingMethodId: shopOrder[2].shippingMethodId,
+      quantity: item.quantity,
+      orderTotal: (item.quantity * item.variantDto.price).toFixed(2),
+    }));
+
+    newValues.forEach((newValue) => {
+      dispatch(addShopOrder(newValue));
+    });
+
+    if (success) {
+      dispatch(clearCartLine(userInfo.id));
+      navigate("/");
+    }
+  };
 
   useEffect(() => {
     let totalPrice = 0;
     let totalItem = 0;
-    products.map((item) => {
+    products.forEach((item) => {
       totalPrice += item.variantDto.price * item.quantity;
       totalItem += item.quantity;
-      setTotalItem(totalItem);
-      setTotalPrice(totalPrice);
     });
+    setTotalItem(totalItem);
+    setTotalPrice(totalPrice);
   }, [products]);
 
   return (
     <>
       <div className="border border-gray-400 rounded-md">
         <div className="w-auto h-auto col-span-1 flex flex-col p-4">
-          <button className="w-full font-titleFont sm:text-xs md:text-md lg:text-lg bg-gradient-to-tr bg-yellow-400 hover:bg-yellow-500 duration-200 py-1.5 rounded-xl mt-3">
+          <button
+            className="w-full font-titleFont sm:text-xs md:text-md lg:text-lg bg-gradient-to-tr bg-yellow-400 hover:bg-yellow-500 duration-200 py-1.5 rounded-xl mt-3"
+            onClick={() => handleOrder()}
+          >
             Place your order
           </button>
           <div class="text-center">
@@ -55,7 +72,7 @@ const PayMentTotal = () => {
           </div>
           <div class="grid grid-cols-4 gap-1 text-sm font-sans">
             <div class="col-span-2">Items ({totalItem}):</div>
-            <div class="col-span-2 text-end">$ {(totalPrice).toFixed(2)}</div>
+            <div class="col-span-2 text-end">$ {totalPrice.toFixed(2)}</div>
             <div class="col-span-2">Shipping & handling:</div>
             <div class="col-span-2 text-end">$ {8}</div>
             <div class="col-span-2"></div>
@@ -63,15 +80,19 @@ const PayMentTotal = () => {
               <div class="border border-gray-300"></div>
             </div>
             <div class="col-span-2">Total before tax:</div>
-            <div class="col-span-2 text-end">$ {(totalPrice + 8).toFixed(2)}</div>
+            <div class="col-span-2 text-end">
+              $ {(totalPrice + 8).toFixed(2)}
+            </div>
             <div class="col-span-2">Estimated tax to be</div>
-            <div class="col-span-2 text-end">{(totalPrice * 10 / 100).toFixed(2)}</div>
+            <div class="col-span-2 text-end">
+              {((totalPrice * 10) / 100).toFixed(2)}
+            </div>
             <div class="col-span-2 text-red-600 font-bold text-lg">
               Order total:
             </div>
             <div class="col-span-2 text-end text-red-600 font-bold text-lg">
               {" "}
-              $ {(totalPrice + 8 + (totalPrice * 10 / 100)).toFixed(2)}
+              $ {(totalPrice + 8 + (totalPrice * 10) / 100).toFixed(2)}
             </div>
             <div class="border border-gray-300 col-span-4"></div>
           </div>
@@ -81,7 +102,11 @@ const PayMentTotal = () => {
             </button>
           </div>
           <div>1 USD = 24540 VND</div>
-          <div>{(totalPrice + 8 + (totalPrice * 10 / 100)).toFixed(2)} USD = {((totalPrice + 8 + (totalPrice * 10 / 100)) * 24540).toFixed(0)} VND</div>
+          <div>
+            {(totalPrice + 8 + (totalPrice * 10) / 100).toFixed(2)} USD ={" "}
+            {((totalPrice + 8 + (totalPrice * 10) / 100) * 24540).toFixed(0)}{" "}
+            VND
+          </div>
         </div>
         <div class="bg-gray-200 text-sm p-4 font-sans border-t border-gray-400 rounded-b-lg ">
           <div class="text-blue-600 text-sm hover:text-orange-500 hover:underline">

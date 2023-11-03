@@ -354,7 +354,7 @@ function ProductDetail() {
                               salePrice: variantRender.salePrice,
                               optionValueDtoList:
                                 variantRender.optionValueDtoList,
-                              imageDtoList: variantRender.mageDtoList,
+                              imageDtoList: variantRender.imageDtoList,
                               videoDtoList: variantRender.videoDtoList,
                               reviewDtoList:
                                 variantRender.reviewDtoList,
