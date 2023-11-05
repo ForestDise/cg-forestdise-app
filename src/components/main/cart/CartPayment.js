@@ -18,8 +18,11 @@ const CartPayment = () => {
   }, [products]);
 
   const handlePayment = ()=>{
-    if(userInfo){
+    if(userInfo && products.length > 0){
       navigate("/payment");
+    }
+    if(!userInfo){
+      navigate("/signin");
     }
   }
 

@@ -19,9 +19,6 @@ function Products() {
     if(products.length < 1){
       dispatch(getProducts());
     }
-    if (userInfo) {
-      dispatch(getCartLines(userInfo.id));   
-    }
     
   }, [userInfo]);
 
