@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { GrClose } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewAddress, getAddress, order } from "../../../features/payment/paymentSlice";
+import { addNewAddress, getAddress, addAdressId } from "../../../features/payment/paymentSlice";
 
 Modal.setAppElement("#root");
 
@@ -10,15 +10,24 @@ function Address() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddress, setIsAddress] = useState(true);
   const dispatch = useDispatch();
+  const [addressNew, setAddressNew] = useState({
+    id: '',
+    name:'',
+    district: '',
+    ward: '',
+    city: '',
+    street: '',
+  });
   const { userInfo } = useSelector((state) => state.user);
-  const [addressShown, setAddressShown] = useState();
   const { address } = useSelector((state) => state.payment);
   const [formAddress, setFormAddress] = useState({
+    id: "",
     userId: userInfo.id,
     street: "",
     ward: "",
     district: "",
     city: "",
+    defaultAddress:false,
   });
 
   const handleChange = (event) => {
@@ -29,15 +38,12 @@ function Address() {
   };
 
   const handleFormSubmit = (event) => {
-    dispatch(addNewAddress(formAddress)).then((result) => {
-      if (addNewAddress.fulfilled.match(result)) {
-        setIsModalOpen(false);
-      }
-    });
+    dispatch(addNewAddress(formAddress));
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
-    if (address.length <= 0) {
+    if (address.length <= 0 && userInfo !== null) {
       dispatch(getAddress(userInfo.id));
     }
   }, []);
@@ -53,19 +59,17 @@ function Address() {
               </h2>
             </div>
             <div className="text-md">
-              {addressShown ? (
-                <div>
-                  <div className="w-23">
-                    <div>{userInfo.clientName}</div>
-                    <div>
-                      {addressShown.street}, {addressShown.ward},{" "}
-                      {addressShown.district}, {addressShown.city}
-                    </div>
+              <div>
+                <div className="w-23">
+                  <div>{addressNew.name}</div>
+                  <div>
+                    <span>{addressNew.street}</span>
+                    <span class="px-2">{addressNew.ward}</span>
+                    <span>{addressNew.district}</span>
+                    <span class="px-2">{addressNew.city}</span>
                   </div>
                 </div>
-              ) : (
-                <></>
-              )}
+              </div>
             </div>
             <div className="text-right">
               <button
@@ -118,10 +122,23 @@ function Address() {
                       name="address"
                       className="mr-2"
                       value={item.id}
-                      onClick={() => dispatch(order({ addressId: item.id }))}
+                      onClick={() => {
+                        dispatch(addAdressId({ addressId: item.id }));
+                        setAddressNew({
+                          id: item.id,
+                          name: userInfo.clientName,
+                          district: item.district,
+                          ward: item.ward,
+                          city: item.city,
+                          street: item.street,
+                        });
+                      }}
                     />
                     <span className="font-semibold">{item.name}</span>{" "}
-                    {item.street}, {item.ward}, {item.district}, {item.city}
+                    <span>{item.street}</span>
+                    <span>{item.ward}</span>
+                    <span>{item.district}</span>
+                    <span>{item.city}</span>
                     <button className="text-blue-600 px-2 text-sm hover:text-orange-500 hover:underline">
                       Edit address
                     </button>

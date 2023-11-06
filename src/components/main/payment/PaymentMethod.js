@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addNewPaymentMethod,
   getPaymentMethod,
-  order,
+  addPaymentMethodId,
 } from "../../../features/payment/paymentSlice";
 
 Modal.setAppElement("#root");
@@ -14,13 +14,22 @@ function Method() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddress, setIsAddress] = useState(true);
   const dispatch = useDispatch();
+  const [paymentMethodNew, setPaymentMethodNew] = useState({
+    id: '',
+    cartNumber: '',
+    nameOnCard: '',
+    expirationDate: '',
+  });
+
   const { userInfo } = useSelector((state) => state.user);
   const { paymentMethod } = useSelector((state) => state.payment);
   const [formPayment, setFormPayment] = useState({
+    id: "",
     userId: userInfo.id,
     cartNumber: "",
     nameOnCard: "",
     expirationDate: "",
+    defaultPayment:false,
   });
 
   const handleFormChange = (event) => {
@@ -31,15 +40,12 @@ function Method() {
   };
 
   const handleFormSubmit = () => {
-    dispatch(addNewPaymentMethod(formPayment)).then((result) => {
-      if (addNewPaymentMethod.fulfilled.match(result)) {
+    dispatch(addNewPaymentMethod(formPayment));
         setIsModalOpen(false);
-      }
-    });
   };
 
   useEffect(() => {
-    if (paymentMethod.length <= 0) {
+    if (paymentMethod.length <= 0 && userInfo !== null) {
       dispatch(getPaymentMethod(userInfo.id));
     }
   }, []);
@@ -69,7 +75,7 @@ function Method() {
                 <button class="text-blue-600 hover:text-orange-500 hover:underline">
                   Billing address:
                 </button>
-                <span class="ml-3">{userInfo.clientName}</span>
+                <span class="ml-3">{paymentMethodNew.nameOnCard}</span>
               </div>
             </div>
             <div class="text-right">
@@ -139,8 +145,18 @@ function Method() {
                       type="radio"
                       name="paymentMethod"
                       className="mr-2"
-                      onClick={() =>
-                        dispatch(order({ paymentMethodId: item.id }))
+                      onClick={() => 
+                        {
+                          setPaymentMethodNew({
+                          id: item.id,
+                          cartNumber: item.cartNumber,
+                          nameOnCard: item.nameOnCard,
+                          expirationDate: item.expirationDate,
+                        });
+                        dispatch(
+                          addPaymentMethodId({ paymentMethodId: item.id })
+                        )
+                      }
                       }
                     />
                     <span className="font-semibold">{item.nameOnCard}</span>{" "}

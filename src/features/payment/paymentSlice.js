@@ -60,7 +60,9 @@ export const addShopOrder = createAsyncThunk(
 );
 
 const initialState = {
-  shopOrder: [],
+  addressId: null,
+  shippingMethodId: null,
+  paymentMethodId: null,
   paymentMethod: [],
   shippingMethod: [],
   address: [],
@@ -73,9 +75,29 @@ export const paymentSlice = createSlice({
   name: "payment",
   initialState,
   reducers: {
-    order: (state, action) => {
-      state.shopOrder.push(action.payload);
+    addAdressId: (state, action) => {
+      if (state.addressId !== null) {
+        state.addressId = null;
+      }
+      state.addressId = action.payload.addressId;
     },
+    addShippingmethodId: (state, action) => {
+      if (state.shippingMethodId !== null) {
+        state.shippingMethodId = null;
+      }
+      state.shippingMethodId = action.payload.shippingMethodId;
+    },
+    addPaymentMethodId: (state, action) => {
+      if (state.paymentMethodId !== null) {
+        state.paymentMethodId = null;
+      }
+      state.paymentMethodId = action.payload.paymentMethodId;
+    },
+    clear:(state)=>{
+      state.addressId = null;
+      state.shippingMethodId = null;
+      state.paymentMethodId = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -193,6 +215,6 @@ export const paymentSlice = createSlice({
   },
 });
 
-export const { order } = paymentSlice.actions;
+export const { addAdressId, addPaymentMethodId, addShippingmethodId, clear } = paymentSlice.actions;
 
 export default paymentSlice.reducer;

@@ -1,40 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addShopOrder } from "../../../features/payment/paymentSlice";
+import { addShopOrder, clear } from "../../../features/payment/paymentSlice";
 import { clearCartLine } from "../../../features/cart/cartSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PayMentTotal = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.cart);
-  const { shopOrder, success } = useSelector((state) => state.payment);
+  const { addressId, paymentMethodId, shippingMethodId } = useSelector(
+    (state) => state.payment
+  );
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItem, setTotalItem] = useState(0);
   const date = new Date();
-
   const handleOrder = () => {
     const newValues = products.map((item) => ({
       userId: userInfo.id,
       variantId: item.variantDto.id,
       orderDate:
         date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear(),
-      addressId: shopOrder[0].addressId,
-      paymentMethodId: shopOrder[1].paymentMethodId,
-      shippingMethodId: shopOrder[2].shippingMethodId,
+      addressId: addressId,
+      paymentMethodId: paymentMethodId,
+      shippingMethodId: shippingMethodId,
       quantity: item.quantity,
       orderTotal: (item.quantity * item.variantDto.price).toFixed(2),
     }));
-
-    newValues.forEach((newValue) => {
-      dispatch(addShopOrder(newValue));
-    });
-
-    if (success) {
+    if (addressId && paymentMethodId && shippingMethodId) {
+      dispatch(addShopOrder(newValues));
+      handleFormChange(newValues);
+      sendEmail(form);
+      dispatch(clear());
       dispatch(clearCartLine(userInfo.id));
       navigate("/");
+    } else {
+      notifyError();
     }
+  };
+
+  const notifyError = () => {
+    toast.error("Request complete information !");
   };
 
   useEffect(() => {
@@ -52,6 +60,9 @@ const PayMentTotal = () => {
     <>
       <div className="border border-gray-400 rounded-md">
         <div className="w-auto h-auto col-span-1 flex flex-col p-4">
+          <div>
+            <ToastContainer position="top-right" />
+          </div>
           <button
             className="w-full font-titleFont sm:text-xs md:text-md lg:text-lg bg-gradient-to-tr bg-yellow-400 hover:bg-yellow-500 duration-200 py-1.5 rounded-xl mt-3"
             onClick={() => handleOrder()}
