@@ -31,8 +31,6 @@ const PayMentTotal = () => {
     }));
     if (addressId && paymentMethodId && shippingMethodId) {
       dispatch(addShopOrder(newValues));
-      handleFormChange(newValues);
-      sendEmail(form);
       dispatch(clear());
       dispatch(clearCartLine(userInfo.id));
       navigate("/");
