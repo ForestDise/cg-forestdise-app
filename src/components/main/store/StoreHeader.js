@@ -89,7 +89,7 @@ export default function StoreHeader() {
 
     await axios
       .get(
-        `http://localhost:8080/api/stores/${storeInfo.id}/product?name=${searchParams}`
+        `https://forestdise.up.railway.app/api/stores/${storeInfo.id}/product?name=${searchParams}`
       )
       .then((res) => {
         dispatch(setSearchProducts(res.data));

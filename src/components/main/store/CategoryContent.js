@@ -41,7 +41,9 @@ function CategoryContent() {
   async function fetchData() {
     let params = selectedCategory.replace(/&/g, "%26");
     await axios
-      .get(`http://localhost:8080/api/stores/${storeInfo.id}/products/category?name=${params}`)
+      .get(
+        `https://forestdise.up.railway.app/api/stores/${storeInfo.id}/products/category?name=${params}`
+      )
       .then((res) => {
         setProductData(res.data);
       })
