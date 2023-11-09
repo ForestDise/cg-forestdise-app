@@ -67,6 +67,20 @@ export default function StoreHeader() {
     dispatch(setSearchParams(e.target.value));
   };
 
+  const handleDropDown = (category) => {
+    dispatch(setSelectedCurrent(category.name));
+    dispatch(setStoreBanner(category.heroImage));
+    dispatch(changeCategory(selectedCategory));
+    dispatch(changeSubCategory(""));
+  };
+
+  const handleStoreChange = (e, category) => {
+    dispatch(setSelectedCurrent(category.name));
+    dispatch(setStoreBanner(category.heroImage));
+    dispatch(changeCategory(selectedCategory));
+    dispatch(changeSubCategory(e.target.name));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     navigate(`/store/${storeInfo.id}/search`);
@@ -319,18 +333,7 @@ export default function StoreHeader() {
                                           changeBannerImage(category.heroImage)
                                         );
                                       }}
-                                      onClick={() => {
-                                        dispatch(
-                                          setSelectedCurrent(category.name)
-                                        );
-                                        dispatch(
-                                          setStoreBanner(category.heroImage)
-                                        );
-                                        dispatch(
-                                          changeCategory(selectedCategory)
-                                        );
-                                        dispatch(changeSubCategory(""));
-                                      }}
+                                      onClick={() => handleDropDown(category)}
                                       className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                       to={`/store/${storeInfo.id}/${selectedCategory}`}
                                     >
@@ -345,7 +348,7 @@ export default function StoreHeader() {
                                         <li key={category.id}>
                                           <Link
                                             name={category.name}
-                                            onMouseOver={() => {                                            
+                                            onMouseOver={() => {
                                               dispatch(
                                                 setSelectedSubCategory(
                                                   category.name
@@ -353,22 +356,7 @@ export default function StoreHeader() {
                                               );
                                             }}
                                             onClick={(e) => {
-                                              dispatch(
-                                                setSelectedCurrent(
-                                                  category.name
-                                                )
-                                              );
-                                              dispatch(
-                                                setStoreBanner(
-                                                  category.heroImage
-                                                )
-                                              );
-                                              dispatch(
-                                                changeCategory(selectedCategory)
-                                              );
-                                              dispatch(
-                                                changeSubCategory(e.target.name)
-                                              );
+                                              handleStoreChange(e, category);
                                             }}
                                             className="font-light block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                             to={`/store/${storeInfo.id}/${selectedCategory}/${selectedSubCategory}`}
@@ -394,18 +382,7 @@ export default function StoreHeader() {
                                           changeBannerImage(category.heroImage)
                                         );
                                       }}
-                                      onClick={() => {
-                                        dispatch(
-                                          setSelectedCurrent(category.name)
-                                        );
-                                        dispatch(
-                                          setStoreBanner(category.heroImage)
-                                        );
-                                        dispatch(
-                                          changeCategory(selectedCategory)
-                                        );
-                                        dispatch(changeSubCategory(""));
-                                      }}
+                                      onClick={() => handleDropDown(category)}
                                       className="font-semibold block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                       to={`/store/${storeInfo.id}/${selectedCategory}`}
                                     >
@@ -428,22 +405,7 @@ export default function StoreHeader() {
                                               );
                                             }}
                                             onClick={(e) => {
-                                              dispatch(
-                                                setSelectedCurrent(
-                                                  category.name
-                                                )
-                                              );
-                                              dispatch(
-                                                setStoreBanner(
-                                                  category.heroImage
-                                                )
-                                              );
-                                              dispatch(
-                                                changeCategory(selectedCategory)
-                                              );
-                                              dispatch(
-                                                changeSubCategory(e.target.name)
-                                              );
+                                              handleStoreChange(e, category);
                                             }}
                                             className="font-light block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                             to={`/store/${storeInfo.id}/${selectedCategory}/${selectedSubCategory}`}

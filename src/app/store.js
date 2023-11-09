@@ -35,21 +35,41 @@ const persistConfig = {
   version: 1,
   storage,
 };
+const persistConfig2 = {
+  key: "root2",
+  version: 1,
+  storage,
+};
+const persistConfig3 = {
+  key: "root3",
+  version: 1,
+  storage,
+};
+const persistConfig4 = {
+  key: "root4",
+  version: 1,
+  storage,
+};
 const userPersistedReducer = persistReducer(persistConfig, userReducer);
-const sellerStorePersistedReducer = persistReducer(persistConfig, sellerStoreReducer);
-const cartPersistedReducer = persistReducer(persistConfig, cartReducer);
-const hashtagPersistedReducer = persistReducer(persistConfig, hashtagReducer);
-const productPersistedReducer = persistReducer(persistConfig, productReducer);
-const shopPersistedReducer = persistReducer(persistConfig, shopReducer);
-const commentPersistedReducer = persistReducer(persistConfig, commentReducer);
-const reviewPersistedReducer = persistReducer(persistConfig, reviewReducer);
 const sellerPersistedReducer = persistReducer(persistConfig, sellerReducer);
-const categoryPersistedReducer = persistReducer(persistConfig, categoryReducer);
-const storeCategoryPersistedReducer = persistReducer(persistConfig, storeCategoryReducer);
+const sellerStorePersistedReducer = persistReducer(persistConfig2, sellerStoreReducer);
+const storeCategoryPersistedReducer = persistReducer(
+  persistConfig2,
+  storeCategoryReducer
+);
+const categoryPersistedReducer = persistReducer(
+  persistConfig3,
+  categoryReducer
+);
+const cartPersistedReducer = persistReducer(persistConfig3, cartReducer);
+const hashtagPersistedReducer = persistReducer(persistConfig4, hashtagReducer);
+const productPersistedReducer = persistReducer(persistConfig4, productReducer);
+const shopPersistedReducer = persistReducer(persistConfig4, shopReducer);
+const commentPersistedReducer = persistReducer(persistConfig4, commentReducer);
+const reviewPersistedReducer = persistReducer(persistConfig4, reviewReducer);
 
 export const store = configureStore({
   reducer: {
-    home: homeReducer,
     cart: cartPersistedReducer,
     sellerStore: sellerStorePersistedReducer,
     variant: variantReducer,
@@ -67,6 +87,7 @@ export const store = configureStore({
     optionValue: optionValueReducer,
     payment: paymentReducer,
     image: imageReducer,
+    home: homeReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

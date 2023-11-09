@@ -11,6 +11,7 @@ function Registration() {
   const [form, setForm] = useState({});
   const [registerData, setRegisterData] = useState({});
   const [registeredEmail, setRegisteredEmail] = useState(false);
+  const [notEnabledEmail, setNotEnabledEmail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [successNotify, setSuccessNotify] = useState("");
   const [emailNotify, setEmailNotify] = useState("");
@@ -71,11 +72,19 @@ function Registration() {
         setEmailNotify("A confirmation link has been sent to your email");
         setTimeout(() => {
           navigate("/signin");
-        }, 2500);
+        }, 2000);
       })
       .catch((err) => {
-        setRegisteredEmail(true);
-        setLoading(false);
+        console.log(err);
+        if (err.response.data.message === "Email has not been verified"){
+          setNotEnabledEmail(true);
+          setRegisteredEmail(false);
+          setLoading(false);
+        } else{
+          setRegisteredEmail(true);
+          setNotEnabledEmail(false);
+          setLoading(false);
+        }
         throw err;
       });
 
@@ -168,6 +177,17 @@ function Registration() {
                           !
                         </span>
                         Email has already been registered
+                      </p>
+                    )}
+                    {notEnabledEmail && (
+                      <p
+                        className="text-red-600 text-xs font-semibold tracking-wide
+                    flex items-center gap-2 -mt-1.5"
+                      >
+                        <span className="italic font-titleFont font-extrabold text-base">
+                          !
+                        </span>
+                        Please verify your email to enable your account
                       </p>
                     )}
                   </div>
