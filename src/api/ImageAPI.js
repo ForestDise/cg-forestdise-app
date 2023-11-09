@@ -1,6 +1,5 @@
 import axios from "axios";
-const IMAGE_MANAGEMENT_API =
-    "http://localhost:8080/api/image";
+const IMAGE_MANAGEMENT_API = "https://forestdise.up.railway.app/api/image";
 export const createImages = async ({ imageUrls, variantId }) => {
     let result = null;
     try {

@@ -1,6 +1,6 @@
 import axios from "axios";
 const CATEGORY_MANAGEMENT_API =
-    "http://localhost:8080/api/category";
+  "https://forestdise.up.railway.app/api/category";
 
 export const searchCategory = async (searchParam) => {
     let result = null;

@@ -1,5 +1,5 @@
 import axios from "axios";
-const USER_MANAGEMENT_API = "http://localhost:8080/api/users";
+const USER_MANAGEMENT_API = "https://forestdise.up.railway.app/api/users";
 
 export const findUser = async (userId, token) => {
   let result = null;

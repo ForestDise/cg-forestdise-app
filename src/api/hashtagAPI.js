@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const HASHTAG_MANAGEMENT_API =
-    "http://localhost:8080/api/hashtag";
+const HASHTAG_MANAGEMENT_API = "https://forestdise.up.railway.app/api/hashtag";
 
 export const createHashtag = async (hashtag) => {
     let result = null;

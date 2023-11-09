@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const STORECATE_MANAGEMENT_API =
-    "http://localhost:8080/api/store-category";
+  "https://forestdise.up.railway.app/api/store-category";
 
 
 export const createCategory = async (category) => {

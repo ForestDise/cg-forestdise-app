@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const STORE_FOR_SELLER_MANAGEMENT_API =
-    "http://localhost:8080/api/stores";
+  "https://forestdise.up.railway.app/api/stores";
 
 export const findShops = async () => {
     let result = null;
