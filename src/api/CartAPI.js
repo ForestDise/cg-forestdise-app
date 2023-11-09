@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const CART_MANAGEMENT_API = "http://localhost:8080/api";
+const CART_MANAGEMENT_API = "https://forestdise.up.railway.app/api";
 
 export const findProductsSame = async () => {
   let result = null;

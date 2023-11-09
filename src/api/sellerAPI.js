@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const SELLER_MANAGEMENT_API = "http://localhost:8080/api/sellers";
+const SELLER_MANAGEMENT_API = "https://forestdise.up.railway.app/api/sellers";
 
 export const findSeller = async (sellerId, token) => {
   let result = null;

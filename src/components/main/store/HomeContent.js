@@ -36,7 +36,9 @@ function HomeContent() {
 
   async function fetchData() {
     await axios
-      .get(`http://localhost:8080/api/stores/${storeInfo.id}/products`)
+      .get(
+        `https://forestdise.up.railway.app/api/stores/${storeInfo.id}/products`
+      )
       .then((res) => {
         setProductData(res.data);
       })

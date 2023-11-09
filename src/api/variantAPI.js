@@ -1,6 +1,5 @@
 import axios from "axios";
-const VARIANT_MANAGEMENT_API =
-  "http://localhost:8080/api";
+const VARIANT_MANAGEMENT_API = "https://forestdise.up.railway.app/api";
 
 export const findVariant = async (productId) => {
   let result = null;

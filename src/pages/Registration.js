@@ -65,7 +65,7 @@ function Registration() {
     setLoading(true);
     setRegisteredEmail(false);
     await axios
-      .post("http://localhost:8080/api/register", registerData)
+      .post("https://forestdise.up.railway.app/api/register", registerData)
       .then(() => {
         setLoading(false);
         setSuccessNotify("Account created successfully");
@@ -89,7 +89,10 @@ function Registration() {
       });
 
     await axios
-      .post("http://localhost:8080/api/cart", registerData)
+      .post("https://forestdise.up.railway.app/api/cart", registerData)
+      .then((res) => {
+        console.log(res.data);
+      })
       .catch((err) => {
         throw err;
       });

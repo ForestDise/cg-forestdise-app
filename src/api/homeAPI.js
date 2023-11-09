@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const HOME_MANAGEMENT_API = "http://localhost:8080/api";
+const HOME_MANAGEMENT_API = "https://forestdise.up.railway.app/api";
 
 export const findProducts = async () => {
   let result = null;

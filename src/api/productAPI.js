@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const PRODUCT_MANAGEMENT_API =
-    "http://localhost:8080/api/product";
+const PRODUCT_MANAGEMENT_API = "https://forestdise.up.railway.app/api/products";
 
 export const findProducts = async (shopId) => {
     let result = null;
@@ -26,7 +25,10 @@ export const findProduct = async (productId) => {
 export const createProduct = async ({product, storeId, categoryId, storeCategoryId}) => {
     let result = null;
     try {
-        result = await axios.post(`http://localhost:8080/api/product-detail/create/${storeId}/${categoryId}/${storeCategoryId}`, product);
+        result = await axios.post(
+          `https://forestdise.up.railway.app/api/product-detail/create/${storeId}/${categoryId}/${storeCategoryId}`,
+          product
+        );
     } catch (e) {
         console.log("create product API error: " + e);
     }

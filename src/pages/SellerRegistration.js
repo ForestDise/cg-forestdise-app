@@ -64,7 +64,10 @@ function SellerRegistration() {
     setLoading(true);
     setRegisteredEmail(false);
     await axios
-      .post("http://localhost:8080/api/register/seller", registerData)
+      .post(
+        "https://forestdise.up.railway.app/api/register/seller",
+        registerData
+      )
       .then(() => {
         setLoading(false);
         setSuccessNotify("Account created successfully");

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const PAYMENT_METHOD_API = "http://localhost:8080/api/payments";
+const PAYMENT_METHOD_API = "https://forestdise.up.railway.app/api/payments";
 
 export const findPaymentMethod = async (userId) => {
     let result = null;

@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const REVIEW_MANAGEMENT_API =
-    "http://localhost:8080/api/reviews";
+const REVIEW_MANAGEMENT_API = "https://forestdise.up.railway.app/api/reviews";
 
 export const findReview = async (variantId) => {
     let result = null;

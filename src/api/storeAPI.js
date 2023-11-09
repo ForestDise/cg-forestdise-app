@@ -1,5 +1,5 @@
 import axios from "axios";
-const STORE_MANAGEMENT_API = "http://localhost:8080/api/stores";
+const STORE_MANAGEMENT_API = "https://forestdise.up.railway.app/api/stores";
 
 export const findStore = async (storeId) => {
   let result = null;

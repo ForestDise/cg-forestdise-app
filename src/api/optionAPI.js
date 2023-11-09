@@ -1,6 +1,5 @@
 import axios from "axios";
-const OPTION_MANAGEMENT_API =
-    "http://localhost:8080/api/option";
+const OPTION_MANAGEMENT_API = "https://forestdise.up.railway.app/api/option";
 
 export const findOption = async (productId) => {
     let result = null;

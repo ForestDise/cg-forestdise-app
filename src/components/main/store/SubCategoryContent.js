@@ -46,7 +46,7 @@ function SubCategoryContent() {
     let params = selectedSubCategory.replace(/&/g, "%26");
     await axios
       .get(
-        `http://localhost:8080/api/stores/${storeInfo.id}/products/sub_category?name=${params}`
+        `https://forestdise.up.railway.app/api/stores/${storeInfo.id}/products/sub_category?name=${params}`
       )
       .then((res) => {
         setProductData(res.data);
